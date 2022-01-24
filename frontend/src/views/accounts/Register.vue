@@ -66,12 +66,6 @@ export default {
       }
   },
   methods:{
-      makeinterbox(event){
-          event.preventDefault()
-          this.user.interdetaillist.push(this.interdetail);
-          this.interdetail=''
-          console.log(this.user.interdetaillist)
-      },
       clickRegister(){
 
       }
