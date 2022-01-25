@@ -5,5 +5,6 @@ import com.ssafy.db.entity.User;
 
 public interface UserService {
 	User signUp(UserRegisterPostReq userRegisterInfo);
+	User getUserByUserno(int userno);
 	User getUserByEmail(String email);
 }

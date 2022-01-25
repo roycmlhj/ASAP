@@ -34,4 +34,10 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public User getUserByUserno(int userno) {
+		User user = userRepository.findById(userno).get();
+		return user;
+	}
+
 }
