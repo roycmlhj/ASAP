@@ -40,6 +40,6 @@ public class Study {
 	
 	
 	@OneToMany
-	@JoinColumn(name = "study_id")
+	@JoinColumn(name = "studyno")
 	List<StudyMember> studyMemberList = new ArrayList<StudyMember>();
 }

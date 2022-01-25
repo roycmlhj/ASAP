@@ -9,8 +9,6 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.ManyToAny;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -35,9 +33,8 @@ public class StudyMember implements Serializable{
 	String studyTime;
 	@Column(name = "is_join")
 	int isJoin;
-	
-	
-	@ManyToOne
-	@JoinColumn(name = "study_id")
-	Study study;
+
+//	@ManyToOne
+//	@JoinColumn(name = "study_rewfwefqfefq")
+//	Study study;
 }
