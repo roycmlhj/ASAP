@@ -1,3 +1,10 @@
+/*
+    작성자 : 한슬기
+    생성일 : 2022.01.25
+    마지막 업데이트 : 2022.01.25
+    
+    개인정보수정 페이지
+ */
 <template>
   <div class="container">
     <b-card bg-variant="light" class="card mb-4">
