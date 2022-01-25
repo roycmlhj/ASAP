@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.api.request.StudyCreatePostReq;
+import com.ssafy.api.response.StudyInfo;
+import com.ssafy.api.response.StudyInfoListRes;
 import com.ssafy.api.response.StudyListRes;
 import com.ssafy.api.service.StudyService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -59,6 +62,22 @@ public class StudyController {
 			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
 	}
 	
+	@GetMapping("/{userno}")
+	@ApiOperation(value = "참여 중인 스터디 목록", notes = "회원 번호에 따른 참여 스터디 목록을 반환한다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<StudyInfoListRes> getStudyListNMemberInfo(@PathVariable("userno") @ApiParam(value = "유저 pk", required = true) int userno){
+		List<Study> studyList = studyService.getStudyList(userno);
+		List<StudyInfo> studyInfoList = new ArrayList<StudyInfo>();
+		for(int i = 0; i < studyList.size(); i++)
+			studyInfoList.add(studyService.getStudyInfo(studyList.get(i).getStudyno(), studyList.get(i).getStudyname()));
+//		return ResponseEntity.status(200).body(StudyInfoListRes.of(studyList));
+		return null;
+	};
+	
 	
 	@GetMapping("/list/{userno}")
 	@ApiOperation(value = "참여 중인 스터디 목록", notes = "회원 번호에 따른 참여 스터디 목록을 반환한다.")
@@ -68,9 +87,9 @@ public class StudyController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<StudyListRes> getStudyList(@PathVariable("userno") @ApiParam(value = "유저 pk", required = true) int userno){
-		
 		List<Study> studyList = studyService.getStudyList(userno);
-		
 		return ResponseEntity.status(200).body(StudyListRes.of(studyList));
 	};
+	
+	
 }

@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.apache.catalina.startup.HomesUserDatabase;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,4 +44,12 @@ public class Study {
 	@OneToMany
 	@JoinColumn(name = "studyno")
 	List<StudyMember> studyMemberList = new ArrayList<StudyMember>();
+	
+	@OneToMany
+	@JoinColumn(name = "studyno")
+	List<Homework> homeworkList = new ArrayList<Homework>();
+	
+	@OneToMany
+	@JoinColumn(name = "studyno")
+	List<Schedule> scheduleList = new ArrayList<Schedule>();
 }

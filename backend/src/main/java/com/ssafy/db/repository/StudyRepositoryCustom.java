@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.ssafy.db.entity.QStudy;
 import com.ssafy.db.entity.Study;
 
 @Repository
