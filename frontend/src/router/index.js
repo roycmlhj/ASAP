@@ -16,6 +16,16 @@ const routes = [
     name: 'Main',
     component: () => import('../views/Main.vue')
   },
+  {
+    path:'/board/create/',
+    name: 'CreateStudyBoard',
+    component: () => import('../views/CreateStudyBoard.vue')
+  },
+  {
+    path:'/board/',
+    name: 'StudyBoard',
+    component: () => import('../views/StudyBoard.vue')
+  }
 ]
 
 const router = new VueRouter({

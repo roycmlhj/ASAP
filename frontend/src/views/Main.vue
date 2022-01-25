@@ -4,7 +4,6 @@
     <b-modal v-model="modalShow">
       <h3>스터디방 생성</h3>
       <b-form @submit="createStudyRoom">
-        <p>스터디 이름</p>
         <b-form-group
           id="input-title-group"
           label="스터디 이름"
@@ -18,7 +17,7 @@
             required
           ></b-form-input>
         </b-form-group>
-        <p>스터디 주제</p>
+        
         <b-form-group
           id="input-topic-group"
           label="스터디 주제"
@@ -33,7 +32,7 @@
           ></b-form-input>
         </b-form-group>
         
-        <p>스터디 설명</p>
+        
         <b-form-group
           id="input-description-group"
           label="스터디 설명"
@@ -64,7 +63,16 @@
           @click="hideModal">닫기</b-button>
         </div>
       </b-form>
-      </b-modal>
+    </b-modal>
+    <br>
+    <br>
+    <router-link to ='/board/create/' >
+    <b-button>
+      
+        스터디 모집하러가기
+      
+    </b-button>
+    </router-link>
   </div>
 </template>
 
