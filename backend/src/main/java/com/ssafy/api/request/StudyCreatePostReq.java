@@ -19,4 +19,6 @@ public class StudyCreatePostReq {
 	int memberno;
 	@ApiModelProperty(name = "스터디 생성 회원 ", example = "ssafy3@ssafy.com")
 	String maker;
+	@ApiModelProperty(name = "스터디 생성 유저 pk ", example = "1")
+	int userno;
 }

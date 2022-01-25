@@ -36,7 +36,8 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 
 		List<Study> studyList = jpaQueryFactory.select(qStudy).from(qStudy)
 		.innerJoin(qStudy.studyMemberList, qStudyMember)
-		.where(qStudyMember.userno.eq(userno)).fetch();
+		.where(qStudyMember.userno.eq(userno).and(qStudyMember.position.ne(2)))
+		.fetch();
 		
 		return studyList;
 	}

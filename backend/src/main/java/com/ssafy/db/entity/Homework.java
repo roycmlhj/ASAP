@@ -6,24 +6,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.Getter;
 import lombok.Setter;
 
+@DynamicInsert
+@DynamicUpdate
 @Entity(name = "homework")
 @Getter
 @Setter
 public class Homework {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int homeworkno;
+	Integer homeworkno;
 	@Column
-	int studyno;
+	Integer studyno;
 	@Column
 	String start_date;
 	@Column
 	String end_date;
 	@Column(name = "is_active")
-	int isActive;
+	Integer isActive;
 	@Column
 	String content;
 }

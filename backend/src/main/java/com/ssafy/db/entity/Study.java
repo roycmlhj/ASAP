@@ -13,22 +13,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.apache.catalina.startup.HomesUserDatabase;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@DynamicInsert
+@DynamicUpdate
 @Entity(name = "study")
 @Getter
 @Setter
 public class Study {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int studyno;
+	Integer studyno;
 	@Column
 	String category;
 	@Column
 	String description;
-	int memberno;
+	@Column
+	Integer memberno;
 	@Column
 	String maker;
 	@Column

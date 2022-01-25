@@ -9,6 +9,10 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -16,23 +20,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity(name = "study_member")
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 @IdClass(StudyMemberId.class)
 public class StudyMember implements Serializable{
+//	@ManyToOne(targetEntity = )
+//	@JoinColumn(name = "userno")
 	@Id
-	int userno;
+	Integer userno;
+//	@ManyToOne(targetEntity = Study.class)
+//	@JoinColumn(name = "studyno")
 	@Id
-	int studyno;
+	Integer studyno;
 	@Column
-	int position;
+	Integer position;
 	@Column(name = "study_time")
 	String studyTime;
 	@Column(name = "is_join")
-	int isJoin;
+	Integer isJoin;
 
 //	@ManyToOne
 //	@JoinColumn(name = "study_rewfwefqfefq")

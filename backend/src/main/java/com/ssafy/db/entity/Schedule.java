@@ -6,18 +6,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.Getter;
 import lombok.Setter;
 
+@DynamicInsert
+@DynamicUpdate
 @Entity(name = "schedule")
 @Getter
 @Setter
 public class Schedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int scheduleno;
+	Integer scheduleno;
 	@Column
-	int studyno;
+	Integer studyno;
 	@Column
 	String next_date;
 }
