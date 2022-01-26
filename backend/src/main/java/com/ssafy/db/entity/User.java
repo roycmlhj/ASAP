@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "user") // default = entity name
+@Entity(name = "user")
+@Table // default = entity name
 @DynamicInsert
 @DynamicUpdate
 @Getter
@@ -29,7 +29,7 @@ import lombok.Setter;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int userno;
+	Integer userno;
 	@Column
 	String email;
 	@JsonIgnore
@@ -45,14 +45,16 @@ public class User {
 	@Column
 	String regidate;
 	@Column(name = "is_admin")
-	int isAdmin;
+	Integer isAdmin;
 	@Column
-	int exp;
+	String image;
 	@Column
-	int level;
+	Integer exp;
+	@Column
+	Integer level;
 	@Column(name = "del_flag")
-	int delFlag;
+	Integer delFlag;
 	
-	@OneToMany(mappedBy = "study_member") //클래스 이름 or 테이블 이름
+	@OneToMany(mappedBy = "userno")
 	List<StudyMember> studyMemberList = new ArrayList<>();
 }

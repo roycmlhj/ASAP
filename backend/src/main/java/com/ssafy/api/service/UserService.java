@@ -7,4 +7,5 @@ public interface UserService {
 	User signUp(UserRegisterPostReq userRegisterInfo);
 	User getUserByUserno(int userno);
 	User getUserByEmail(String email);
+	User modifyUser(int userno, UserRegisterPostReq userModifyInfo); 
 }

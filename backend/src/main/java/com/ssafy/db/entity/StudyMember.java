@@ -12,24 +12,26 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "study_member")
+@Entity(name = "study_member")
+@Table
 @IdClass(StudyMemberId.class)
 @Getter
 @Setter
 public class StudyMember{
 	@Id
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "userno")
-	int userno;
+	Integer userno;
+	
 	@Id
-	@ManyToOne
+	@ManyToOne(targetEntity = Study.class)
 	@JoinColumn(name = "studyno")
-	int studyno;
+	Integer studyno;
+	
 	@Column
-	int position;
+	Integer position;
 	@Column(name = "study_time")
 	String studyTime;
 	@Column(name = "is_join")
-	int isJoin;
+	Integer isJoin;
 }

@@ -22,4 +22,6 @@ public class UserRegisterPostReq {
 	String mainCategory;
 	@ApiModelProperty(name="유저 세부 관심사", example="#공부#요리")
 	String interests;
+	@ApiModelProperty(name="유저 프로필 사진", example="이미지링크")
+	String image;
 }

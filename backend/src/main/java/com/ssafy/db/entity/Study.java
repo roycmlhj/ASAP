@@ -14,20 +14,20 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "study")
+@Entity(name = "study")
+@Table
 @Getter
 @Setter
 public class Study {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int studyno;
+	Integer studyno;
 	@Column
 	String category;
 	@Column
 	String description;
 	@Column
-	int memberno;
+	Integer memberno;
 	@Column
 	String maker;
 	@Column
@@ -39,7 +39,7 @@ public class Study {
 	@Column
 	String timestamp;
 	
-	@OneToMany(mappedBy = "study_member")
+	@OneToMany(mappedBy = "studyno")
 	List<StudyMember> studyMemberList = new ArrayList<>();
 }
 
