@@ -1,5 +1,7 @@
 package com.ssafy.api.request;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -21,7 +23,7 @@ public class UserRegisterPostReq {
 	@ApiModelProperty(name="유저 주 관심사", example="사회공헌/교류")
 	String mainCategory;
 	@ApiModelProperty(name="유저 세부 관심사", example="#공부#요리")
-	String interests;
+	List<String> interests;
 	@ApiModelProperty(name="유저 프로필 사진", example="이미지링크")
 	String image;
 }

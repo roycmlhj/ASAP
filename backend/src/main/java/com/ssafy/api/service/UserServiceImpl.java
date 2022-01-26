@@ -1,5 +1,7 @@
 package com.ssafy.api.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,11 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(registerInfo.getPassword()));
 		user.setNickname(registerInfo.getNickname());
 		user.setMainCategory(registerInfo.getMainCategory());
-		user.setInterests(registerInfo.getInterests());
+		StringBuilder sb = new StringBuilder();
+		for (String str : registerInfo.getInterests()) {
+			sb.append("#"+str);
+		}
+		user.setInterests(sb.toString());
 		return userRepository.save(user);
 	}
 
@@ -41,23 +47,35 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User modifyUser(int userno, UserRegisterPostReq userModifyInfo) {
 		User user = getUserByUserno(userno);
-		System.out.println("getget"+user.toString());
-		System.out.println(userModifyInfo.getPassword());
 		if(!userModifyInfo.getPassword().isEmpty()) 
 			user.setPassword(passwordEncoder.encode(userModifyInfo.getPassword()));
-		System.out.println(userModifyInfo.getNickname());
 		if(!userModifyInfo.getNickname().isEmpty()) 
 			user.setNickname(userModifyInfo.getNickname());
-		System.out.println(userModifyInfo.getMainCategory());
 		if(!userModifyInfo.getMainCategory().isEmpty()) 
 			user.setMainCategory(userModifyInfo.getMainCategory());
-		if(!userModifyInfo.getInterests().isEmpty()) 
-			user.setInterests(userModifyInfo.getInterests());
-		System.out.println("4");
+		if(!userModifyInfo.getInterests().isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			for (String str : userModifyInfo.getInterests()) {
+				sb.append("#"+str);
+			}
+			user.setInterests(sb.toString());
+		}
 		if(!userModifyInfo.getImage().isEmpty()) 
 			user.setImage(userModifyInfo.getImage());
-		System.out.println("out");
 		return userRepository.save(user);
+	}
+
+	@Override
+	public boolean deleteUser(int userno) {
+		userRepository.deleteById(userno);
+		// 삭제 후 boolean 출력 값 어떻게??
+		return true;
+	}
+
+	@Override
+	public List<User> getUserList() {
+		List<User> userlist = userRepository.findAll();
+		return userlist;
 	}
 
 }

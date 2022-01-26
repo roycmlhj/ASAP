@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.UserRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -93,4 +95,33 @@ public class UserController {
 		}
 		return ResponseEntity.status(404).body(BaseResponseBody.of(404, "이미 존재하는 이메일입니다."));
 	}	
+	
+	@PostMapping("/{userno}")
+	@ApiOperation(value = "회원정보 수정", notes = "회원의 정보를 수정한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> modifyUser(
+			@RequestBody @ApiParam(value = "회원 수정정보", required = false) UserRegisterPostReq modifyInfo,
+			@PathVariable("userno") @ApiParam(value = "수정할 회원의 userno", required = true) int userno){ 
+		User user = userService.modifyUser(userno, modifyInfo);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+	
+	@DeleteMapping("/{userno}")
+	@ApiOperation(value = "회원탈퇴", notes = "회원 탈퇴한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> deleteUser(
+			@PathVariable("userno") @ApiParam(value = "탈퇴할 회원의 userno", required = true) int userno){
+		userService.deleteUser(userno);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
 }
