@@ -65,6 +65,7 @@ public class StudyServiceImpl implements StudyService {
 	public StudyInfo getStudyInfo(int studyno, String studyName) {
 		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno);
 		Schedule schedule = scheduleRepository.findByStudyno(studyno);
+		Schedule schedule2 = new Schedule();
 		//List<String> memeberImage = ;
 		
 		return null;
@@ -82,7 +83,7 @@ public class StudyServiceImpl implements StudyService {
 		if(Optional.ofNullable(studyRepository.findById(applyInfo.getStudyno())).get() != null) {
 			//if() //나중에 여기에 userno도 studyno처럼 있는 얘인지 확인해보자.
 			//if() //나중에 여기에 study member 테이블에 이미 있는 값을 넣는지도 확인해보자.
-				StudyMember studyMember = new StudyMember();	
+				StudyMember studyMember = new StudyMember();
 				studyMember.setStudyno(applyInfo.getStudyno());
 				studyMember.setUserno(applyInfo.getUserno());
 				studyMemberRepository.save(studyMember);
@@ -97,7 +98,12 @@ public class StudyServiceImpl implements StudyService {
 		if(Optional.ofNullable(studyRepository.findById(acceptInfo.getStudyno())).get() != null) {
 			//if() //나중에 여기에 userno도 studyno처럼 있는 얘인지 확인해보자.
 			//if() //나중에 여기에 userno, studyno가 study_member에 있는 얘인지 확인해보자.
-				//여기에 update하는 custom을 만들자...
+				if(acceptInfo.getFlag() == 1)
+					studyMemberRepository.acceptStudy(acceptInfo);
+				else if(acceptInfo.getFlag() == 0)
+					studyMemberRepository.rejectStudy(acceptInfo);
+				
+				return true;
 		}
 		
 		return false;

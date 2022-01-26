@@ -16,6 +16,7 @@ import org.apache.catalina.startup.HomesUserDatabase;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
