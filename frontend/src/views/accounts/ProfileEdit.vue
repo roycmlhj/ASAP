@@ -10,14 +10,14 @@
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
       <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
-      <p>1seul357@gmail.com</p>
+      <p>{{ username }}</p>
       <b-button variant="link" class="float-right">회원탈퇴</b-button>
     </b-card>
     <b-card bg-variant="light">
       <b-form-group
         label="비밀번호"
         label-for="password"
-        label-cols-sm="2"
+        label-cols-sm="1"
         label-align-sm="right"
       >
         <b-form-input 
@@ -34,9 +34,9 @@
         </b-form-invalid-feedback>
       </b-form-group>
       <b-form-group
-        label="비밀번호 확인"
+        label="비밀번호"
         label-for="passwordcheck"
-        label-cols-sm="2"
+        label-cols-sm="1"
         label-align-sm="right"
       >
         <b-form-input 
@@ -55,7 +55,7 @@
       <b-form-group
         label="닉네임"
         label-for="nickname"
-        label-cols-sm="2"
+        label-cols-sm="1"
         label-align-sm="right"
       >
         <b-form-input 
@@ -71,7 +71,7 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </b-card>
-    <div class="container row mt-4">
+    <div class="d-flex mt-4">
       <b-card bg-variant="light" class="col-6">
         <h5 class="float-left"><strong>이미지 업로드</strong></h5>
         <b-form-file v-model="user.file" ref="file-input" class="mb-2"></b-form-file>
@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import jwt_decode from 'jwt-decode'
 import interest from "./assets/interests.json"
 
 export default {
@@ -143,6 +144,7 @@ export default {
   data: () => {
     return {
       interestsList : interest,
+      username : null,
       user:{
         password: '',
         nickname: '',
@@ -188,6 +190,16 @@ export default {
       } else {
         return false
       }
+    }
+  },
+    created: function () {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      this.username = decoded.sub
+      console.log(decoded)
+    } else {
+      this.$router.push({name: 'Login'})
     }
   }
 }

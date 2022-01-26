@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import jwt_decode from 'jwt-decode'
 // import axios from 'axios'
 import StudyMemberCountBar from '@/components/StudyMemberCountBar.vue'
 
@@ -91,6 +92,15 @@ export default {
       }
       //console.log(StudyRoomItem.member)
       console.log(StudyRoomItem)
+    }
+  },
+  created: function () {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      console.log(decoded)
+    } else {
+      this.$router.push({name: 'Login'})
     }
   }
 }
