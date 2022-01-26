@@ -33,6 +33,7 @@
             aria-describedby="input-live-help input-live-feedback"
           >
           </b-form-input>
+          <b-button class="float-right mt-3" variant="info" @click="clickConfirmation">중복확인</b-button>
           <b-form-invalid-feedback id="input-live-feedback">
             아이디는 이메일 형식이어야 합니다.
           </b-form-invalid-feedback>
@@ -96,7 +97,7 @@
           label-cols-sm="3"
           label-align-sm="right"
         >
-          <b-form-select name="interests" id="interests" v-model="user.main_category">
+          <b-form-select name="interests" id="interests" v-model="user.mainCategory">
             <option value="" selected disabled hidden>선택해주세요</option>
             <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
           </b-form-select>
@@ -108,7 +109,7 @@
           tag-pills
           placeholder="관심분야를 입력해주세요."
           ></b-form-tags>
-        <b-button @click="clickRegister">회원가입</b-button>
+        <b-button class="float-right mt-3" variant="info" @click="clickRegister">회원가입</b-button>
       </b-form-group>
     </b-card>
   </div>
@@ -129,23 +130,39 @@ export default {
         email: '',
         password: '',
         nickname: '',
-        main_category: '',
+        mainCategory: '',
         interests: []
       },
       passwordcheck: '',
     }
   },
   methods: {
+    clickConfirmation: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/user/${this.user.email}/`,
+        data: this.user.email,
+      })
+        .then(res => {
+          console.log(res)
+          alert("사용할 수 있는 이메일입니다.")
+        })
+        .catch(err => {
+          console.log(err)
+          alert("이미 사용중인 이메일입니다.")
+        })
+    },
     clickRegister: function () {
+      console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
         this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {
-      // console.log(this.user)
+      this.user.interests = '#.vue.json'
       axios({
         method: 'post',
-        url: 'http://localhost:8080/user/signup/',
+        url: 'http://localhost:8080/api/v1/user/signup/',
         data: this.user,
       })
         .then(res => {

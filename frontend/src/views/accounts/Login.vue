@@ -53,13 +53,13 @@ export default {
     login: function () {
       axios({
         method: 'post',
-        url: 'http://localhost:8080/user/login/',
+        url: 'http://localhost:8080/api/v1/user/login/',
         data: this.user,
       })
         .then(res => {
           console.log(res)
           localStorage.setItem('jwt', res.data.token)
-          // this.$emit('login')
+          this.$emit('login')
           this.$router.push({ name: 'Main'})
         })
         .catch(err => {
