@@ -31,6 +31,8 @@ public class QHomework extends EntityPathBase<Homework> {
 
     public final NumberPath<Integer> studyno = createNumber("studyno", Integer.class);
 
+    public final StringPath title = createString("title");
+
     public QHomework(String variable) {
         super(Homework.class, forVariable(variable));
     }

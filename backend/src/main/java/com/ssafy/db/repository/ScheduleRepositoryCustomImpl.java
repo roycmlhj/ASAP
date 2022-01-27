@@ -21,9 +21,9 @@ public class ScheduleRepositoryCustomImpl extends QuerydslRepositorySupport impl
 	public Schedule findByStudyno(int studyno) {
 		Schedule schedule = jpaQueryFactory.selectFrom(qSchedule)
 				.where(qSchedule.studyno.eq(studyno))
-				.orderBy(qSchedule.next_date.desc())
+				.orderBy(qSchedule.nextDate.desc())
 				.fetchFirst();
-		return null;
+		return schedule;
 	}
 
 }

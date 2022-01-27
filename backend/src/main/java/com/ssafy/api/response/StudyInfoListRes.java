@@ -16,9 +16,9 @@ public class StudyInfoListRes {
 	@ApiModelProperty(name = "모든 참가 스터디 정보")
 	List<StudyInfo> studyInfoList;
 
-//	public static StudyListRes of(List<Study> studyList) {
-//		StudyListRes res = new StudyListRes();
-//		res.studyList = studyList;
-//		return res;
-//	}
+	public static StudyInfoListRes of(List<StudyInfo> studyInfoList) {
+		StudyInfoListRes res = new StudyInfoListRes();
+		res.studyInfoList = studyInfoList;
+		return res;
+	}
 }

@@ -31,4 +31,6 @@ public class Homework {
 	Integer isActive;
 	@Column
 	String content;
+	@Column
+	String title;
 }

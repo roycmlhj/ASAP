@@ -20,9 +20,11 @@ import com.ssafy.api.response.StudyInfo;
 import com.ssafy.api.response.StudyInfoListRes;
 import com.ssafy.api.response.StudyListRes;
 import com.ssafy.api.response.StudyRes;
+import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.service.StudyService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Study;
+import com.ssafy.db.entity.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +51,8 @@ public class StudyController {
 	 *  /study/accept put
 	 */
 	
+	
+	//interests 추가하기!!!!!
 	@PostMapping("/create")
 	@ApiOperation(value = "스터디 방 생성", notes = "스터디 방에 대한 정보를 받고 스터디 방을 생성한다.")
 	@ApiResponses({
@@ -78,7 +82,7 @@ public class StudyController {
 		for(int i = 0; i < studyList.size(); i++)
 			studyInfoList.add(studyService.getStudyInfo(studyList.get(i).getStudyno(), studyList.get(i).getStudyname()));
 
-		return null;
+		return ResponseEntity.status(200).body(StudyInfoListRes.of(studyInfoList));
 	};
 	
 	
@@ -137,4 +141,16 @@ public class StudyController {
 		else
 			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
 	}
+	
+	@GetMapping("/all-user/{studyno}")
+	@ApiOperation(value = "스터디 지원자 정보", notes = "스터디에 지원한 유저와 참가중인 유저를 반환해준다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<UserListRes> getUserList(@PathVariable("studyno") @ApiParam(value = "study pk", required = true) int studyno){
+		List<User> userList = studyService.getUserList(studyno);
+		return ResponseEntity.status(200).body(UserListRes.of(userList));
+	};
 }

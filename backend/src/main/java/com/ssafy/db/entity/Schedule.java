@@ -24,6 +24,6 @@ public class Schedule {
 	Integer scheduleno;
 	@Column
 	Integer studyno;
-	@Column
-	String next_date;
+	@Column(name = "next_date")
+	String nextDate;
 }

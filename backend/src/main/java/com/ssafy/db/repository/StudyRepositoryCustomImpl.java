@@ -1,6 +1,7 @@
 package com.ssafy.db.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -23,7 +24,7 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 	}
 
 	@Override
-	public List<Study> findByUserno(int userno) {
+	public Optional<List<Study>> findByUserno(int userno) {
 		/*
 		 * select a.studyno, a.name
 		 * from study a
@@ -39,6 +40,6 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 		.where(qStudyMember.userno.eq(userno).and(qStudyMember.position.ne(2)))
 		.fetch();
 		
-		return studyList;
+		return Optional.ofNullable(studyList);
 	}
 }
