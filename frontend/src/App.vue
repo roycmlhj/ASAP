@@ -3,8 +3,8 @@
     <div id="nav">
       <span v-if="isLogin">
         <router-link :to="{ name: 'Main' }">Main</router-link> |
-        <router-link :to="{ name: 'ProfileEdit' }">ProfileEdit</router-link> |
-        <router-link :to="{ name: 'StoryBoard'}">StoryBoard</router-link> | 
+        <router-link :to="{ name: 'MyPage' }">MyPage</router-link> |
+        <router-link :to="{ name: 'StudyBoard'}">StudyBoard</router-link> | 
         <router-link @click.native="logout" to="#">Logout</router-link>
       </span>
       <span v-else>

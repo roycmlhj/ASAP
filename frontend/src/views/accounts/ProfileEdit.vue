@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.01.25
-    마지막 업데이트 : 2022.01.25
+    마지막 업데이트 : 2022.01.27
     
     개인정보수정 페이지
  */
@@ -10,8 +10,8 @@
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
       <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
-      <p>{{ username }}</p>
-      <b-button variant="link" class="float-right">회원탈퇴</b-button>
+      <p>{{ this.user.email }}</p>
+      <b-button variant="link" class="float-right" @click="userDelete">회원탈퇴</b-button>
     </b-card>
     <b-card bg-variant="light">
       <b-form-group
@@ -74,8 +74,8 @@
     <div class="d-flex mt-4">
       <b-card bg-variant="light" class="col-6">
         <h5 class="float-left"><strong>이미지 업로드</strong></h5>
-        <b-form-file v-model="user.file" ref="file-input" class="mb-2"></b-form-file>
-        <p class="mt-2 float-left">선택된 이미지 : <b>{{ user.file ? user.file.name : '' }}</b></p>
+        <b-form-file v-model="user.image" ref="file-input" class="mb-2"></b-form-file>
+        <p class="mt-2 float-left">선택된 이미지 : <b>{{ user.image ? user.image.name : '' }}</b></p>
         <b-form-checkbox
           id="checkbox-1"
           name="checkbox-1"
@@ -87,7 +87,7 @@
       </b-card>
       <b-card bg-variant="light" class="col-6">
         <h5 class="float-left"><strong>관심 분야</strong></h5>
-        <b-form-select name="interests" id="interests" v-model="user.main_category" class="mb-3">
+        <b-form-select name="interests" id="interests" v-model="user.mainCategory" class="mb-3">
           <option value="" selected disabled hidden>선택해주세요</option>
           <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
         </b-form-select>
@@ -131,33 +131,84 @@
         </b-form-tags>
       </b-card>
     </div>
-    <b-button class="mt-5 float-right">저장하기</b-button>
+    <b-button class="mt-5 float-right" @click="userEdit">저장하기</b-button>
   </div>
 </template>
 
 <script>
 import jwt_decode from 'jwt-decode'
 import interest from "./assets/interests.json"
+import axios from 'axios'
 
 export default {
   name: 'ProfileEdit',
   data: () => {
     return {
       interestsList : interest,
-      username : null,
+      userno: null,
       user:{
+        email: null,
         password: '',
         nickname: '',
-        main_category: '',
+        mainCategory: '',
         interests: [],
-        file: null
+        image: null
       },
       passwordcheck: '',
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     clearFiles() {
       this.$refs['file-input'].reset()
+    },
+    userEdit: function() {
+      console.log(this.user)
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        headers: this.setToken(),
+        data: this.user
+      })
+        .then(res => {
+          console.log(res)
+          // localStorage.setItem('jwt', res.data.accessToken)
+          alert("회원 정보 수정이 완료되었습니다.")
+          this.$router.push({ name: 'MyPage'})
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    userDelete: function () {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+      })
+        .then(res => {
+          console.log(res)
+          alert("회원 탈퇴가 완료되었습니다.")
+          this.$router.push({ name: 'Login'})
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    getUserInformation: function () {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      this.user.nickname = decoded.nickname
+      this.user.mainCategory = decoded.mainCategory
+      this.userno = decoded.userno
+      this.user.email = decoded.email
+      this.mainCategory = decoded.mainCategory
+      // console.log(this.username, this.user.nickname, this.user.mainCategory, this.user.email)
     }
   },
   computed: {
@@ -194,10 +245,7 @@ export default {
   },
     created: function () {
     if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
-      const decoded = jwt_decode(token)
-      this.username = decoded.sub
-      console.log(decoded)
+      this.getUserInformation()
     } else {
       this.$router.push({name: 'Login'})
     }

@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class StudyMemberId implements Serializable{
-	Integer userno;
-	Integer studyno;
+	private Integer userno;
+	private Integer studyno;
 }

@@ -159,7 +159,6 @@ export default {
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {
-      this.user.interests = '#.vue.json'
       axios({
         method: 'post',
         url: 'http://localhost:8080/api/v1/user/signup/',

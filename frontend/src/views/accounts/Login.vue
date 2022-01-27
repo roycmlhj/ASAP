@@ -25,7 +25,7 @@
         @keyup.enter="login"
       >
       </b-form-input>
-      <b-form-checkbox>&nbsp;자동로그인</b-form-checkbox>
+      <!-- <b-form-checkbox>&nbsp;자동로그인</b-form-checkbox> -->
       <b-button @click="login">Login</b-button>
       <div class="mt-4">
         Didn't you have ID? &nbsp;&nbsp;
