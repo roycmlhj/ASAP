@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User modifyUser(int userno, UserRegisterPostReq userModifyInfo) {
 		User user = getUserByUserno(userno);
-		if(!userModifyInfo.getPassword().isEmpty()) 
+		if(!userModifyInfo.getPassword().equals("")) 
 			user.setPassword(passwordEncoder.encode(userModifyInfo.getPassword()));
-		if(!userModifyInfo.getNickname().isEmpty()) 
+		if(!userModifyInfo.getNickname().equals("")) 
 			user.setNickname(userModifyInfo.getNickname());
-		if(!userModifyInfo.getMainCategory().isEmpty()) 
+		if(!userModifyInfo.getMainCategory().equals("")) 
 			user.setMainCategory(userModifyInfo.getMainCategory());
 		if(!userModifyInfo.getInterests().isEmpty()) {
 			StringBuilder sb = new StringBuilder();

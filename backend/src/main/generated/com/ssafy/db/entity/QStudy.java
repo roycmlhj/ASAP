@@ -24,6 +24,8 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final StringPath description = createString("description");
 
+    public final ListPath<Homework, QHomework> homeworkList = this.<Homework, QHomework>createList("homeworkList", Homework.class, QHomework.class, PathInits.DIRECT2);
+
     public final StringPath image = createString("image");
 
     public final StringPath interests = createString("interests");
@@ -31,6 +33,8 @@ public class QStudy extends EntityPathBase<Study> {
     public final StringPath maker = createString("maker");
 
     public final NumberPath<Integer> memberno = createNumber("memberno", Integer.class);
+
+    public final ListPath<Schedule, QSchedule> scheduleList = this.<Schedule, QSchedule>createList("scheduleList", Schedule.class, QSchedule.class, PathInits.DIRECT2);
 
     public final ListPath<StudyMember, QStudyMember> studyMemberList = this.<StudyMember, QStudyMember>createList("studyMemberList", StudyMember.class, QStudyMember.class, PathInits.DIRECT2);
 

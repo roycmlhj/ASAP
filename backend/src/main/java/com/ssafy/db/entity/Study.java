@@ -8,14 +8,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
+import org.apache.catalina.startup.HomesUserDatabase;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+@DynamicInsert
+@DynamicUpdate
 @Entity(name = "study")
-@Table
 @Getter
 @Setter
 public class Study {
@@ -39,7 +46,16 @@ public class Study {
 	@Column
 	String timestamp;
 	
-	@OneToMany(mappedBy = "studyno")
-	List<StudyMember> studyMemberList = new ArrayList<>();
+	
+	@OneToMany
+	@JoinColumn(name = "studyno")
+	List<StudyMember> studyMemberList = new ArrayList<StudyMember>();
+	
+	@OneToMany
+	@JoinColumn(name = "studyno")
+	List<Homework> homeworkList = new ArrayList<Homework>();
+	
+	@OneToMany
+	@JoinColumn(name = "studyno")
+	List<Schedule> scheduleList = new ArrayList<Schedule>();
 }
-

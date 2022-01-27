@@ -29,7 +29,7 @@ import lombok.Setter;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer userno;
+	int userno;
 	@Column
 	String email;
 	@JsonIgnore

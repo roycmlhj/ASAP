@@ -101,7 +101,6 @@ public class AdminController {
     })
 	public ResponseEntity<UserListRes> userList(){
 		List<User> userlist = userService.getUserList();
-		
 		return ResponseEntity.status(200).body(UserListRes.of(userlist));
 	}
 }

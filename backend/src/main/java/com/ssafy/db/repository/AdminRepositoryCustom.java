@@ -1,5 +1,5 @@
-//package com.ssafy.db.repository;
-//
-//public interface AdminRepositoryCustom {
-//	
-//}
+package com.ssafy.db.repository;
+
+public interface AdminRepositoryCustom {
+	
+}
