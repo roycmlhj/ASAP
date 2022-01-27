@@ -43,7 +43,7 @@ public class StudyServiceImpl implements StudyService {
 		if(studyRepository.save(study) != null) {
 			//if() //나중에 여기에 userno도 studyno처럼 있는 얘인지 확인해보자.
 			//if() //나중에 여기에 study member 테이블에 이미 있는 값을 넣는지도 확인해보자.
-			StudyMember studyMember = new StudyMember();	
+			StudyMember studyMember = new StudyMember();
 			studyMember.setStudyno(studyRepository.findByStudyname(studyInfo.getStudyname()).get().getStudyno());
 			studyMember.setUserno(studyInfo.getUserno());
 			studyMember.setPosition(0);
