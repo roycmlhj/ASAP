@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-button @click="modalShow=!modalShow" variant="link">스터디방 만들기</b-button>
-    <b-modal v-model="modalShow" title="스터디방 생성" hide-footer>
+    <b-button @click="modalShow=!modalShow" variant="link">스터디 방 생성하기</b-button>
+    <b-modal v-model="modalShow" title="Create Study" hide-footer>
       <b-form @submit="createStudyRoom">
         <b-form-group
           id="input-title-group"
@@ -32,12 +32,14 @@
           label="소개"
           lebel-for="input-description"
         >
-          <b-form-input
+          <b-form-textarea
             id="input-description"
             v-model="description"
             type = "text"
+            rows="6"
+            max-rows="6"
             required
-          ></b-form-input>
+          ></b-form-textarea>
         </b-form-group>
         <b-form-group
           id="input-member-group"
@@ -49,9 +51,7 @@
           >
           </study-member-count-bar>
         </b-form-group>
-        <div class="mt-3">
-          <b-button type = "submit" variant="btn btn-primary">완료</b-button>
-        </div>
+        <b-button class="float-right" type="submit" variant="primary">완료</b-button>
       </b-form>
     </b-modal>
     <br>
@@ -105,3 +105,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  form {
+    padding: 0px 20px;
+  }
+</style>

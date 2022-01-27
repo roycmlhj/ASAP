@@ -10,7 +10,7 @@
     <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
     <b-modal ref="my-modal" 
       ok-only 
-      title="개인정보수정"    
+      title="Input Password"    
       hide-footer
     >
     <b-form-group
@@ -24,7 +24,7 @@
         type="password"
       >
       </b-form-input>
-      <b-button class="mt-5 float-right" @click="passwordConfirmation">확인</b-button>
+      <b-button class="mt-5 float-right" variant="primary" @click="passwordConfirmation">확인</b-button>
     </b-form-group>
     </b-modal>
   </div>

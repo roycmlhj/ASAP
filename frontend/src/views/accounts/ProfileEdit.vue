@@ -87,9 +87,9 @@
       </b-card>
       <b-card bg-variant="light" class="col-6">
         <h5 class="float-left"><strong>관심 분야</strong></h5>
-        <b-form-select name="interests" id="interests" v-model="user.mainCategory" class="mb-3">
+        <b-form-select name="mainCategory" id="mainCategory" v-model="user.mainCategory" class="mb-3">
           <option value="" selected disabled hidden>선택해주세요</option>
-          <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
+          <option v-for="interest in interestList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
         </b-form-select>
         <b-form-tags v-model="user.interests" no-outer-focus class="mb-2">
           <template v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }">
@@ -144,7 +144,7 @@ export default {
   name: 'ProfileEdit',
   data: () => {
     return {
-      interestsList : interest,
+      interestList : interest,
       userno: null,
       user:{
         email: null,
@@ -154,6 +154,7 @@ export default {
         interests: [],
         image: null
       },
+      interestTmp: [],
       passwordcheck: '',
     }
   },
@@ -208,7 +209,8 @@ export default {
       this.userno = decoded.userno
       this.user.email = decoded.email
       this.mainCategory = decoded.mainCategory
-      // console.log(this.username, this.user.nickname, this.user.mainCategory, this.user.email)
+      this.interestTmp = decoded.interests
+      this.user.interests = this.interestTmp.split('#')
     }
   },
   computed: {

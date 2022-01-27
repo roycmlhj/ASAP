@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>모집 글 작성</h1>
-    <b-form>
+    <b-form class="form">
       <b-form-group
         id="input-study-group"
         label="스터디 선택"
@@ -122,3 +122,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>
