@@ -7,5 +7,5 @@ import com.ssafy.db.entity.StudyMember;
 
 @Repository
 public interface StudyMemberRepository extends JpaRepository<StudyMember, Integer>, StudyMemberRepositoryCustom{
-
+	void deleteByUserno(int userno);
 }

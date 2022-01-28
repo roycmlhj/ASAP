@@ -56,10 +56,11 @@ public class JwtTokenUtil {
                 .withIssuer(ISSUER)
                 .withClaim("userno", user.getUserno())
                 .withClaim("email", user.getEmail())
-                .withClaim("nickname", user.getUserno())
+                .withClaim("nickname", user.getNickname())
                 .withClaim("image", user.getImage())
                 .withClaim("mainCategory", user.getMainCategory())
                 .withClaim("interests", user.getInterests())
+                .withClaim("isAdmin", user.getIsAdmin())
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }

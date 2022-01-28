@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -143,24 +144,11 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<UserDetailInfoRes> detailUser(@PathVariable("userno") @ApiParam(value = "조회할 회원의 userno", required = true) int userno){
-		// 여기에 유저 analisis? 추가
+		// 여기에 유저 analyze 추가
 		User user = userService.getUserByUserno(userno);
 		List<Study> studyList = studyService.getStudyList(userno);
-		List<Homework> onHomeworkList = new ArrayList<Homework>();
-		List<Homework> doneHomeworkList = new ArrayList<Homework>();
+		List<Homework> onHomeworkList = userService.getHomeworkListbyUserno(userno, 0);
+		List<Homework> doneHomeworkList = userService.getHomeworkListbyUserno(userno, 1);
 		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList));
-	}
-	
-	@PostMapping("/kick")
-	@ApiOperation(value = "스터디 회원 퇴출", notes = "스터디 회원을 퇴출한다.") 
-    @ApiResponses({
-        @ApiResponse(code = 200, message = "성공"),
-        @ApiResponse(code = 401, message = "인증 실패"),
-        @ApiResponse(code = 404, message = "사용자 없음"),
-        @ApiResponse(code = 500, message = "서버 오류")
-    })
-	public ResponseEntity<? extends BaseResponseBody> kickUser(int userno, int studyno){
-		
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 }

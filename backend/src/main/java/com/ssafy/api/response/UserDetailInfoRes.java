@@ -16,6 +16,7 @@ import lombok.Setter;
 @ApiModel("UserDetailInfoResponse")
 public class UserDetailInfoRes {
 	// study analyze 추가 필요.
+	// 데이터 솎아내야 함
 	@ApiModelProperty(name = "유저 정보")
 	User user;
 	@ApiModelProperty(name = "참여 스터디 목록")

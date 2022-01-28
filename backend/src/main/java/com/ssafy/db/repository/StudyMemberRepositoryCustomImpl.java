@@ -39,4 +39,14 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 		.execute();
 	}
 
+	// 민추가
+	@Override
+	@Transactional
+	public void kickStudyMember(int userno, int studyno) {
+		jpaQueryFactory.delete(qStudyMember)
+		.where(qStudyMember.userno.eq(userno)
+				.and(qStudyMember.studyno.eq(studyno)))
+		.execute();
+	}
+
 }

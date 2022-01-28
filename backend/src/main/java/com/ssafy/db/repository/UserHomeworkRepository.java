@@ -11,5 +11,4 @@ import java.util.Optional;
  */
 @Repository
 public interface UserHomeworkRepository extends JpaRepository<User, Integer>, UserHomeworkRepositoryCustom {
-	
 }

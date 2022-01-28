@@ -44,6 +44,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<StudyMember, QStudyMember> studyMemberList = this.<StudyMember, QStudyMember>createList("studyMemberList", StudyMember.class, QStudyMember.class, PathInits.DIRECT2);
 
+    public final ListPath<UserHomework, QUserHomework> userHomeworkList = this.<UserHomework, QUserHomework>createList("userHomeworkList", UserHomework.class, QUserHomework.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> userno = createNumber("userno", Integer.class);
 
     public QUser(String variable) {

@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -30,6 +31,10 @@ public class QHomework extends EntityPathBase<Homework> {
     public final StringPath start_date = createString("start_date");
 
     public final NumberPath<Integer> studyno = createNumber("studyno", Integer.class);
+
+    public final StringPath title = createString("title");
+
+    public final ListPath<UserHomework, QUserHomework> userHomeworkList = this.<UserHomework, QUserHomework>createList("userHomeworkList", UserHomework.class, QUserHomework.class, PathInits.DIRECT2);
 
     public QHomework(String variable) {
         super(Homework.class, forVariable(variable));

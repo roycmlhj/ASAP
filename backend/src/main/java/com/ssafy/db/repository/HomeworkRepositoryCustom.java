@@ -10,4 +10,6 @@ import com.ssafy.db.entity.Homework;
 @Repository
 public interface HomeworkRepositoryCustom {
 	Optional<List<Homework>> findByStudyno(int studyno);
+	// 민추가
+	Optional<List<Homework>> findHomeworkByuserno(int userno, int flag);
 }

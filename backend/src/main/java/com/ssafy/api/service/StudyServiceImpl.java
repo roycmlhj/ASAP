@@ -19,6 +19,7 @@ import com.ssafy.db.repository.HomeworkRepository;
 import com.ssafy.db.repository.ScheduleRepository;
 import com.ssafy.db.repository.StudyMemberRepository;
 import com.ssafy.db.repository.StudyRepository;
+import com.ssafy.db.repository.UserHomeworkRepository;
 
 @Service("studyService")
 public class StudyServiceImpl implements StudyService {
@@ -106,21 +107,4 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return false;
 	}
-
-	@Override
-	public List<Homework> getHomeworkListbyUserno(int userno) {
-		List<Study> studyList = getStudyList(userno);
-		// 전체 과제
-		List<Homework> homeworkList = new ArrayList<>();
-		for (Study study : studyList) {
-			List<Homework> temp = homeworkRepository.findByStudyno(study.getStudyno()).get();
-			for (Homework homework : temp) {
-				homeworkList.add(homework);
-			}
-		}
-		
-		// 제출한 과제
-		return homeworkList;
-	}
-
 }

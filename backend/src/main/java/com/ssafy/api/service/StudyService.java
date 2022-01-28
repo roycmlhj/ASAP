@@ -16,5 +16,4 @@ public interface StudyService {
 	Study getStudyInfo(int studyno);
 	boolean applyStudy(StudyApplyPostReq applyInfo);
 	boolean acceptStudy(StudyAcceptPutReq acceptInfo);
-	List<Homework> getHomeworkListbyUserno(int userno);
 }
