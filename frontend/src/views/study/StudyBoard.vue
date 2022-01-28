@@ -6,22 +6,20 @@
         <b-button @click="search">search</b-button>
       </b-input-group-append>
     </b-input-group>
-    <b-card-group deck>
-      <span class = "d-flex flex-wrap">
-        <b-card  v-for="study in studies" v-bind:key="study" :title="study.title" style="max-width: 16rem; height: 22rem;">
-          <b-card-text>
-            {{"모집중"}}             {{study.currentMember}}/{{study.member}}
-          </b-card-text>
-          <b-card-text>
-            <span v-for="topic in study.topic" v-bind:key="topic">{{topic}}    </span>
-          </b-card-text>
-          <b-card-text>
-            <b-avatar :src="study.studyLeaderIconTag"></b-avatar>
-            {{study.studyLeader}}
-          </b-card-text>
-        </b-card>
-      </span>
-    </b-card-group>
+    <span class="row">
+      <b-card class="col-6" v-for="study in studies" v-bind:key="study" :title="study.title">
+        <b-card-text>
+          {{"모집중"}}             {{study.currentMember}}/{{study.member}}
+        </b-card-text>
+        <b-card-text>
+          <span v-for="topic in study.topic" v-bind:key="topic">{{topic}}    </span>
+        </b-card-text>
+        <b-card-text>
+          <b-avatar :src="study.studyLeaderIconTag"></b-avatar>
+          {{study.studyLeader}}
+        </b-card-text>
+      </b-card>
+    </span>
     <div class="overflow-auto">
       <b-pagination-nav :link-gen="linkGen" :number-of-pages="studies.length/2"></b-pagination-nav>
     </div>
@@ -37,7 +35,6 @@
       return {
         searchWord : null,
         studies : [],
-        
       }
     },
     methods: {
