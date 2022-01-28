@@ -1,5 +1,7 @@
 package com.ssafy.api.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.api.response.UserDetailInfoRes;
+import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
+import com.ssafy.api.service.StudyService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.db.entity.Homework;
+import com.ssafy.db.entity.Study;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 
@@ -37,6 +44,8 @@ import io.swagger.annotations.ApiResponse;
 public class UserController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	StudyService studyService;
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -104,11 +113,11 @@ public class UserController {
         @ApiResponse(code = 404, message = "사용자 없음"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<? extends BaseResponseBody> modifyUser(
+	public ResponseEntity<UserLoginPostRes> modifyUser(
 			@RequestBody @ApiParam(value = "회원 수정정보", required = false) UserRegisterPostReq modifyInfo,
 			@PathVariable("userno") @ApiParam(value = "수정할 회원의 userno", required = true) int userno){ 
 		User user = userService.modifyUser(userno, modifyInfo);
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(user)));
 	}
 	
 	@DeleteMapping("/{userno}")
@@ -122,6 +131,36 @@ public class UserController {
 	public ResponseEntity<? extends BaseResponseBody> deleteUser(
 			@PathVariable("userno") @ApiParam(value = "탈퇴할 회원의 userno", required = true) int userno){
 		userService.deleteUser(userno);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+	
+	@GetMapping("detail/{userno}")
+	@ApiOperation(value = "내 정보 상세보기", notes = "내 상세 정보를 본다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<UserDetailInfoRes> detailUser(@PathVariable("userno") @ApiParam(value = "조회할 회원의 userno", required = true) int userno){
+		// 여기에 유저 analisis? 추가
+		User user = userService.getUserByUserno(userno);
+		List<Study> studyList = studyService.getStudyList(userno);
+		List<Homework> onHomeworkList = new ArrayList<Homework>();
+		List<Homework> doneHomeworkList = new ArrayList<Homework>();
+		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList));
+	}
+	
+	@PostMapping("/kick")
+	@ApiOperation(value = "스터디 회원 퇴출", notes = "스터디 회원을 퇴출한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> kickUser(int userno, int studyno){
+		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 }

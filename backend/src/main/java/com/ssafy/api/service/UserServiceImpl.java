@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 			}
 			user.setInterests(sb.toString());
 		}
-		if(!userModifyInfo.getImage().isEmpty()) 
+		if(userModifyInfo.getImage() != null) 
 			user.setImage(userModifyInfo.getImage());
 		return userRepository.save(user);
 	}

@@ -6,5 +6,5 @@ import java.util.Optional;
 import com.ssafy.db.entity.Study;
 
 public interface StudyRepositoryCustom {
-	List<Study> findByUserno(int userno);
+	Optional<List<Study>> findByUserno(int userno);
 }

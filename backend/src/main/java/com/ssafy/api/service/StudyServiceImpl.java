@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,14 +57,14 @@ public class StudyServiceImpl implements StudyService {
 
 	@Override
 	public List<Study> getStudyList(int userno) {
-		List<Study> studyList = studyRepository.findByUserno(userno);
+		List<Study> studyList = studyRepository.findByUserno(userno).get();
 		
 		return studyList;
 	}
 
 	@Override
 	public StudyInfo getStudyInfo(int studyno, String studyName) {
-		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno);
+		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get();
 		Schedule schedule = scheduleRepository.findByStudyno(studyno);
 		Schedule schedule2 = new Schedule();
 		//List<String> memeberImage = ;
@@ -103,8 +104,23 @@ public class StudyServiceImpl implements StudyService {
 				
 				return true;
 		}
-		
 		return false;
+	}
+
+	@Override
+	public List<Homework> getHomeworkListbyUserno(int userno) {
+		List<Study> studyList = getStudyList(userno);
+		// 전체 과제
+		List<Homework> homeworkList = new ArrayList<>();
+		for (Study study : studyList) {
+			List<Homework> temp = homeworkRepository.findByStudyno(study.getStudyno()).get();
+			for (Homework homework : temp) {
+				homeworkList.add(homework);
+			}
+		}
+		
+		// 제출한 과제
+		return homeworkList;
 	}
 
 }

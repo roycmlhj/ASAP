@@ -1,6 +1,7 @@
 package com.ssafy.db.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -19,10 +20,10 @@ public class HomeworkRepositoryCustomImpl extends QuerydslRepositorySupport impl
 	}
 
 	@Override
-	public List<Homework> findByStudyno(int studyno) {
+	public Optional<List<Homework>> findByStudyno(int studyno) {
 		List<Homework> homeworkList = jpaQueryFactory.selectFrom(qHomework)
 				.where(qHomework.studyno.eq(studyno)).fetch();
-		return homeworkList;
+		return Optional.ofNullable(homeworkList);
 	}
 
 }
