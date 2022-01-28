@@ -148,4 +148,10 @@ public class StudyServiceImpl implements StudyService {
 		return userList;
 	}
 
+	@Override
+	public Study getStudyByStudyname(String studyname) {
+		Study study = studyRepository.findByStudyname(studyname).get();
+		return study;
+	}
+
 }
