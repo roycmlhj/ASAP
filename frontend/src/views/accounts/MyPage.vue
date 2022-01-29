@@ -24,7 +24,7 @@
         type="password"
       >
       </b-form-input>
-      <b-button class="mt-5 float-right" variant="primary" @click="passwordConfirmation">확인</b-button>
+      <b-button class="mt-5" variant="dark" style="float: right;" @click="passwordConfirmation">확인</b-button>
     </b-form-group>
     </b-modal>
   </div>
@@ -67,5 +67,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

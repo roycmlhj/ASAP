@@ -5,6 +5,7 @@
         <router-link :to="{ name: 'Main' }">Main</router-link> |
         <router-link :to="{ name: 'MyPage' }">MyPage</router-link> |
         <router-link :to="{ name: 'StudyBoard'}">StudyBoard</router-link> | 
+        <router-link :to="{ name: 'Admin' }">Admin</router-link> |
         <router-link @click.native="logout" to="#">Logout</router-link>
       </span>
       <span v-else>

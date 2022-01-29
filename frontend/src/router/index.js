@@ -7,6 +7,7 @@ import StudyBoard from '../views/study/StudyBoard.vue'
 import Main from '../views/study/Main.vue'
 import CreateStudyBoard from '../views/study/CreateStudyBoard.vue'
 import MyPage from '../views/accounts/MyPage.vue'
+import Admin from '../views/admins/Admin.vue'
 
 
 Vue.use(VueRouter)
@@ -47,6 +48,11 @@ const routes = [
     name: 'MyPage',
     component: MyPage
   },
+  {
+    path: '/admin/userlist/',
+    name: 'Admin',
+    component: Admin
+  }
 
 ]
 

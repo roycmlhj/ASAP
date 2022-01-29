@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h1>모집 글 작성</h1>
-    <b-form class="form">
+    <h4>모집 글 작성</h4>
+    <b-form>
       <b-form-group
         id="input-study-group"
         label="스터디 선택"
@@ -24,19 +24,13 @@
         >{{title}}
         </b-form-input>
       </b-form-group>
-      <b-form-group
-        id="input-topic-group"
-        label="스터디 주제"
-        lebel-for="input-topic"
-      >
-        <b-form-input
-          id="input-topic"
-          v-model="topic"
-          type = "text"
-          required
-        >{{topic}}
-        </b-form-input>
-      </b-form-group>
+      <b-form-tags 
+        input-id="interests" 
+        v-model="interests"
+        tag-variant="primary"
+        tag-pills
+        placeholder="관심분야를 입력해주세요."
+        ></b-form-tags>
       <b-form-group
         id="input-description-group"
         label="스터디 설명"
@@ -83,6 +77,7 @@
 
 <script>
 import StudyDropdown from '@/components/StudyDropdown.vue'
+import axios from 'axios'
 
 
 export default {
@@ -94,25 +89,37 @@ export default {
     return {
       title:null,
       description:null,
-      topic:null,
+      interests:[],
       git:null,
       call:null,
+      study:null,
     }
   },
   methods: {
-    updateStudy(Study) {
-      this.title = Study.title
-      this.description = Study.description
-      this.topic = Study.topic
-      //console.log(this.title)
-      //console.log(this.description)
-      //console.log(this.topic)
+    updateStudy(studyinfo) {
+      axios({
+        method:'get',
+        url:`http://localhost:8080/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
+        data:this.study
+      }).then(res=> {
+        console.log(res)
+        this.title=studyinfo.studyname
+        if (!res.data.study.interests){
+          this.interests=[]
+        }else{
+          const input_interests = res.data.study.interests
+          
+          this.interests=input_interests.split('#')
+        }
+        this.description= res.data.study.description
+        console.log(this.description)
+      })
     },
     createStudyRoom: function() {
       const StudyRoomItem = {
         title:this.title,
         description:this.description,
-        topic:this.topic,
+        interests:this.interests,
         git:this.git,
         call: this.call,
       }
@@ -122,6 +129,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

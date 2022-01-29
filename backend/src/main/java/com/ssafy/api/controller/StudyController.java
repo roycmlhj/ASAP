@@ -107,7 +107,6 @@ public class StudyController {
 	};
 	
 	
-	
 	@PostMapping("/apply")
 	@ApiOperation(value = "스터디 가입 신청", notes = "스터디에 가입 신청을 한다.")
 	@ApiResponses({

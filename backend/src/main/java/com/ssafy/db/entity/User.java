@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -55,6 +56,11 @@ public class User {
 	@Column(name = "del_flag")
 	Integer delFlag;
 	
-	@OneToMany(mappedBy = "userno")
+	@OneToMany
+	@JoinColumn(name = "userno")
 	List<StudyMember> studyMemberList = new ArrayList<>();
+	
+	@OneToMany
+	@JoinColumn(name = "userno")
+	List<UserHomework> userHomeworkList = new ArrayList<>();
 }

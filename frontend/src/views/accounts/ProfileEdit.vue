@@ -11,14 +11,13 @@
       <h5><strong>프로필</strong></h5>
       <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
       <p>{{ this.user.email }}</p>
-      <b-button variant="link" class="float-right" @click="userDelete">회원탈퇴</b-button>
+      <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
     </b-card>
-    <b-card bg-variant="light">
+    <b-card bg-variant="light" class="input">
       <b-form-group
         label="비밀번호"
         label-for="password"
         label-cols-sm="1"
-        label-align-sm="right"
       >
         <b-form-input 
           id="password"
@@ -29,7 +28,7 @@
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
         >
         </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback">
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -37,7 +36,6 @@
         label="비밀번호"
         label-for="passwordcheck"
         label-cols-sm="1"
-        label-align-sm="right"
       >
         <b-form-input 
           id="passwordcheck" 
@@ -48,7 +46,7 @@
           placeholder="비밀번호를 한번 더 입력해주세요."
         >
         </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback">
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호가 일치하지 않습니다.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -56,7 +54,6 @@
         label="닉네임"
         label-for="nickname"
         label-cols-sm="1"
-        label-align-sm="right"
       >
         <b-form-input 
           id="nickname" 
@@ -66,7 +63,7 @@
           placeholder="닉네임은 2자 이상이어야 합니다."
         >
         </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback">
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           닉네임은 두 글자 이상이어야 합니다.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -100,7 +97,7 @@
                 placeholder="관심 분야를 추가로 입력해주세요."
                 class="form-control">
               <b-input-group-append>
-                <b-button @click="addTag()" variant="primary">Add</b-button>
+                <b-button @click="addTag()" style="background-color: skyblue; border: none;">Add</b-button>
               </b-input-group-append>
             </b-input-group>
             <ul
@@ -131,7 +128,7 @@
         </b-form-tags>
       </b-card>
     </div>
-    <b-button class="mt-5 float-right" @click="userEdit">저장하기</b-button>
+    <b-button class="btn1 mt-5 float-right" @click="userEdit">저장하기</b-button>
   </div>
 </template>
 
@@ -179,7 +176,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          // localStorage.setItem('jwt', res.data.accessToken)
+          localStorage.setItem('jwt', res.data.accessToken)
           alert("회원 정보 수정이 완료되었습니다.")
           this.$router.push({ name: 'MyPage'})
         })
@@ -211,6 +208,7 @@ export default {
       this.mainCategory = decoded.mainCategory
       this.interestTmp = decoded.interests
       this.user.interests = this.interestTmp.split('#')
+      console.log(decoded)
     }
   },
   computed: {
@@ -260,5 +258,13 @@ export default {
    width: 100px;
    height: 100px;
    border-radius: 70%;
+ }
+ .btn1 {
+   background-color: palevioletred;
+   border: none;
+ }
+ input {
+   border: none;
+   border-bottom: solid 1px;
  }
 </style>

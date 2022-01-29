@@ -51,7 +51,7 @@
           >
           </study-member-count-bar>
         </b-form-group>
-        <b-button class="float-right" type="submit" variant="primary">완료</b-button>
+        <b-button class="float-right" type="submit" variant="dark">완료</b-button>
       </b-form>
     </b-modal>
     <br>
