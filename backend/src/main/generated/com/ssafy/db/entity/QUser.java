@@ -20,6 +20,8 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
+    public final ListPath<Board, QBoard> boardList = this.<Board, QBoard>createList("boardList", Board.class, QBoard.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> delFlag = createNumber("delFlag", Integer.class);
 
     public final StringPath email = createString("email");
@@ -43,6 +45,8 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath regidate = createString("regidate");
 
     public final ListPath<StudyMember, QStudyMember> studyMemberList = this.<StudyMember, QStudyMember>createList("studyMemberList", StudyMember.class, QStudyMember.class, PathInits.DIRECT2);
+
+    public final ListPath<UserHomework, QUserHomework> userHomeworkList = this.<UserHomework, QUserHomework>createList("userHomeworkList", UserHomework.class, QUserHomework.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> userno = createNumber("userno", Integer.class);
 

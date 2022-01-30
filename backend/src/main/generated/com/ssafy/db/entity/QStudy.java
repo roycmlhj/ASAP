@@ -20,6 +20,8 @@ public class QStudy extends EntityPathBase<Study> {
 
     public static final QStudy study = new QStudy("study");
 
+    public final ListPath<Board, QBoard> boardlist = this.<Board, QBoard>createList("boardlist", Board.class, QBoard.class, PathInits.DIRECT2);
+
     public final StringPath category = createString("category");
 
     public final StringPath description = createString("description");

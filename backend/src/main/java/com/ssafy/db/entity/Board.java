@@ -9,21 +9,41 @@ import javax.persistence.Id;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @DynamicInsert
 @DynamicUpdate
-@Entity(name = "schedule")
+@Entity(name = "board")
 @Getter
 @Setter
-public class Schedule {
+public class Board {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer scheduleno;
+	Integer boardno;
+	@Column
+	String boardname;
+	@Column
+	Integer userno;
+	@Column
+	String timestamp;
 	@Column
 	Integer studyno;
-	@Column(name = "next_date")
-	String nextDate;
+	@Column 
+	String boarddescription;
+	@Column
+	String link;
+	@Column
+	String contactlink;
+	@Column
+	Integer maxmember;
+	@Column(name = "is_recruit")
+	Integer isRecruit;
+	@Column
+	Integer hit;
+	@Column
+	String interests;
+	@Column
+	String category;
+	
 }

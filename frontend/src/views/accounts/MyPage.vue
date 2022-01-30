@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
-    생성일 : 2022.01.27
-    마지막 업데이트 : 2022.01.27
+    생성일 : 2022.01.30
+    마지막 업데이트 : 2022.01.30
     
     마이페이지
  */
@@ -32,6 +32,8 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
+
 export default {
   name: 'MyPage',
   data: function () {
@@ -40,6 +42,7 @@ export default {
         email: 'meme@naver.com',
         password: null,
       },
+      userNo: null,
     }
   },
   methods: {
@@ -51,7 +54,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          this.$router.push({ name: 'ProfileEdit'})
+          this.$router.push({ name: 'ProfileEdit', params: { user_no : this.userNo }})
         })
         .catch(err => {
           alert("비밀번호를 확인해주세요.")
@@ -62,6 +65,11 @@ export default {
     showModal() {
       this.$refs['my-modal'].show()
     },
+  },
+  created: function () {
+    const token = localStorage.getItem('jwt')
+    const decoded = jwt_decode(token)
+    this.userNo = decoded.userno
   }
 }
 </script>

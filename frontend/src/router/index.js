@@ -24,7 +24,7 @@ const routes = [
     component: Register
   },
   {
-    path: '/user/modify',
+    path: '/user/modify/:user_no',
     name: 'ProfileEdit',
     component: ProfileEdit
   },

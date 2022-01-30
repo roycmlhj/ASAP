@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h4>모집 글 작성</h4>
+    <h1>모집 글 작성</h1>
     <b-form>
       <b-form-group
         id="input-study-group"

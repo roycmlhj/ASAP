@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <span v-if="isLogin">
-        <router-link :to="{ name: 'Main' }">Main</router-link> |
+        <router-link :to="{ name: 'Main' }">MyStudy</router-link> |
         <router-link :to="{ name: 'MyPage' }">MyPage</router-link> |
         <router-link :to="{ name: 'StudyBoard'}">StudyBoard</router-link> | 
         <router-link :to="{ name: 'Admin' }">Admin</router-link> |

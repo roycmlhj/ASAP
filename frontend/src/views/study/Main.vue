@@ -1,36 +1,45 @@
 <template>
   <div>
-    <b-button @click="modalShow=!modalShow" variant="link">스터디 방 생성하기</b-button>
+    <a @click="modalShow=!modalShow" href="#">스터디방 만들기</a>
     <b-modal v-model="modalShow" title="Create Study" hide-footer>
-      <b-form @submit="createStudyRoom">
+      <b-form>
         <b-form-group
           id="input-title-group"
-          label="스터디 이름"
+          label="Name"
           lebel-for="input-title"
         >
+        <div class="d-flex justify-content-between">
           <b-form-input
             id="input-title"
             v-model="title"
             type = "text"
+            style="width: 75%"
             required
           ></b-form-input>
+          <b-button @click="nameCheck" style="background-color: palevioletred;">Check</b-button>
+        </div>
         </b-form-group>
         <b-form-group
-          id="input-topic-group"
-          label="주제"
-          lebel-for="input-topic"
+          label="Subject"
+          label-for="interests"
         >
-          <b-form-input
-            id="input-topic"
-            v-model="topic"
-            type = "text"
-            required
-          ></b-form-input>
+          <b-form-select name="interests" id="interests" v-model="mainCategory">
+            <option value="" selected disabled hidden>주제를 선택해주세요</option>
+            <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
+          </b-form-select>
         </b-form-group>
+        <b-form-tags
+          input-id="interests" 
+          v-model="interests"
+          tag-variant="primary"
+          tag-pills
+          placeholder="세부 주제를 입력해주세요."
+        ></b-form-tags>
         <b-form-group
           id="input-description-group"
-          label="소개"
+          label="Description"
           lebel-for="input-description"
+          class="mt-3"
         >
           <b-form-textarea
             id="input-description"
@@ -43,7 +52,7 @@
         </b-form-group>
         <b-form-group
           id="input-member-group"
-          label="총 인원 수"
+          label="The number of people"
           label-for="input-member"
         >
           <study-member-count-bar
@@ -51,7 +60,7 @@
           >
           </study-member-count-bar>
         </b-form-group>
-        <b-button class="float-right" type="submit" variant="dark">완료</b-button>
+        <b-button @click="createStudyRoom" style="background-color: #A5A6F6; width: 100%">완료</b-button>
       </b-form>
     </b-modal>
     <br>
@@ -61,8 +70,10 @@
 
 <script>
 import jwt_decode from 'jwt-decode'
-// import axios from 'axios'
+import axios from 'axios'
 import StudyMemberCountBar from '@/components/StudyMemberCountBar.vue'
+import interest from "@/views/accounts/assets/interests.json"
+
 
 export default {
   name: 'Main',
@@ -71,27 +82,84 @@ export default {
   },
   data() {
     return {
+      interestsList : interest,
       modalShow: false,
-      title:null,
-      description:null,
-      topic:null,
-      member:null,
+      title:'',
+      description:'',
+      memberno:'',
+      mainCategory:'',
+      interests:[],
+      maker:'',
+      userno: null,
+      studies: null,
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     updateMember(memberNum) {
-      this.member=memberNum
+      this.memberno=memberNum
       //console.log(this.member)
     },
+    nameCheck: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/study/name_check/${this.title}/`,
+        data: this.title
+      })
+        .then(res => {
+          console.log(res)
+          alert("사용할 수 있는 스터디 이름입니다.")
+        })
+        .catch(err => {
+          console.log(err)
+          alert("이미 사용중인 스터디 이름입니다.")
+        })
+    },
+    getStudies: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/study/${this.userno}/`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(this.title, err)
+        })
+    },
     createStudyRoom: function() {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+  
       const StudyRoomItem = {
-        title:this.title,
-        description:this.description,
-        topic:this.topic,
-        member:this.member,
+        studyname: this.title,
+        description: this.description,
+        category: this.mainCategory,
+        memberno: this.memberno,
+        maker: decoded.email,
+        userno: decoded.userno,
+        interests: this.interests,
       }
-      //console.log(StudyRoomItem.member)
-      console.log(StudyRoomItem)
+
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/study/create`,
+        data: StudyRoomItem
+      })
+        .then(res => {
+          console.log(res)
+          this.modalShow=false
+      })
+        .catch(err=> {
+          console.log(err)
+      })
     }
   },
   created: function () {
@@ -99,6 +167,8 @@ export default {
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       console.log(decoded)
+      this.userno = decoded.userno
+      this.getStudies()
     } else {
       this.$router.push({name: 'Login'})
     }
@@ -110,4 +180,7 @@ export default {
   form {
     padding: 0px 20px;
   }
+  /* button {
+    width: 100%;
+  } */
 </style>

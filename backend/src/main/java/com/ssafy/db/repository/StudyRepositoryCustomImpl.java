@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.db.entity.QStudy;
 import com.ssafy.db.entity.QStudyMember;
 import com.ssafy.db.entity.Study;
-import com.ssafy.db.entity.StudyMember;
 
 public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport implements StudyRepositoryCustom {
 

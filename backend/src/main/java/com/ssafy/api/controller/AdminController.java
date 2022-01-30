@@ -71,6 +71,19 @@ public class AdminController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
+	@PostMapping("/kick")
+	@ApiOperation(value = "스터디 회원 퇴출", notes = "스터디 회원을 퇴출한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> kickUser(int userno, int studyno){
+		userService.kickUser(userno, studyno);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+	
 	//유저 탈퇴 - delflag 1로 변경
 	//studymember에서 모두삭제
 	//만약 position이 0이면 그 사람이 가입한 스터디 중 maker가 userno인 스터디의 방장이라면

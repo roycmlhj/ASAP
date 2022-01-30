@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
-    생성일 : 2022.01.25
-    마지막 업데이트 : 2022.01.27
+    생성일 : 2022.01.30
+    마지막 업데이트 : 2022.01.30
     
     개인정보수정 페이지
  */
@@ -143,6 +143,7 @@ export default {
     return {
       interestList : interest,
       userno: null,
+      admin: null,
       user:{
         email: null,
         password: '',
@@ -176,9 +177,15 @@ export default {
       })
         .then(res => {
           console.log(res)
-          localStorage.setItem('jwt', res.data.accessToken)
-          alert("회원 정보 수정이 완료되었습니다.")
-          this.$router.push({ name: 'MyPage'})
+          if (this.admin == 0) {
+            localStorage.setItem('jwt', res.data.accessToken)
+            alert("회원 정보 수정이 완료되었습니다.")
+            window.location.reload(this.$route.params.user_no)
+          }
+          else {
+            alert("회원 정보 수정이 완료되었습니다.")
+            window.location.reload(this.$route.params.user_no)
+          }
         })
         .catch(err => {
           console.log(err)
@@ -188,6 +195,7 @@ export default {
       axios({
         method: 'delete',
         url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        headers: this.setToken(),
       })
         .then(res => {
           console.log(res)
@@ -209,7 +217,26 @@ export default {
       this.interestTmp = decoded.interests
       this.user.interests = this.interestTmp.split('#')
       console.log(decoded)
-    }
+    },
+    getUserInformationByAdmin: function (user_no) {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/admin/${user_no}`,
+      })
+        .then(res => {
+          console.log(res)
+          this.user.nickname = res.data.user.nickname
+          this.user.mainCategory = res.data.user.mainCategory
+          this.userno = res.data.user.userno
+          this.user.email = res.data.user.email
+          this.mainCategory = res.data.user.mainCategory
+          this.interestTmp = res.data.user.interests
+          this.user.interests = this.interestTmp.split('#')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
   },
   computed: {
     nameState() {
@@ -243,9 +270,17 @@ export default {
       }
     }
   },
-    created: function () {
+  created: function () {
     if (localStorage.getItem('jwt')) {
-      this.getUserInformation()
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      if (decoded.isAdmin == 1) {
+        this.admin = 1
+        this.getUserInformationByAdmin(this.$route.params.user_no)
+      }
+      else {
+        this.getUserInformation()
+      }
     } else {
       this.$router.push({name: 'Login'})
     }
