@@ -15,11 +15,12 @@ import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Study;
 import com.ssafy.db.entity.StudyMember;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.HomeworkRepository;
 import com.ssafy.db.repository.ScheduleRepository;
 import com.ssafy.db.repository.StudyMemberRepository;
 import com.ssafy.db.repository.StudyRepository;
-import com.ssafy.db.repository.UserHomeworkRepository;
+import com.ssafy.db.repository.UserRepository;
 
 @Service("studyService")
 public class StudyServiceImpl implements StudyService {
@@ -32,6 +33,8 @@ public class StudyServiceImpl implements StudyService {
 	ScheduleRepository scheduleRepository;
 	@Autowired
 	StudyMemberRepository studyMemberRepository;
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public boolean createStudy(StudyCreatePostReq studyInfo) {
@@ -41,16 +44,26 @@ public class StudyServiceImpl implements StudyService {
 		study.setDescription(studyInfo.getDescription());
 		study.setMemberno(studyInfo.getMemberno());
 		study.setMaker(studyInfo.getMaker());
+		String interests = "";
+		for(int i = 0; i < studyInfo.getInterests().size(); i++) {
+			interests += "#";
+			interests += studyInfo.getInterests().get(i);
+		}
+		study.setInterests(interests);
+		
 		
 		if(studyRepository.save(study) != null) {
-			//if() //나중에 여기에 userno도 studyno처럼 있는 얘인지 확인해보자.
-			//if() //나중에 여기에 study member 테이블에 이미 있는 값을 넣는지도 확인해보자.
-			StudyMember studyMember = new StudyMember();	
-			studyMember.setStudyno(studyRepository.findByStudyname(studyInfo.getStudyname()).get().getStudyno());
-			studyMember.setUserno(studyInfo.getUserno());
-			studyMember.setPosition(0);
-			studyMemberRepository.save(studyMember);
-			return true;
+			if(Optional.ofNullable(userRepository.findById(studyInfo.getUserno())).get() != null) {
+				//나중에 여기에 study member 테이블에 이미 있는 값을 넣는지도 확인해보자.
+				StudyMember studyMember = new StudyMember();
+				studyMember.setStudyno(studyRepository.findByStudyname(studyInfo.getStudyname()).get().getStudyno());
+				studyMember.setUserno(studyInfo.getUserno());
+				studyMember.setPosition(0);
+				studyMemberRepository.save(studyMember);
+				return true;
+			}
+			else
+				return false;
 		}
 		else
 			return false;
@@ -65,12 +78,22 @@ public class StudyServiceImpl implements StudyService {
 
 	@Override
 	public StudyInfo getStudyInfo(int studyno, String studyName) {
-		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get();
+		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get(); //
 		Schedule schedule = scheduleRepository.findByStudyno(studyno);
-		Schedule schedule2 = new Schedule();
-		//List<String> memeberImage = ;
+		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
+		List<String> memberImage = new ArrayList<String>();
+		for(int i = 0; i < members.size(); i++) {
+			memberImage.add(userRepository.findById(members.get(i).getUserno()).get().getImage());
+		}
 		
-		return null;
+		StudyInfo studyInfo = new StudyInfo();
+		studyInfo.setHomeworkList(homeworkList);
+		studyInfo.setMemberImage(memberImage);
+		studyInfo.setStudyName(studyName);
+		if(schedule != null)
+			studyInfo.setNextDate(schedule.getNextDate());
+		
+		return studyInfo;
 	}
 
 	@Override
@@ -82,13 +105,16 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public boolean applyStudy(StudyApplyPostReq applyInfo) {
 		if(Optional.ofNullable(studyRepository.findById(applyInfo.getStudyno())).get() != null) {
-			//if() //나중에 여기에 userno도 studyno처럼 있는 얘인지 확인해보자.
+			if(Optional.ofNullable(userRepository.findById(applyInfo.getUserno())).get() != null) {
 			//if() //나중에 여기에 study member 테이블에 이미 있는 값을 넣는지도 확인해보자.
 				StudyMember studyMember = new StudyMember();
 				studyMember.setStudyno(applyInfo.getStudyno());
 				studyMember.setUserno(applyInfo.getUserno());
 				studyMemberRepository.save(studyMember);
 				return true;
+			}
+			else
+				return false;
 		}
 		return false;
 	}
@@ -96,7 +122,7 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public boolean acceptStudy(StudyAcceptPutReq acceptInfo) {
 		if(Optional.ofNullable(studyRepository.findById(acceptInfo.getStudyno())).get() != null) {
-			//if() //나중에 여기에 userno도 studyno처럼 있는 얘인지 확인해보자.
+			if(Optional.ofNullable(userRepository.findById(acceptInfo.getUserno())).get() != null) {
 			//if() //나중에 여기에 userno, studyno가 study_member에 있는 얘인지 확인해보자.
 				if(acceptInfo.getFlag() == 1)
 					studyMemberRepository.acceptStudy(acceptInfo);
@@ -104,7 +130,28 @@ public class StudyServiceImpl implements StudyService {
 					studyMemberRepository.rejectStudy(acceptInfo);
 				
 				return true;
+			}
+			else
+				return false;
 		}
+		
 		return false;
 	}
+
+	@Override
+	public List<User> getUserList(int studyno) {
+		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
+		List<User> userList = new ArrayList<User>();
+		for(int i = 0; i < members.size(); i++) {
+			userList.add(userRepository.findById(members.get(i).getUserno()).get());
+		}
+		return userList;
+	}
+
+	@Override
+	public Study getStudyByStudyname(String studyname) {
+		Study study = studyRepository.findByStudyname(studyname).get();
+		return study;
+	}
+
 }

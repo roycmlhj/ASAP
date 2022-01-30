@@ -20,6 +20,8 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
+    public final ListPath<Board, QBoard> boardList = this.<Board, QBoard>createList("boardList", Board.class, QBoard.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> delFlag = createNumber("delFlag", Integer.class);
 
     public final StringPath email = createString("email");

@@ -1,5 +1,7 @@
 package com.ssafy.api.request;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -21,4 +23,6 @@ public class StudyCreatePostReq {
 	String maker;
 	@ApiModelProperty(name = "스터디 생성 유저 pk ", example = "1")
 	int userno;
+	@ApiModelProperty(name = "스터디 소분류", example = "['알고리즘', '백준', '프로그래머스']")
+	List<String> interests;
 }

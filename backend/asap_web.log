@@ -1598,3 +1598,8 @@ Caused by: org.springframework.data.mapping.PropertyReferenceException: No prope
 2022-01-29 01:49:32.357  INFO 12436 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2022-01-29 01:49:32.459  INFO 12436 --- [restartedMain] com.ssafy.GroupCallApplication           : Started GroupCallApplication in 1.945 seconds (JVM running for 6419.178)
 2022-01-29 01:49:32.466  INFO 12436 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2022-01-29 02:20:42.793  INFO 12436 --- [RMI TCP Connection(206)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2022-01-29 02:20:42.828  INFO 12436 --- [RMI TCP Connection(206)-127.0.0.1] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-01-29 02:20:42.839  INFO 12436 --- [RMI TCP Connection(206)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-01-29 02:20:42.842  INFO 12436 --- [RMI TCP Connection(206)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-28 - Shutdown initiated...
+2022-01-29 02:20:42.848  INFO 12436 --- [RMI TCP Connection(206)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-28 - Shutdown completed.

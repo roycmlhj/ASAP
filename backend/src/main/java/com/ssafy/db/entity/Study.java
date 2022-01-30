@@ -58,4 +58,8 @@ public class Study {
 	@OneToMany
 	@JoinColumn(name = "studyno")
 	List<Schedule> scheduleList = new ArrayList<Schedule>();
+	
+	@OneToMany
+	@JoinColumn(name = "studyno")
+	List<Board> boardlist = new ArrayList<Board>();
 }
