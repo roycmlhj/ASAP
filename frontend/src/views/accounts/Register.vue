@@ -134,6 +134,7 @@ export default {
         interests: []
       },
       passwordcheck: '',
+      flag: null,
     }
   },
   methods: {
@@ -146,16 +147,19 @@ export default {
         .then(res => {
           console.log(res)
           alert("사용할 수 있는 이메일입니다.")
+          this.flag = 0
         })
         .catch(err => {
           console.log(err)
           alert("이미 사용중인 이메일입니다.")
+          this.flag = 1
         })
     },
     clickRegister: function () {
       console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
-        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null
+        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null ||
+        this.flag == 1
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {

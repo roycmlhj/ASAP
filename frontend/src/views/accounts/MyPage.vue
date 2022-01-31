@@ -6,8 +6,16 @@
     마이페이지
  */
 <template>
-  <div>
-    <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
+  <div class="container d-flex" v-if="userInfo">
+    <div>
+      <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
+      <p>{{ userInfo.nickname }}</p>
+      <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
+    </div>
+    <div>
+      <h5><strong>관심분야</strong></h5>
+      <user-interests :interests="userInfo.interests"></user-interests>
+    </div>
     <b-modal ref="my-modal" 
       ok-only 
       title="Input Password"    
@@ -33,9 +41,13 @@
 <script>
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import UserInterests from '@/components/UserInterests.vue'
 
 export default {
   name: 'MyPage',
+  components: {
+    UserInterests,
+  },
   data: function () {
     return {
       user: {
@@ -43,9 +55,32 @@ export default {
         password: null,
       },
       userNo: null,
+      userInfo: null,
+      studyList: null,
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    getUser: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/user/detail/${this.userNo}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.userInfo = res.data.user
+          console.log(res.data.user)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     passwordConfirmation: function () {
       axios({
         method: 'post',
@@ -70,9 +105,17 @@ export default {
     const token = localStorage.getItem('jwt')
     const decoded = jwt_decode(token)
     this.userNo = decoded.userno
+    this.getUser()
   }
 }
 </script>
 
 <style scoped>
+  img {
+    width: 180px;
+    height: 200px;
+  }
+  p {
+    margin: 0px;
+  }
 </style>

@@ -78,7 +78,7 @@ public class StudyController {
 		for(int i = 0; i < studyList.size(); i++)
 			studyInfoList.add(studyService.getStudyInfo(studyList.get(i).getStudyno(), studyList.get(i).getStudyname()));
 
-		return null;
+		return ResponseEntity.status(200).body(StudyInfoListRes.of(studyInfoList));
 	};
 	
 	

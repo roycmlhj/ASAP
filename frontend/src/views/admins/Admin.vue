@@ -28,7 +28,7 @@
           <td v-if="user.delFlag == 0">가입</td>
           <td v-else>탈퇴</td>
           <td v-if="user.delFlag == 0">
-            <b-button id="show-btn" style="background-color: rgb(221, 182, 74);" @click="showModal(user)">Detail</b-button>
+            <b-button id="show-btn" size="sm" style="background-color: rgb(221, 182, 74);" @click="showModal(user)">Detail</b-button>
           </td>
         </tr>
       </tbody>
@@ -36,13 +36,13 @@
     <b-modal ref="my-modal" :member="member" hide-header hide-footer>
       <div class="d-block text-center">
         <div v-if="member">
-          <user-modal :member="member"></user-modal>
+          <user-modal :member="member" :studylist="studylist"></user-modal>
         </div>
       </div>
       <div class="float-right mt-4">
-        <b-button style="font-size: 13px; background-color: #A5A6F6;" @click="userUpdate(member.userno)">수정</b-button>&nbsp;
-        <b-button style="font-size: 13px; background-color: #A5A6F6;" @click="userDelete(member.userno)">강퇴</b-button>&nbsp;
-        <b-button style="font-size: 13px; background-color: #A5A6F6;" @click="hideModal">취소</b-button>
+        <b-button style="background-color: #A5A6F6;" @click="userUpdate(member.userno)">수정</b-button>&nbsp;
+        <b-button style="background-color: #A5A6F6;" @click="userDelete(member.userno)">강퇴</b-button>&nbsp;
+        <b-button style="background-color: #A5A6F6;" @click="hideModal">취소</b-button>
     </div>
     </b-modal>
   </div>
@@ -62,6 +62,7 @@ export default {
       userlist: null,
       member: null,
       modal: false,
+      studylist: null,
     }
   },
   methods: {
@@ -74,7 +75,7 @@ export default {
     },
     showModal: function (user) {
       this.$refs['my-modal'].show()
-      this.member = user
+      this.getUserInformation(user)
     },
     hideModal() {
       this.$refs['my-modal'].hide()
@@ -93,10 +94,26 @@ export default {
           console.log(err)
         })
     },
+    getUserInformation: function (user) {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/admin/${user.userno}/`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res)
+          this.member = res.data.user
+          this.studylist = res.data.studyList
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     userDelete: function (userNo) {
       axios({
         method: 'delete',
         url: `http://localhost:8080/api/v1/user/${userNo}/`,
+        headers: this.setToken(),
       })
         .then(res => {
           console.log(res)

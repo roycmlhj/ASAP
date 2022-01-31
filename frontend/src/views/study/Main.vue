@@ -16,7 +16,7 @@
             style="width: 75%"
             required
           ></b-form-input>
-          <b-button @click="nameCheck" style="background-color: palevioletred;">Check</b-button>
+          <b-button @click="nameCheck" style="background-color: rgb(231, 163, 209);">중복체크</b-button>
         </div>
         </b-form-group>
         <b-form-group
