@@ -49,8 +49,6 @@ public class UserController {
 	@Autowired
 	StudyService studyService;
 	@Autowired
-	EmailService emailService;
-	@Autowired
 	PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/login")
@@ -66,12 +64,12 @@ public class UserController {
 		String password = loginInfo.getPassword();
 		
 		User user = userService.getUserByEmail(email);
-		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
-		if(passwordEncoder.matches(password, user.getPassword())) {
+		// 탈퇴한 회원인지 확인 + 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
+		if(user.getDelFlag() != 1 && passwordEncoder.matches(password, user.getPassword())) {
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
 			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(user)));
 		}
-		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+		// 탈퇴한 회원이거나 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
 		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
 	}
 	
@@ -107,21 +105,6 @@ public class UserController {
 		}
 		return ResponseEntity.status(404).body(BaseResponseBody.of(404, "이미 존재하는 이메일입니다."));
 	}
-	
-	@PostMapping("emailConfirm")
-	@ApiOperation(value = "회원 가입시 이메인 인증", notes = "기존사용하고 있는 이메일을 통해 인증")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 404, message = "사용자 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-	public ResponseEntity<? extends BaseResponseBody> emailConfirm(
-			@RequestBody @ApiParam(value="이메일 정보", required = true) String email) throws Exception{
-		String confirm = emailService.sendSimpleMessage(email);
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, confirm));
-	}
-	
 	
 	@PostMapping("/{userno}")
 	@ApiOperation(value = "회원정보 수정", notes = "회원의 정보를 수정한다.") 
