@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="container">
+    <study-room-list :studies="studies"></study-room-list>
     <a @click="modalShow=!modalShow" href="#">스터디방 만들기</a>
     <b-modal v-model="modalShow" title="Create Study" hide-footer>
       <b-form>
@@ -73,12 +74,14 @@ import jwt_decode from 'jwt-decode'
 import axios from 'axios'
 import StudyMemberCountBar from '@/components/StudyMemberCountBar.vue'
 import interest from "@/views/accounts/assets/interests.json"
+import StudyRoomList from '@/components/StudyRoomList.vue'
 
 
 export default {
   name: 'Main',
   components: { 
-    StudyMemberCountBar
+    StudyMemberCountBar,
+    StudyRoomList
   },
   data() {
     return {
@@ -128,7 +131,8 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          console.log(res)
+          console.log(res.data.studyInfoList)
+          this.studies = res.data.studyInfoList
         })
         .catch(err => {
           console.log(this.title, err)

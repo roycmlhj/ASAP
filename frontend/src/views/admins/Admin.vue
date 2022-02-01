@@ -36,7 +36,7 @@
     <b-modal ref="my-modal" :member="member" hide-header hide-footer>
       <div class="d-block text-center">
         <div v-if="member">
-          <user-modal :member="member" :studylist="studylist"></user-modal>
+          <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
         </div>
       </div>
       <div class="float-right mt-4">
@@ -50,12 +50,12 @@
 
 <script>
 import axios from 'axios'
-import UserModal from '@/components/UserModal.vue'
+import UserInfoModal from '@/components/UserInfoModal.vue'
 
 export default {
   name: 'Admin',
   components: {
-    UserModal
+    UserInfoModal
   },
   data: function () {
     return {

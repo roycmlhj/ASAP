@@ -1,3 +1,10 @@
+/*
+    작성자 : 한슬기
+    생성일 : 2022.01.30
+    마지막 업데이트 : 2022.02.01
+    
+    세부관심분야 컴포넌트
+ */
 <template>
   <div class="d-flex flex-wrap justify-content-center" :interestList="getInterests()">
     <p v-for="interest in interestList" :key="interest.id" :style="{ width: interest.length +70 + 'px'}">

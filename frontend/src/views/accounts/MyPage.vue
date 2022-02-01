@@ -1,12 +1,12 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.01.30
-    마지막 업데이트 : 2022.01.30
+    마지막 업데이트 : 2022.02.01
     
     마이페이지
  */
 <template>
-  <div class="container d-flex" v-if="userInfo">
+  <div class="container d-flex flex-wrap" v-if="userInfo">
     <div>
       <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
       <p>{{ userInfo.nickname }}</p>
@@ -16,7 +16,11 @@
       <h5><strong>관심분야</strong></h5>
       <user-interests :interests="userInfo.interests"></user-interests>
     </div>
-    <b-modal ref="my-modal" 
+    <div class="d-flex">
+      <user-info-table :studyList="studyList"></user-info-table>
+      <user-info-table :studyList="studyList"></user-info-table>
+    </div>
+    <b-modal ref="my-modal"
       ok-only 
       title="Input Password"    
       hide-footer
@@ -42,11 +46,13 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import UserInterests from '@/components/UserInterests.vue'
+import UserInfoTable from '@/components/UserInfoTable.vue'
 
 export default {
   name: 'MyPage',
   components: {
     UserInterests,
+    UserInfoTable
   },
   data: function () {
     return {
@@ -75,7 +81,8 @@ export default {
       })
         .then(res => {
           this.userInfo = res.data.user
-          console.log(res.data.user)
+          this.studyList = res.data.studyList
+          console.log(res.data)
         })
         .catch(err => {
           console.log(err)
