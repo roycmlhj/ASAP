@@ -17,7 +17,7 @@
             style="width: 75%"
             required
           ></b-form-input>
-          <b-button @click="nameCheck" style="background-color: rgb(231, 163, 209);">중복체크</b-button>
+          <b-button @click="nameCheck" style="background-color: rgb(130, 163, 209); font-size: 13px;">중복체크</b-button>
         </div>
         </b-form-group>
         <b-form-group
@@ -131,7 +131,7 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          console.log(res.data.studyInfoList)
+          console.log(res.data)
           this.studies = res.data.studyInfoList
         })
         .catch(err => {
