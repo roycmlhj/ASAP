@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
         msgg+= ePw+"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("properties의 Email 주소","ASAP"));//보내는 사람
+        message.setFrom(new InternetAddress("kwwoo516@gmail.com","ASAP"));//보내는 사람
  
         return message;
     }

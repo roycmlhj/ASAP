@@ -2,6 +2,8 @@ package com.ssafy.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class EmailController {
 	@Autowired
 	EmailService emailService;
 	
-	@PostMapping("email-auth")
+	@GetMapping("/{email}")
 	@ApiOperation(value = "회원 가입시 이메인 인증번호 전송", notes = "기존 사용하고 있는 이메일에 인증번호 전송")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -33,7 +35,7 @@ public class EmailController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<? extends BaseResponseBody> emailAuth(
-			@RequestBody @ApiParam(value="이메일 정보", required = true) String email) throws Exception{
+			@PathVariable @ApiParam(value="이메일 정보", required = true) String email) throws Exception{
 		String confirm = emailService.sendSimpleMessage(email);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
@@ -48,10 +50,11 @@ public class EmailController {
     })
 	public ResponseEntity<? extends BaseResponseBody> emailConfirm(
 			@RequestBody @ApiParam(value="인증번호", required = true) String code) throws Exception{
+		code = code.substring(0,code.length()-1);
 		if(EmailServiceImpl.ePw.equals(code)) {
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		}else {
-			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "인증 실패"));
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "인증 실패"));
 		}
 	}
 }
