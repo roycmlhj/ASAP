@@ -22,7 +22,7 @@
         <tr>
           <td>{{ study.studyname }}</td>
           <td>{{ study.category }}</td>
-          <td>2022.02.01</td>
+          <td>{{  dateTime(study.timestamp) }}</td>
           <td>진행</td>
         </tr>
       </tbody>
@@ -31,12 +31,19 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'UserInfoTable',
   props: {
     studyList: {
       type: Array,
     }
+  },
+  methods: {
+    dateTime(value) {
+      return moment(value).format('YYYY-MM-DD');
+    },
   }
 }
 </script>

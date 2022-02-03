@@ -38,6 +38,8 @@ public class Homework {
 	String content;
 	@Column
 	String title;
+	@Column
+	Integer userno;
 	
 	@OneToMany
 	@JoinColumn(name = "homeworkno")

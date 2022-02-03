@@ -7,7 +7,7 @@
  */
 <template>
   <div class="d-flex flex-wrap justify-content-center" :interestList="getInterests()">
-    <p v-for="interest in interestList" :key="interest.id" :style="{ width: interest.length +70 + 'px'}">
+    <p v-for="interest in interestList" :key="interest.id" :style="{ width: interest.length +75 + 'px'}">
       {{ interest }}
     </p>
   </div>

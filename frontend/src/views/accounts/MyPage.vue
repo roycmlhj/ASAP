@@ -57,7 +57,7 @@ export default {
   data: function () {
     return {
       user: {
-        email: 'meme@naver.com',
+        email: null,
         password: null,
       },
       userNo: null,
@@ -82,6 +82,7 @@ export default {
         .then(res => {
           this.userInfo = res.data.user
           this.studyList = res.data.studyList
+          this.user.email = res.data.user.email
           console.log(res.data)
         })
         .catch(err => {
@@ -105,6 +106,7 @@ export default {
         })
     },
     showModal() {
+      this.user.password = null,
       this.$refs['my-modal'].show()
     },
   },

@@ -75,7 +75,7 @@ export default {
     userKick: function () {
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/admin/kick/`,
+        url: `http://localhost:8080/api/v1/admin/kick/${this.userInfo.studyno}`,
         data: this.userInfo
       })
         .then(res => {

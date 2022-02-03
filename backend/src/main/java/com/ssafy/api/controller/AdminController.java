@@ -71,7 +71,8 @@ public class AdminController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
-	@PostMapping("/kick")
+	// 수정함
+	@PostMapping("/kick/{studyno}")
 	@ApiOperation(value = "스터디 회원 퇴출", notes = "스터디 회원을 퇴출한다.") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "성공"),
@@ -79,7 +80,9 @@ public class AdminController {
         @ApiResponse(code = 404, message = "사용자 없음"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<? extends BaseResponseBody> kickUser(int userno, int studyno){
+	public ResponseEntity<? extends BaseResponseBody> kickUser(
+			@ApiParam(value = "방출할 유저의 no", required = true) int userno, 
+			@PathVariable("studyno") @ApiParam(value = "스터디의 no", required = true) int studyno){
 		userService.kickUser(userno, studyno);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}

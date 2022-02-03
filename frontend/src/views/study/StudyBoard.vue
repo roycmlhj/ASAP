@@ -1,34 +1,42 @@
 <template>
   <div class="container">
     <b-input-group>
-      <b-form-input v-model="searchWord"></b-form-input>
+      <b-form-input class="mb-3" v-model="searchWord"></b-form-input>
       <b-input-group-append>
-        <b-button @click="search">search</b-button>
+        <b-button class="mb-3" @click="search">search</b-button>
       </b-input-group-append>
     </b-input-group>
-    <span class="row">
-      <b-card class="col-6" v-for="study in studies" v-bind:key="study" :title="study.title">
+    <span class="row d-flex justify-content-around">
+      <div class="col-6 " v-for="study in studies" v-bind:key="study">
+        <b-card class = "mb-3 col-12">
+        <div class="row d-flex justify-content-around">
+          <h3>{{study.title}}</h3>
+          <b-card-text>
+            {{"모집중"}}
+          </b-card-text>
+          <b-card-text>
+            {{study.currentMember}}/{{study.member}}
+          </b-card-text>
+        </div>
+        <div class="row d-flex justify-content-around">
         <b-card-text>
-          {{"모집중"}}             {{study.currentMember}}/{{study.member}}
-        </b-card-text>
-        <b-card-text>
-          <span v-for="topic in study.topic" v-bind:key="topic">{{topic}}    </span>
+          <b-badge class="mx-1" v-for="topic in study.topic" v-bind:key="topic"> {{topic}}</b-badge>
         </b-card-text>
         <b-card-text>
           <b-avatar :src="study.studyLeaderIconTag"></b-avatar>
           {{study.studyLeader}}
         </b-card-text>
-      </b-card>
+        </div>
+        </b-card>
+      </div>
     </span>
-    <div class="overflow-auto">
+    <div class="row d-flex justify-content-around overflow-auto">
       <b-pagination-nav :link-gen="linkGen" :number-of-pages="studies.length/2"></b-pagination-nav>
     </div>
   </div>
 </template>
-
 <script>
 //import axios from 'axios'
-
   export default {
     components: {},
     data() {

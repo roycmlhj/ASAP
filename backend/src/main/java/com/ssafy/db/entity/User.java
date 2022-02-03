@@ -66,5 +66,9 @@ public class User {
 	
 	@OneToMany
 	@JoinColumn(name = "userno")
+	List<Homework> homeworkList = new ArrayList<>();
+	
+	@OneToMany
+	@JoinColumn(name = "userno")
 	List<Board> boardList = new ArrayList<>();
 }
