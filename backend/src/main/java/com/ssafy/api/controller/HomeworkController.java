@@ -8,7 +8,7 @@ import com.ssafy.api.service.HomeworkService;
 
 import io.swagger.annotations.Api;
 
-@Api(value = "study API", tags = {"Homework"})
+@Api(value = "Homework API", tags = {"Homework"})
 @RestController
 @RequestMapping("/api/v1/homework")
 public class HomeworkController {
