@@ -10,22 +10,17 @@
  */
 
 <template>
-<section>
-  <div class="container">
-    <b-card bg-variant="light">
-      <b-form-group
-        label-cols-lg="3"
-        label="회원가입"
-        label-size="lg"
-        label-class="font-weight-bold pt-0"
-        class="mb-0"
-      >
-        <b-form-group
-          label="E-mail:"
-          label-for="email"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
+<section class="container">
+  <h2><strong>회원가입</strong></h2>
+  <p>회원가입을 하고, ASAP을 이용해보세요!</p>
+  <div class="form">
+    <b-form-group
+      label="이메일 *"
+      label-for="email"
+      label-align-sm="left"
+    >
+      <div class="d-flex">
+        <p>
           <b-form-input 
             id="email" 
             v-model="user.email"
@@ -33,85 +28,98 @@
             aria-describedby="input-live-help input-live-feedback"
           >
           </b-form-input>
-          <b-button class="float-right mt-3" variant="info" @click="clickConfirmation">중복확인</b-button>
-          <b-form-invalid-feedback id="input-live-feedback">
+          <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
             아이디는 이메일 형식이어야 합니다.
           </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group
-          label="Password:"
-          label-for="password"
-          label-cols-sm="3"
-          label-align-sm="right"
+        </p>
+        <b-button class="ml-2" @click="clickConfirmation">중복확인</b-button>
+        <b-button class="ml-2" @click="emailAuth">인증번호 발송</b-button>
+      </div>
+    </b-form-group>
+    <b-form-group
+      label="인증번호 *"
+      label-for="code"
+      label-align-sm="left"
+    >
+      <div class="d-flex">
+        <b-form-input 
+          id="number" 
+          v-model="code"
+          style="width: 72%;"
         >
-          <b-form-input 
-            id="password"
-            type="password" 
-            v-model="user.password"
-            :state="passwordState"
-            aria-describedby="input-live-help input-live-feedback"
-          >
-          </b-form-input>
-          <b-form-invalid-feedback id="input-live-feedback">
-            비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group
-          label="Password Confirmation:"
-          label-for="passwordcheck"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
-          <b-form-input 
-            id="passwordcheck"
-            type="password" 
-            v-model="passwordcheck"
-            :state="passwordcheckState"
-            aria-describedby="input-live-help input-live-feedback"
-          >
-          </b-form-input>
-          <b-form-invalid-feedback id="input-live-feedback">
-            비밀번호가 일치하지 않습니다.
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group
-          label="Nickname:"
-          label-for="nickname"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
-          <b-form-input 
-            id="nickname"
-            v-model="user.nickname"
-            :state="nameState"
-            aria-describedby="input-live-help input-live-feedback"
-          >
-          </b-form-input>
-          <b-form-invalid-feedback id="input-live-feedback">
-            닉네임은 두 글자 이상이어야 합니다.
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group
-          label="Interests:"
-          label-for="interests"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
-          <b-form-select name="interests" id="interests" v-model="user.mainCategory">
-            <option value="" selected disabled hidden>선택해주세요</option>
-            <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-tags 
-          input-id="interests" 
-          v-model="user.interests"
-          tag-variant="primary"
-          tag-pills
-          placeholder="관심분야를 입력해주세요."
-          ></b-form-tags>
-        <b-button class="float-right mt-3" variant="info" @click="clickRegister">회원가입</b-button>
-      </b-form-group>
-    </b-card>
+        </b-form-input>
+        <b-button class="ml-2" @click="codeConfirm">인증번호 확인</b-button>
+      </div>
+    </b-form-group>
+    <b-form-group
+      label="비밀번호 *"
+      label-for="password"
+      label-align-sm="left"
+    >
+      <b-form-input 
+        id="password"
+        type="password" 
+        v-model="user.password"
+        :state="passwordState"
+        aria-describedby="input-live-help input-live-feedback"
+      >
+      </b-form-input>
+      <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <b-form-group
+      label="비밀번호 확인 *"
+      label-for="passwordcheck"
+      label-align-sm="left"
+    >
+      <b-form-input 
+        id="passwordcheck"
+        type="password" 
+        v-model="passwordcheck"
+        :state="passwordcheckState"
+        aria-describedby="input-live-help input-live-feedback"
+      >
+      </b-form-input>
+      <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        비밀번호가 일치하지 않습니다.
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <b-form-group
+      label="닉네임 *"
+      label-for="nickname"
+      label-align-sm="left"
+    >
+      <b-form-input 
+        id="nickname"
+        v-model="user.nickname"
+        :state="nameState"
+        aria-describedby="input-live-help input-live-feedback"
+      >
+      </b-form-input>
+      <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        닉네임은 두 글자 이상이어야 합니다.
+      </b-form-invalid-feedback>
+    </b-form-group>
+    <b-form-group
+      label="관심분야 *"
+      label-for="interests"
+      label-align-sm="left"
+      style="width: 50%;"
+    >
+      <b-form-select name="interests" id="interests" v-model="user.mainCategory">
+        <option value="" selected disabled hidden>선택해주세요</option>
+        <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
+      </b-form-select>
+    </b-form-group>
+    <b-form-tags 
+      input-id="interests" 
+      v-model="user.interests"
+      tag-variant="primary"
+      tag-pills
+      placeholder="관심분야를 입력해주세요."
+      ></b-form-tags>
+    <b-button class="mt-4" style="width: 100%;" @click="clickRegister">회원가입</b-button>
   </div>
 </section>
 </template>
@@ -134,6 +142,9 @@ export default {
         interests: []
       },
       passwordcheck: '',
+      flag: null,
+      ans: null,
+      code: null,
     }
   },
   methods: {
@@ -146,20 +157,49 @@ export default {
         .then(res => {
           console.log(res)
           alert("사용할 수 있는 이메일입니다.")
+          this.flag = 0
         })
         .catch(err => {
           console.log(err)
           alert("이미 사용중인 이메일입니다.")
+          this.flag = 1
+        })
+    },
+    emailAuth: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/email/${this.user.email}/`,
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err, this.user.email)
+        })
+    },
+    codeConfirm: function () {
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/email/email-confirm/`,
+        data: this.code,
+      })
+        .then(res => {
+          console.log(res, this.code)
+          this.ans = 0
+        })
+        .catch(err => {
+          console.log(err, this.code)
+          this.ans = 1
         })
     },
     clickRegister: function () {
-      console.log(this.user)
+      // console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
-        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null
+        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null ||
+        this.flag == 1 || this.ans == 1
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {
-      
       axios({
         method: 'post',
         url: 'http://localhost:8080/api/v1/user/signup/',
@@ -222,5 +262,23 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .container {
+    width: 35%;
+    /* border: 1px solid black; */
+  }
+  .form {
+    padding: 40px;
+  }
+  button {
+    font-size: 12px;
+    height: 38px;
+    background-color: rgb(130, 163, 209);
+  }
+  button:hover {
+    background-color: rgb(79, 138, 216);
+  }
+  h2 {
+    margin-top: 1rem;
+  }
 </style>

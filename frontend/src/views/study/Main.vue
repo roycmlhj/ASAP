@@ -1,43 +1,46 @@
 <template>
-  <div>
-    <b-button @click="modalShow=!modalShow" variant="link">스터디방 만들기</b-button>
-    <b-modal v-model="modalShow" title="스터디방 생성" hide-footer>
+  <div class="container">
+    <study-room-list :studies="studies"></study-room-list>
+    <a @click="modalTurn" href="#">스터디방 만들기</a>
+    <b-modal v-model="modalShow" title="Create Study" hide-footer>
       <b-form>
         <b-form-group
           id="input-title-group"
-          label="스터디 이름"
+          label="Name"
           lebel-for="input-title"
         >
+        <div class="d-flex justify-content-between">
           <b-form-input
             id="input-title"
             v-model="title"
             type = "text"
+            style="width: 75%"
             required
           ></b-form-input>
+          <b-button @click="nameCheck" style="background-color: rgb(130, 163, 209); font-size: 13px;">중복체크</b-button>
+        </div>
         </b-form-group>
         <b-form-group
-          label="관심분야"
+          label="Subject"
           label-for="interests"
-          
         >
           <b-form-select name="interests" id="interests" v-model="mainCategory">
-            <option value="" selected disabled hidden>선택해주세요</option>
+            <option value="" selected disabled hidden>주제를 선택해주세요</option>
             <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
           </b-form-select>
         </b-form-group>
-        
         <b-form-tags
-          
           input-id="interests" 
           v-model="interests"
           tag-variant="primary"
           tag-pills
-          placeholder="관심분야를 입력해주세요."
+          placeholder="세부 주제를 입력해주세요."
         ></b-form-tags>
         <b-form-group
           id="input-description-group"
-          label="소개"
+          label="Description"
           lebel-for="input-description"
+          class="mt-3"
         >
           <b-form-textarea
             id="input-description"
@@ -50,7 +53,7 @@
         </b-form-group>
         <b-form-group
           id="input-member-group"
-          label="총 인원 수"
+          label="The number of people"
           label-for="input-member"
         >
           <study-member-count-bar
@@ -58,9 +61,7 @@
           >
           </study-member-count-bar>
         </b-form-group>
-        <div class="mt-3">
-          <b-button @click="createStudyRoom" variant="btn btn-primary">완료</b-button>
-        </div>
+        <b-button @click="createStudyRoom" style="background-color: #A5A6F6; width: 100%">완료</b-button>
       </b-form>
     </b-modal>
     <br>
@@ -72,11 +73,15 @@
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
 import StudyMemberCountBar from '@/components/StudyMemberCountBar.vue'
-import interest from "./assets/interests.json"
+import interest from "@/views/accounts/assets/interests.json"
+import StudyRoomList from '@/components/StudyRoomList.vue'
+
+
 export default {
   name: 'Main',
   components: { 
-    StudyMemberCountBar
+    StudyMemberCountBar,
+    StudyRoomList
   },
   data() {
     return {
@@ -87,45 +92,102 @@ export default {
       memberno:'',
       mainCategory:'',
       interests:[],
-      maker:''
+      maker:'',
+      userno: null,
+      studies: null,
+      flag: 2,
     }
   },
   methods: {
+    modalTurn: function() {
+      if (!this.modalShow){
+        this.title=''
+        this.description=''
+        this.memberno=''
+        this.mainCategory=''
+        this.interests=[]
+        this.maker=''
+      }
+      this.modalShow=!this.modalShow
+    }
+    ,
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     updateMember(memberNum) {
       this.memberno=memberNum
       //console.log(this.member)
     },
+    nameCheck: function () {
+      if (this.title == '') {
+        alert("스터디 이름을 입력해주세요.")
+      } else {
+        axios({
+          method: 'get',
+          url: `http://localhost:8080/api/v1/study/name_check/${this.title}`,
+          data: this.title
+        })
+        .then(res => {
+          console.log(res)
+          this.flag = 1
+          alert("사용할 수 있는 스터디 이름입니다.")
+        })
+        .catch(err => {
+          console.log(err, this.title)
+          this.flag = 2
+          alert("이미 사용중인 스터디 이름입니다.")
+        })
+      }
+    },
+    getStudies: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/study/${this.userno}/`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data)
+          this.studies = res.data.studyInfoList
+        })
+        .catch(err => {
+          console.log(this.title, err)
+        })
+    },
     createStudyRoom: function() {
-      
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
-      console.log(decoded)
-      
+  
       const StudyRoomItem = {
-        studyname:this.title,
-        description:this.description,
-        category:this.mainCategory,
-        memberno:this.memberno,
-        maker:decoded.email,
-        userno:decoded.userno,
-        interests:this.interests,
+        studyname: this.title,
+        description: this.description,
+        category: this.mainCategory,
+        memberno: this.memberno,
+        maker: decoded.email,
+        userno: decoded.userno,
+        interests: this.interests,
       }
-      
-      axios({
-        method:'post',
-        url:`http://localhost:8080/api/v1/study/create`,
-        data:StudyRoomItem
-      }).then(res => {
-        console.log(res)
-        alert("스터디방 생성")
-        this.modalShow=false
-      }).catch(err=> {
-        console.log(err)
-        alert(err)
-        
-      })
-      console.log(console.log(this.interests))
-      console.log(StudyRoomItem)
+      if(!StudyRoomItem.studyname || !StudyRoomItem.description || !StudyRoomItem.category || !StudyRoomItem.memberno || !StudyRoomItem.interests){
+        console.log("pass")
+        alert("모든 칸에 입력해주세요!!!")
+      }
+      else{
+        axios({
+          method: 'post',
+          url: `http://localhost:8080/api/v1/study/create`,
+          data: StudyRoomItem
+        })
+          .then(res => {
+            console.log(res)
+            this.modalShow=false
+        })
+          .catch(err=> {
+            console.log(err)
+        })
+      }
     }
   },
   created: function () {
@@ -133,10 +195,20 @@ export default {
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       console.log(decoded)
+      this.userno = decoded.userno
+      this.getStudies()
     } else {
       this.$router.push({name: 'Login'})
     }
   }
 }
 </script>
-<style scoped> form { padding: 0px 20px; } </style>
+
+<style scoped>
+  form {
+    padding: 0px 20px;
+  }
+  /* button {
+    width: 100%;
+  } */
+</style>

@@ -26,16 +26,20 @@
         >{{title}}
         </b-form-input>
       </b-form-group>
-        <b-form-group label="주제" label-for="interests" label-align-sm="left">
-          <b-form-tags 
-            input-id="interests" 
-            v-model="interests"
-            tag-variant="primary"
-            tag-pills
-            placeholder="주제를 입력해주세요."
-          ></b-form-tags>
-        </b-form-group>
-      
+
+      <b-form-group>
+        
+        
+        <b-form-tags 
+        
+        input-id="interests" 
+        v-model="interests"
+        tag-variant="primary"
+        tag-pills
+        placeholder="관심분야를 입력해주세요."
+        ></b-form-tags>
+        
+      </b-form-group>
       <b-form-group
         id="input-description-group"
         lebel-for="input-description"
@@ -49,7 +53,7 @@
           v-model="description"
           type = "text"
           required
-          rows="12"
+          rows="8"
         >{{description}}
         </b-form-textarea>
       </b-form-group>
@@ -86,7 +90,7 @@
         </b-form-input>
       </b-form-group>
       <div class="mt-3">
-        <b-button class="float-right" type="submit">작성하기</b-button>
+        <b-button type="submit" variant="primary">작성하기</b-button>
       </div>
     </b-form>
   </div>
@@ -111,6 +115,15 @@ export default {
       call:null,
       study:null,
     }
+  },
+  created: function(){
+    //axios통신을 통해 데이터 받아와서 업데이트
+    this.title="",
+    this.description="",
+    this.interests=[],
+    this.git="",
+    this.call="",
+    this.study="",
   },
   methods: {
     updateStudy(studyinfo) {
@@ -146,6 +159,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-  button { font-size: 15px; height: 38px; background-color: rgb(130, 163, 209); } button:hover { background-color: rgb(79, 138, 216); }
-</style>

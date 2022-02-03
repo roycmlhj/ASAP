@@ -3,10 +3,12 @@ import VueRouter from 'vue-router'
 import Login from '../views/accounts/Login.vue'
 import Register from '../views/accounts/Register.vue'
 import ProfileEdit from '../views/accounts/ProfileEdit.vue'
-import StoryBoard from '../views/study/StudyBoard.vue'
+import StudyBoard from '../views/study/StudyBoard.vue'
 import Main from '../views/study/Main.vue'
 import CreateStudyBoard from '../views/study/CreateStudyBoard.vue'
-
+import MyPage from '../views/accounts/MyPage.vue'
+import Admin from '../views/admins/Admin.vue'
+import StudyRoom from '../views/study/StudyRoom.vue'
 
 Vue.use(VueRouter)
 
@@ -21,44 +23,42 @@ const routes = [
     name: 'Register',
     component: Register
   },
-  
   {
-<<<<<<< HEAD
-    path: '/user/modify',
+    path: '/user/modify/:user_no',
     name: 'ProfileEdit',
     component: ProfileEdit
   },
   {
     path: '/study/studyboard',
-    name: 'StoryBoard',
-    component: StoryBoard
+    name: 'StudyBoard',
+    component: StudyBoard
   },
   {
     path: '/study/main',
     name: 'Main',
     component: Main
-=======
-    path: '/main/',
-    name: 'Main',
-    component: () => import('../views/Main.vue')
->>>>>>> 69723850392e5ec24da03c341aa1ba61e2166c6e
   },
   {
     path:'/board/create/',
     name: 'CreateStudyBoard',
-<<<<<<< HEAD
     component: CreateStudyBoard
   },
-
-=======
-    component: () => import('../views/CreateStudyBoard.vue')
+  {
+    path:'/user/detail/',
+    name: 'MyPage',
+    component: MyPage
   },
   {
-    path:'/board/',
-    name: 'StudyBoard',
-    component: () => import('../views/StudyBoard.vue')
+    path: '/admin/userlist/',
+    name: 'Admin',
+    component: Admin
+  },
+  {
+    path: '/study/room/',
+    name: 'StudyRoom',
+    component: StudyRoom
   }
->>>>>>> 69723850392e5ec24da03c341aa1ba61e2166c6e
+
 ]
 
 const router = new VueRouter({

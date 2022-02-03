@@ -13,23 +13,23 @@
       <b-form-input 
         type="text" 
         id="email"
-        placeholder="ID"
+        placeholder="E-mail"
         v-model="user.email"
       >
       </b-form-input>
       <b-form-input 
         type="password" 
         id="password"
-        placeholder="PW"
+        placeholder="Password"
         v-model="user.password"
         @keyup.enter="login"
       >
       </b-form-input>
-      <b-form-checkbox>&nbsp;자동로그인</b-form-checkbox>
-      <b-button @click="login">Login</b-button>
+      <b-form-checkbox class="mt-2" style="float: left;">&nbsp;자동 로그인하기</b-form-checkbox>
+      <b-button @click="login" style="background-color: #C59FDF;">Login</b-button>
       <div class="mt-4">
         Didn't you have ID? &nbsp;&nbsp;
-        <router-link :to="{ name: 'Register' }">Sign up</router-link>
+        <router-link :to="{ name: 'Register' }"><strong>Sign up</strong></router-link>
       </div>
     </div>
   </div>
@@ -82,7 +82,8 @@ export default {
 }
 button {
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+  border: none;
 }
 input {
   margin-bottom: 1rem;

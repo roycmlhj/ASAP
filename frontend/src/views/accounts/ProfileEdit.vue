@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
-    생성일 : 2022.01.25
-    마지막 업데이트 : 2022.01.25
+    생성일 : 2022.01.30
+    마지막 업데이트 : 2022.01.30
     
     개인정보수정 페이지
  */
@@ -10,15 +10,14 @@
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
       <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
-      <p>{{ username }}</p>
-      <b-button variant="link" class="float-right">회원탈퇴</b-button>
+      <p>{{ this.user.email }}</p>
+      <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
     </b-card>
-    <b-card bg-variant="light">
+    <b-card bg-variant="light" class="input">
       <b-form-group
         label="비밀번호"
         label-for="password"
         label-cols-sm="1"
-        label-align-sm="right"
       >
         <b-form-input 
           id="password"
@@ -29,7 +28,7 @@
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
         >
         </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback">
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -37,7 +36,6 @@
         label="비밀번호"
         label-for="passwordcheck"
         label-cols-sm="1"
-        label-align-sm="right"
       >
         <b-form-input 
           id="passwordcheck" 
@@ -48,7 +46,7 @@
           placeholder="비밀번호를 한번 더 입력해주세요."
         >
         </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback">
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호가 일치하지 않습니다.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -56,7 +54,6 @@
         label="닉네임"
         label-for="nickname"
         label-cols-sm="1"
-        label-align-sm="right"
       >
         <b-form-input 
           id="nickname" 
@@ -66,7 +63,7 @@
           placeholder="닉네임은 2자 이상이어야 합니다."
         >
         </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback">
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           닉네임은 두 글자 이상이어야 합니다.
         </b-form-invalid-feedback>
       </b-form-group>
@@ -74,8 +71,8 @@
     <div class="d-flex mt-4">
       <b-card bg-variant="light" class="col-6">
         <h5 class="float-left"><strong>이미지 업로드</strong></h5>
-        <b-form-file v-model="user.file" ref="file-input" class="mb-2"></b-form-file>
-        <p class="mt-2 float-left">선택된 이미지 : <b>{{ user.file ? user.file.name : '' }}</b></p>
+        <b-form-file v-model="user.image" ref="file-input" class="mb-2"></b-form-file>
+        <p class="mt-2 float-left">선택된 이미지 : <b>{{ user.image ? user.image.name : '' }}</b></p>
         <b-form-checkbox
           id="checkbox-1"
           name="checkbox-1"
@@ -87,9 +84,9 @@
       </b-card>
       <b-card bg-variant="light" class="col-6">
         <h5 class="float-left"><strong>관심 분야</strong></h5>
-        <b-form-select name="interests" id="interests" v-model="user.main_category" class="mb-3">
+        <b-form-select name="mainCategory" id="mainCategory" v-model="user.mainCategory" class="mb-3">
           <option value="" selected disabled hidden>선택해주세요</option>
-          <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
+          <option v-for="interest in interestList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
         </b-form-select>
         <b-form-tags v-model="user.interests" no-outer-focus class="mb-2">
           <template v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }">
@@ -100,7 +97,7 @@
                 placeholder="관심 분야를 추가로 입력해주세요."
                 class="form-control">
               <b-input-group-append>
-                <b-button @click="addTag()" variant="primary">Add</b-button>
+                <b-button @click="addTag()" style="background-color: skyblue; border: none;">Add</b-button>
               </b-input-group-append>
             </b-input-group>
             <ul
@@ -131,34 +128,115 @@
         </b-form-tags>
       </b-card>
     </div>
-    <b-button class="mt-5 float-right">저장하기</b-button>
+    <b-button class="btn1 mt-5 float-right" @click="userEdit">저장하기</b-button>
   </div>
 </template>
 
 <script>
 import jwt_decode from 'jwt-decode'
 import interest from "./assets/interests.json"
+import axios from 'axios'
 
 export default {
   name: 'ProfileEdit',
   data: () => {
     return {
-      interestsList : interest,
-      username : null,
+      interestList : interest,
+      userno: null,
+      admin: null,
       user:{
+        email: null,
         password: '',
         nickname: '',
-        main_category: '',
+        mainCategory: '',
         interests: [],
-        file: null
+        image: null
       },
+      interestTmp: [],
       passwordcheck: '',
     }
   },
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
     clearFiles() {
       this.$refs['file-input'].reset()
-    }
+    },
+    userEdit: function() {
+      console.log(this.user)
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        headers: this.setToken(),
+        data: this.user
+      })
+        .then(res => {
+          console.log(res)
+          if (this.admin == 0) {
+            localStorage.setItem('jwt', res.data.accessToken)
+            alert("회원 정보 수정이 완료되었습니다.")
+            window.location.reload(this.$route.params.user_no)
+          }
+          else {
+            alert("회원 정보 수정이 완료되었습니다.")
+            window.location.reload(this.$route.params.user_no)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    userDelete: function () {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res)
+          alert("회원 탈퇴가 완료되었습니다.")
+          this.$router.push({ name: 'Login'})
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    getUserInformation: function () {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      this.user.nickname = decoded.nickname
+      this.user.mainCategory = decoded.mainCategory
+      this.userno = decoded.userno
+      this.user.email = decoded.email
+      this.mainCategory = decoded.mainCategory
+      this.interestTmp = decoded.interests
+      this.user.interests = this.interestTmp.split('#')
+      console.log(decoded)
+    },
+    getUserInformationByAdmin: function (user_no) {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/admin/${user_no}`,
+      })
+        .then(res => {
+          console.log(res)
+          this.user.nickname = res.data.user.nickname
+          this.user.mainCategory = res.data.user.mainCategory
+          this.userno = res.data.user.userno
+          this.user.email = res.data.user.email
+          this.mainCategory = res.data.user.mainCategory
+          this.interestTmp = res.data.user.interests
+          this.user.interests = this.interestTmp.split('#')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
   },
   computed: {
     nameState() {
@@ -192,12 +270,17 @@ export default {
       }
     }
   },
-    created: function () {
+  created: function () {
     if (localStorage.getItem('jwt')) {
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
-      this.username = decoded.sub
-      console.log(decoded)
+      if (decoded.isAdmin == 1) {
+        this.admin = 1
+        this.getUserInformationByAdmin(this.$route.params.user_no)
+      }
+      else {
+        this.getUserInformation()
+      }
     } else {
       this.$router.push({name: 'Login'})
     }
@@ -210,5 +293,13 @@ export default {
    width: 100px;
    height: 100px;
    border-radius: 70%;
+ }
+ .btn1 {
+   background-color: palevioletred;
+   border: none;
+ }
+ input {
+   border: none;
+   border-bottom: solid 1px;
  }
 </style>
