@@ -10,7 +10,7 @@
             <img src="https://w.namu.la/s/7dca3fe36abec714f9f294ec68e4127f52bfc9d234639d0fd20d4820ef33e4ed6a61c072d1d7570737a4cfe681e82534466b6f890789ddb218a245d8969845b74e84f75df8e85d8984a3d9c57812d6d589734af074645802fa7d9594f0e0049e" alt="default_image">   
             <img src="http://newsimg.hankookilbo.com/2019/04/29/201904291390027161_3.jpg" alt="default_image">
           </p>
-          <p><b-button style="background-color: #E9D155; color: black; font-size: 11px;">입장하기</b-button></p>
+          <p><router-link :to="{ name: 'StudyRoom'}"><b-button style="background-color: #E9D155; color: black; font-size: 11px;">입장하기</b-button></router-link></p>
         </div>  
       </swiper-slide> 
       <div class="swiper-button-prev" slot="button-prev"></div> 

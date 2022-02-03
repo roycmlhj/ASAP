@@ -8,6 +8,7 @@ import Main from '../views/study/Main.vue'
 import CreateStudyBoard from '../views/study/CreateStudyBoard.vue'
 import MyPage from '../views/accounts/MyPage.vue'
 import Admin from '../views/admins/Admin.vue'
+import StudyRoom from '../views/study/StudyRoom.vue'
 
 
 Vue.use(VueRouter)
@@ -37,6 +38,11 @@ const routes = [
     path: '/study/main',
     name: 'Main',
     component: Main
+  },
+  {
+    path: '/study/studyroom',
+    name: 'StudyRoom',
+    component: StudyRoom
   },
   {
     path:'/board/create/',

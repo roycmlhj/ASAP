@@ -32,8 +32,8 @@
             아이디는 이메일 형식이어야 합니다.
           </b-form-invalid-feedback>
         </p>
-        <b-button class="ml-2" @click="clickConfirmation">중복확인</b-button>
-        <b-button class="ml-2" @click="emailAuth">인증번호 발송</b-button>
+        <b-button class="ml-1" @click="clickConfirmation">중복확인</b-button>
+        <b-button class="ml-1" @click="emailAuth">인증번호 발송</b-button>
       </div>
     </b-form-group>
     <b-form-group
@@ -271,7 +271,7 @@ export default {
     padding: 40px;
   }
   button {
-    font-size: 12px;
+    font-size: 11px;
     height: 38px;
     background-color: rgb(130, 163, 209);
   }

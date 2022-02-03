@@ -8,7 +8,7 @@
 <template>
   <div class="container">
     <h5 v-if="studyList" class="float-left"><strong>스터디 목록</strong></h5>
-    <h5 v-else class="float-left"><strong>과제 목록</strong></h5>
+    <h5 v-else class="float-left"><strong>과제 목록</strong></h5><br>
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
