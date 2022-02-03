@@ -77,7 +77,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public StudyInfo getStudyInfo(int studyno, String studyName) {
+	public StudyInfo getStudyInfo(int studyno, String studyName, String category) {
 		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get(); //
 		Schedule schedule = scheduleRepository.findByStudyno(studyno);
 		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
@@ -90,6 +90,7 @@ public class StudyServiceImpl implements StudyService {
 		studyInfo.setHomeworkList(homeworkList);
 		studyInfo.setMemberImage(memberImage);
 		studyInfo.setStudyName(studyName);
+		studyInfo.setCategory(category);
 		if(schedule != null)
 			studyInfo.setNextDate(schedule.getNextDate());
 		
