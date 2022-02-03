@@ -41,4 +41,12 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 		
 		return Optional.ofNullable(studyList);
 	}
+
+	@Override
+	public long countRecruteUser(int studyno) {
+		long count = jpaQueryFactory.select(qStudyMember).from(qStudyMember)
+				.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.isJoin.lt(2)))
+				.fetchCount();
+		return count;
+	}
 }

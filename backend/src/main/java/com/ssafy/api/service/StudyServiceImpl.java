@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.api.request.StudyAcceptPutReq;
 import com.ssafy.api.request.StudyApplyPostReq;
 import com.ssafy.api.request.StudyCreatePostReq;
+import com.ssafy.api.response.BoardMember;
 import com.ssafy.api.response.StudyInfo;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.Schedule;
@@ -24,7 +25,6 @@ import com.ssafy.db.repository.UserRepository;
 
 @Service("studyService")
 public class StudyServiceImpl implements StudyService {
-
 	@Autowired
 	StudyRepository studyRepository;
 	@Autowired
@@ -77,7 +77,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public StudyInfo getStudyInfo(int studyno, String studyName) {
+	public StudyInfo getStudyInfo(int studyno, String studyName, String category) {
 		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get(); //
 		Schedule schedule = scheduleRepository.findByStudyno(studyno);
 		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
@@ -90,6 +90,7 @@ public class StudyServiceImpl implements StudyService {
 		studyInfo.setHomeworkList(homeworkList);
 		studyInfo.setMemberImage(memberImage);
 		studyInfo.setStudyName(studyName);
+		studyInfo.setCategory(category);
 		if(schedule != null)
 			studyInfo.setNextDate(schedule.getNextDate());
 		

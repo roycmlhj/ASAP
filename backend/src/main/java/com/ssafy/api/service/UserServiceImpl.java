@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.Tuple;
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.api.response.BoardMember;
 import com.ssafy.db.entity.Homework;
+import com.ssafy.db.entity.QUser;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.HomeworkRepository;
 import com.ssafy.db.repository.StudyMemberRepository;
@@ -54,7 +57,7 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userno).get();
 		return user;
 	}
-
+	
 	@Override
 	public User modifyUser(int userno, UserRegisterPostReq userModifyInfo) {
 		User user = getUserByUserno(userno);
@@ -107,6 +110,19 @@ public class UserServiceImpl implements UserService {
 	public boolean kickUser(int userno, int studyno) {
 		studyMemberRepository.kickStudyMember(userno, studyno);
 		return true;
+	}
+
+	//추가
+	@Override
+	public List<BoardMember> getBoardMember(int studyno) {
+		List<BoardMember> list = userRepository.findBoardMemberByStudyno(studyno).get();
+		return list;
+	}
+
+	@Override
+	public String getNicknameByUserno(int userno) {
+		String nickname = userRepository.findNicknameByUserno(userno);
+		return nickname;
 	}
 
 }

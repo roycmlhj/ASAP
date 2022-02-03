@@ -21,5 +21,4 @@ public class StudyListRes {
 		res.studyList = studyList;
 		return res;
 	}
-
 }

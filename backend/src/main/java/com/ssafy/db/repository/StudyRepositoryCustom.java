@@ -7,4 +7,5 @@ import com.ssafy.db.entity.Study;
 
 public interface StudyRepositoryCustom {
 	Optional<List<Study>> findByUserno(int userno);
+	long countRecruteUser(int studyno);
 }

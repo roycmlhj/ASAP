@@ -64,6 +64,10 @@ public class User {
 	@JoinColumn(name = "userno")
 	List<UserHomework> userHomeworkList = new ArrayList<>();
 	
+	@OneToMany 
+	@JoinColumn(name = "userno") 
+	List<Homework> homeworkList = new ArrayList<>();
+	
 	@OneToMany
 	@JoinColumn(name = "userno")
 	List<Board> boardList = new ArrayList<>();

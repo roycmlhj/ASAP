@@ -36,6 +36,8 @@ public class QHomework extends EntityPathBase<Homework> {
 
     public final ListPath<UserHomework, QUserHomework> userHomeworkList = this.<UserHomework, QUserHomework>createList("userHomeworkList", UserHomework.class, QUserHomework.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> userno = createNumber("userno", Integer.class);
+
     public QHomework(String variable) {
         super(Homework.class, forVariable(variable));
     }
