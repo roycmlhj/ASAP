@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.api.request.StudyBoardCreatePostReq;
 import com.ssafy.api.request.StudyBoardPutReq;
 import com.ssafy.api.response.StudyBoardListRes;
+import com.ssafy.api.response.StudyBoardNNickname;
 import com.ssafy.api.response.StudyBoardRes;
 import com.ssafy.api.service.StudyBoardService;
+import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.StudyBoard;
 
@@ -33,6 +36,8 @@ import io.swagger.annotations.ApiResponses;
 public class StudyBoardController {
 	@Autowired
 	StudyBoardService studyBoardService;
+	@Autowired
+	UserService userService;
 	
 	@PostMapping("/create")
 	@ApiOperation(value = "스터디 게시글 생성", notes = "스터디 게시글을 생성한다.")
@@ -59,8 +64,14 @@ public class StudyBoardController {
 	})
 	public ResponseEntity<StudyBoardListRes> getStudyBoardList(@PathVariable("studyno") @ApiParam(value = "study pk", required = true) int studyno){
 		List<StudyBoard> studyBoardList = studyBoardService.getStudyBoardList(studyno);
+		List<StudyBoardNNickname> studyBoardNNicknameList = new ArrayList<>();
 		
-		return ResponseEntity.status(200).body(StudyBoardListRes.of(studyBoardList));
+		for(int i = 0; i < studyBoardList.size(); i++) {
+			studyBoardNNicknameList.add(new StudyBoardNNickname(studyBoardList.get(i), 
+										userService.getUserNickname(studyBoardList.get(i).getUserno())));
+		}
+		
+		return ResponseEntity.status(200).body(StudyBoardListRes.of(studyBoardNNicknameList));
 	};
 	
 	

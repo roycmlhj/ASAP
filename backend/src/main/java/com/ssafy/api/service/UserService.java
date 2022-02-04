@@ -15,4 +15,5 @@ public interface UserService {
 	List<User> getUserList();
 	List<Homework> getHomeworkListbyUserno(int userno, int flag);
 	boolean kickUser(int userno, int studyno);
+	String getUserNickname(Integer userno);
 }

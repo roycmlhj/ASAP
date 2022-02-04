@@ -14,11 +14,16 @@ import lombok.Setter;
 @ApiModel("StudyBoardListResponse")
 public class StudyBoardListRes {
 	@ApiModelProperty(name = "스터디 게시글 리스트")
-	List<StudyBoard> studyBoardList;
+	List<StudyBoardNNickname> studyBoardList;
 	
-	public static StudyBoardListRes of(List<StudyBoard> studyBoardList) {
+	public static StudyBoardListRes of(List<StudyBoardNNickname> studyBoardNNicknameList) {
 		StudyBoardListRes res = new StudyBoardListRes();
-		res.studyBoardList = studyBoardList;
+//		for(int i = 0; i < studyBoardList.size(); i++) {
+//			System.out.println(i + " : " + studyBoardList.get(i).toString() + " " + nicknameList.get(i));
+//			res.studyBoardList.add(new StudyBoardNNickname(studyBoardList.get(i), nicknameList.get(i)));
+//			System.out.println("check");
+//		}
+		res.studyBoardList = studyBoardNNicknameList;
 		return res;
 	}
 }
