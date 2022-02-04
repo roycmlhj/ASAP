@@ -28,16 +28,18 @@ public class Homework {
 	Integer homeworkno;
 	@Column
 	Integer studyno;
-	@Column
-	String start_date;
-	@Column
-	String end_date;
+	@Column(name = "start_date")
+	String startDate;
+	@Column(name = "end_date")
+	String endDate;
 	@Column(name = "is_active")
 	Integer isActive;
 	@Column
 	String content;
 	@Column
 	String title;
+	@Column
+	Integer userno;
 	
 	@OneToMany
 	@JoinColumn(name = "homeworkno")
