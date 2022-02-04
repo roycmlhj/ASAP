@@ -16,20 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.api.request.BoardCreatePostReq;
-import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.BoardMember;
 import com.ssafy.api.response.BoardPaging;
 import com.ssafy.api.response.BoardRes;
-import com.ssafy.api.response.UserDetailInfoRes;
-import com.ssafy.api.response.UserInfoStudyListRes;
-import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.service.BoardService;
 import com.ssafy.api.service.StudyService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Board;
-import com.ssafy.db.entity.StudyMember;
-import com.ssafy.db.entity.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -102,7 +96,7 @@ public class BoardController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
-	@GetMapping("/list/page")
+	@GetMapping("/list")
 	@ApiOperation(value = "게시글 목록", notes = "게시글을 목록을 불러온다") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "성공"),
@@ -112,6 +106,21 @@ public class BoardController {
 	public ResponseEntity<Page<BoardPaging>> boardList(
 			@PageableDefault(size=5, sort="timestamp") @ApiParam(value = "페이징 객체", required = true) Pageable pageRequest) {
 		Page<BoardPaging> pagingList = boardService.boardList(pageRequest);
+		return ResponseEntity.status(200).body(pagingList);
+	}
+	
+	@GetMapping("/list/search")
+	@ApiOperation(value = "게시글 검색", notes = "게시글을 검색하고 목록을 불러온다") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<List<BoardPaging>> boardSearchList(
+			@ApiParam(value = "검색 분류", required = true) String type, 
+			@ApiParam(value = "검색 키워드", required = true) String keyword,
+			@PageableDefault(size=5, sort="timestamp") @ApiParam(value = "검색할 게시물 정보", required = true) Pageable pageRequest) {
+		List<BoardPaging> pagingList = boardService.boardSearch(type, keyword, pageRequest);
 		return ResponseEntity.status(200).body(pagingList);
 	}
 }

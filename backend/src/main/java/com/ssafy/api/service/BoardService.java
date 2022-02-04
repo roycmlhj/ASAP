@@ -1,5 +1,7 @@
 package com.ssafy.api.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,4 +15,5 @@ public interface BoardService {
 	Board modifyBoard(int boardno, BoardCreatePostReq boardCreateInfo);
 	boolean deleteBoard(int boardno);
 	Page<BoardPaging> boardList(Pageable pageRequest);
+	List<BoardPaging> boardSearch(String type, String keyword, Pageable pageRequest);
 }

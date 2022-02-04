@@ -1,6 +1,9 @@
 package com.ssafy.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,8 +85,44 @@ public class BoardServiceImpl implements BoardService {
 						board.getIsRecruit(),
 						board.getMaxmember(),
 						(int)studyRepository.countRecruteUser(board.getStudyno()),
-						board.getTimestamp()
+						board.getTimestamp(),
+						board.getInterests()
 				));
+		return pagingList;
+	}
+
+	@Override
+	@Transactional
+	public List<BoardPaging> boardSearch(String type, String keyword, Pageable pageRequest) {
+		List<Board> boardList = new ArrayList<Board>();
+		switch (type) {
+		case "category":
+			boardList = boardRepository.findByCategoryContaining(keyword, pageRequest);
+			break;
+		case "nickname":
+			boardList = boardRepository.findByNicknameContaining(keyword, pageRequest);
+			break;
+		case "boardname":
+			boardList = boardRepository.findByBoardnameContaining(keyword, pageRequest);
+			break;
+		default:
+			break;
+		}
+		List<BoardPaging> pagingList = new ArrayList<BoardPaging>();
+		for (Board board : boardList) {
+			BoardPaging bp = new BoardPaging(
+					board.getBoardno(), 
+					board.getBoardname(), 
+					board.getUserno(), 
+					board.getNickname(), 
+					board.getCategory(), 
+					board.getIsRecruit(), 
+					board.getMaxmember(), 
+					(int)studyRepository.countRecruteUser(board.getStudyno()), 
+					board.getTimestamp(),
+					board.getInterests());
+			pagingList.add(bp);
+		}
 		return pagingList;
 	}
 }

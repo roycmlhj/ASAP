@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.api.request.UserKickPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserInfoStudyListRes;
 import com.ssafy.api.response.UserListRes;
@@ -72,7 +73,7 @@ public class AdminController {
 	}
 	
 	// 수정함
-	@PostMapping("/kick/{studyno}")
+	@PostMapping("/kick")
 	@ApiOperation(value = "스터디 회원 퇴출", notes = "스터디 회원을 퇴출한다.") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "성공"),
@@ -81,9 +82,8 @@ public class AdminController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<? extends BaseResponseBody> kickUser(
-			@ApiParam(value = "방출할 유저의 no", required = true) int userno, 
-			@PathVariable("studyno") @ApiParam(value = "스터디의 no", required = true) int studyno){
-		userService.kickUser(userno, studyno);
+			@RequestBody @ApiParam(value = "방출할 스터디no, 유저no", required = true) UserKickPostReq userKickInfo) {
+		userService.kickUser(userKickInfo.getUserno(), userKickInfo.getStudyno());
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	

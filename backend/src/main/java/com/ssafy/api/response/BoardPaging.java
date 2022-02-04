@@ -15,9 +15,10 @@ public class BoardPaging {
 	int maxmember;
 	int membercnt;
 	String timestamp;
+	String interests;
 	
 	public BoardPaging(int boardno, String boardname, int userno, String nickname, String category, int is_recruit,
-			int maxmember, int membercnt, String timestamp) {
+			int maxmember, int membercnt, String timestamp, String interests) {
 		this.boardno = boardno;
 		this.boardname = boardname;
 		this.userno = userno;
@@ -27,5 +28,6 @@ public class BoardPaging {
 		this.maxmember = maxmember;
 		this.membercnt = membercnt;
 		this.timestamp = timestamp;
+		this.interests = interests;
 	}
 }
