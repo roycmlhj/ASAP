@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.api.request.UserKickPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserInfoStudyListRes;
 import com.ssafy.api.response.UserListRes;
@@ -79,8 +80,10 @@ public class AdminController {
         @ApiResponse(code = 404, message = "사용자 없음"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<? extends BaseResponseBody> kickUser(int userno, int studyno){
-		userService.kickUser(userno, studyno);
+	public ResponseEntity<? extends BaseResponseBody> kickUser(
+			@RequestBody @ApiParam(value = "방출할 스터디no, 유저no", required = true) UserKickPostReq userKickInfo) {
+		userService.kickUser(userKickInfo.getUserno(), userKickInfo.getStudyno());
+
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	

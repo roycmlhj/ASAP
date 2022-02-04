@@ -9,4 +9,5 @@ import com.ssafy.db.entity.Study;
 public interface StudyRepositoryCustom {
 	Optional<List<Study>> findByUserno(int userno);
 	void updateStudy(StudyPutReq studyPutInfo, String interests);
+	long countRecruteUser(int studyno);
 }
