@@ -91,6 +91,7 @@ public class StudyServiceImpl implements StudyService {
 		studyInfo.setMemberImage(memberImage);
 		studyInfo.setStudyName(studyName);
 		studyInfo.setCategory(category);
+		studyInfo.setStudyno(studyno);
 		if(schedule != null)
 			studyInfo.setNextDate(schedule.getNextDate());
 		

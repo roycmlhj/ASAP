@@ -7,12 +7,20 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.HomeworkCreatePostReq;
 import com.ssafy.db.entity.Homework;
+import com.ssafy.db.entity.StudyMember;
+import com.ssafy.db.entity.UserHomework;
 import com.ssafy.db.repository.HomeworkRepository;
+import com.ssafy.db.repository.StudyMemberRepository;
+import com.ssafy.db.repository.UserHomeworkRepository;
 
 @Service("homeworkService")
 public class HomeworkServiceImpl implements HomeworkService {
 	@Autowired
 	HomeworkRepository homeworkRepository;
+	@Autowired
+	StudyMemberRepository studyMemberRepository;
+	@Autowired
+	UserHomeworkRepository userHomeworkRepository;
 
 	@Override
 	public boolean createHomework(HomeworkCreatePostReq homeworkInfo) {
@@ -23,10 +31,17 @@ public class HomeworkServiceImpl implements HomeworkService {
 		homework.setEndDate(homeworkInfo.getEndDate());
 		homework.setContent(homeworkInfo.getContent());
 		
-		if(homeworkRepository.save(homework) != null)
-			return true;
+		int homeworkno = homeworkRepository.save(homework).getHomeworkno();
 		
-		return false;
+		List<StudyMember> studyMember = studyMemberRepository.findByStudyno(homeworkInfo.getStudyno());
+		for(int i = 0; i < studyMember.size(); i++) {
+			UserHomework userHomework = new UserHomework();
+			userHomework.setUserno(studyMember.get(i).getUserno());
+			userHomework.setHomeworkno(homeworkno);
+			userHomeworkRepository.save(userHomework);
+		}
+		
+		return true;
 	}
 
 	@Override
