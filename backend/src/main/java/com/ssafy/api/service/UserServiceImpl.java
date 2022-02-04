@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	StudyMemberRepository studyMemberRepository;
 	@Autowired
+	BoardService boardService;
+	@Autowired
 	PasswordEncoder passwordEncoder;
 	
 	@Override
@@ -85,7 +87,10 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userno).get();
 		user.setDelFlag(1);
 		userRepository.save(user);
-		//board테이블 삭제
+		List<Integer> boardlist = boardService.getBoardnoByUserno(userno);
+		for (Integer boardno : boardlist) {
+			boardService.deleteBoard(boardno);
+		}
 		//study 위임 -> 아무도 없으면 삭제
 		studyMemberRepository.deleteByUserno(userno);
 		//push테이블 삭제

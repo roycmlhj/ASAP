@@ -16,4 +16,5 @@ public interface BoardService {
 	boolean deleteBoard(int boardno);
 	Page<BoardPaging> boardList(Pageable pageRequest);
 	List<BoardPaging> boardSearch(String type, String keyword, Pageable pageRequest);
+	List<Integer> getBoardnoByUserno(int userno);
 }

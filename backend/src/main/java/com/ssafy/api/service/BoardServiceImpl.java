@@ -125,4 +125,10 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return pagingList;
 	}
+
+	@Override
+	public List<Integer> getBoardnoByUserno(int userno) {
+		List<Integer> list = boardRepository.findBoardnoByUserno(userno);
+		return list;
+	}
 }

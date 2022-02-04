@@ -1,10 +1,12 @@
 package com.ssafy.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.api.request.BoardCreatePostReq;
@@ -104,7 +107,8 @@ public class BoardController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<Page<BoardPaging>> boardList(
-			@PageableDefault(size=5, sort="timestamp") @ApiParam(value = "페이징 객체", required = true) Pageable pageRequest) {
+			@PageableDefault(size = 5, sort="timestamp", direction = Direction.DESC) @ApiParam(value = "페이징 정보", required = true) Pageable pageRequest) {
+		System.out.println(pageRequest + " " + pageRequest.getPageNumber());
 		Page<BoardPaging> pagingList = boardService.boardList(pageRequest);
 		return ResponseEntity.status(200).body(pagingList);
 	}
@@ -119,7 +123,7 @@ public class BoardController {
 	public ResponseEntity<List<BoardPaging>> boardSearchList(
 			@ApiParam(value = "검색 분류", required = true) String type, 
 			@ApiParam(value = "검색 키워드", required = true) String keyword,
-			@PageableDefault(size=5, sort="timestamp") @ApiParam(value = "검색할 게시물 정보", required = true) Pageable pageRequest) {
+			@PageableDefault(size=8, sort="timestamp", direction = Direction.DESC) @ApiParam(value = "검색할 게시물 정보", required = true) Pageable pageRequest) {
 		List<BoardPaging> pagingList = boardService.boardSearch(type, keyword, pageRequest);
 		return ResponseEntity.status(200).body(pagingList);
 	}
