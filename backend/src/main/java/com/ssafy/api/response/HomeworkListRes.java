@@ -15,9 +15,9 @@ import lombok.Setter;
 @ApiModel("HomeworkListResponse")
 public class HomeworkListRes {
 	@ApiModelProperty(name = "과제 글 리스트")
-	List<Homework> homeworkList;
+	List<HomeworkNNickname> homeworkList;
 	
-	public static HomeworkListRes of(List<Homework> homeworkList) {
+	public static HomeworkListRes of(List<HomeworkNNickname> homeworkList) {
 		HomeworkListRes res = new HomeworkListRes();
 		res.homeworkList = homeworkList;
 		return res;

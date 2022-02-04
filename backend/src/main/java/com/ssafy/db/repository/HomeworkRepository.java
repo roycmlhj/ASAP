@@ -11,4 +11,5 @@ import com.ssafy.db.entity.Homework;
 @Repository
 public interface HomeworkRepository extends JpaRepository<Homework, Integer>, HomeworkRepositoryCustom{
 	Optional<List<Homework>> findByStudyno(int studyno);
+
 }

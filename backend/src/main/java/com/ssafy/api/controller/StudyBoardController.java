@@ -111,7 +111,7 @@ public class StudyBoardController {
         @ApiResponse(code = 401, message = "실패"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<? extends BaseResponseBody> deleteUser(
+	public ResponseEntity<? extends BaseResponseBody> deleteStudyBoard(
 			@PathVariable("boardno") @ApiParam(value = "삭제할 board pk", required = true) int boardno){
 		if(studyBoardService.deleteStudyBoard(boardno))
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

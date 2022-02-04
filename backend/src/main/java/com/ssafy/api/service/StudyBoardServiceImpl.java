@@ -23,9 +23,7 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 		studyBoard.setContent(studyBoardInfo.getContent());
 		studyBoard.setStudyno(studyBoardInfo.getStudyno());
 		studyBoard.setTitle(studyBoardInfo.getTitle());
-		studyBoard.setType(studyBoardInfo.getType());
 		studyBoard.setUserno(studyBoardInfo.getUserno());
-		
 		if(studyBoardRepository.save(studyBoard) != null)
 			return true;
 		

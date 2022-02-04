@@ -22,13 +22,13 @@ public class QHomework extends EntityPathBase<Homework> {
 
     public final StringPath content = createString("content");
 
-    public final StringPath end_date = createString("end_date");
+    public final StringPath endDate = createString("endDate");
 
     public final NumberPath<Integer> homeworkno = createNumber("homeworkno", Integer.class);
 
     public final NumberPath<Integer> isActive = createNumber("isActive", Integer.class);
 
-    public final StringPath start_date = createString("start_date");
+    public final StringPath startDate = createString("startDate");
 
     public final NumberPath<Integer> studyno = createNumber("studyno", Integer.class);
 
