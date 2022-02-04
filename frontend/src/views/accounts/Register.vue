@@ -142,8 +142,8 @@ export default {
         interests: []
       },
       passwordcheck: '',
-      flag: 2,
-      ans: 2,
+      flag: 0,
+      ans: 0,
       code: null,
     }
   },

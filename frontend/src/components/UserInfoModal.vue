@@ -59,8 +59,8 @@ export default {
   data: function () {
     return {
       userInfo: {
-        userno: 3,
-        studyno: 8
+        userno: null,
+        studyno: null
       }
     }
   },
@@ -75,18 +75,18 @@ export default {
     userKick: function () {
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/admin/kick/${this.userInfo.studyno}`,
+        url: `http://localhost:8080/api/v1/admin/kick`,
         data: this.userInfo
       })
         .then(res => {
-          console.log(res)
+          console.log(res, this.userInfo)
           window.location.reload()
           alert("스터디에서 해당 회원을 강퇴시켰습니다.")
         })
         .catch(err => {
-          console.log(err)
+          console.log(err, this.userInfo)
         })
-    },
+    }
   }
 }
 </script>

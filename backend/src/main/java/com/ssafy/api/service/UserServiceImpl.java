@@ -109,4 +109,9 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+	@Override
+	public String getUserNickname(Integer userno) {
+		return userRepository.findById(userno).get().getNickname();
+	}
+
 }

@@ -40,7 +40,7 @@ const routes = [
     component: Main
   },
   {
-    path: '/study/studyroom',
+    path: '/study/studyroom/:study_no',
     name: 'StudyRoom',
     component: StudyRoom
   },

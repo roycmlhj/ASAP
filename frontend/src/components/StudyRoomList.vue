@@ -1,3 +1,10 @@
+/*
+    작성자 : 한슬기
+    생성일 : 2022.02.03
+    마지막 업데이트 : 2022.02.03
+    
+    메인페이지 > 스터디 리스트
+ */
 <template>
   <div class="container d-flex flex-wrap justify-content-center">
     <div class="mb-5" v-for="study in studies" :key="study.id">
@@ -12,7 +19,7 @@
           <img src="https://w.namu.la/s/7dca3fe36abec714f9f294ec68e4127f52bfc9d234639d0fd20d4820ef33e4ed6a61c072d1d7570737a4cfe681e82534466b6f890789ddb218a245d8969845b74e84f75df8e85d8984a3d9c57812d6d589734af074645802fa7d9594f0e0049e" alt="default_image">   
           <img src="http://newsimg.hankookilbo.com/2019/04/29/201904291390027161_3.jpg" alt="default_image">
         </p>
-        <p><router-link :to="{ name: 'StudyRoom'}"><b-button>입장하기</b-button></router-link></p>
+        <p><router-link :to="{ name: 'StudyRoom', params: { study_no : study.studyno }}"><b-button>입장하기</b-button></router-link></p>
       </div>  
     </div>
   </div>
