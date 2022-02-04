@@ -1,6 +1,5 @@
 package com.ssafy.db.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,29 +16,23 @@ import lombok.Setter;
 
 @DynamicInsert
 @DynamicUpdate
-@Entity(name = "homework")
+@Entity(name = "study_board")
 @Getter
 @Setter
-public class Homework {
+public class StudyBoard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer homeworkno;
+	Integer boardno;
+	@Column
+	Integer type;
 	@Column
 	Integer studyno;
-	@Column(name = "start_date")
-	String startDate;
-	@Column(name = "end_date")
-	String endDate;
-	@Column(name = "is_active")
-	Integer isActive;
 	@Column
-	String content;
+	Integer userno;
 	@Column
 	String title;
 	@Column
-	Integer userno;
-	
-	@OneToMany
-	@JoinColumn(name = "homeworkno")
-	List<UserHomework> userHomeworkList = new ArrayList<>();
+	String content;
+	@Column
+	String timestamp;
 }

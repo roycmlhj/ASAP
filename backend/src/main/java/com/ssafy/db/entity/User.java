@@ -66,5 +66,14 @@ public class User {
 	
 	@OneToMany
 	@JoinColumn(name = "userno")
+	List<Homework> homeworkList = new ArrayList<>();
+	
+	@OneToMany
+	@JoinColumn(name = "userno")
 	List<Board> boardList = new ArrayList<>();
+	
+	//studyBaord와의 관계 추가
+	@OneToMany
+	@JoinColumn(name = "userno")
+	List<StudyBoard> studyBoardList = new ArrayList<>();
 }

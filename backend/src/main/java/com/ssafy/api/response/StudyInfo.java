@@ -11,6 +11,9 @@ import lombok.Setter;
 @Setter
 public class StudyInfo {
 	String studyName;
+	String category;
+	//수정
+	int studyno;
 	List<Homework> homeworkList;
 	String nextDate;
 	List<String> memberImage;

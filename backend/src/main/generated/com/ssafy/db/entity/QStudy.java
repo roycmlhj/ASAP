@@ -38,6 +38,8 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final ListPath<Schedule, QSchedule> scheduleList = this.<Schedule, QSchedule>createList("scheduleList", Schedule.class, QSchedule.class, PathInits.DIRECT2);
 
+    public final ListPath<StudyBoard, QStudyBoard> studyBoardList = this.<StudyBoard, QStudyBoard>createList("studyBoardList", StudyBoard.class, QStudyBoard.class, PathInits.DIRECT2);
+
     public final ListPath<StudyMember, QStudyMember> studyMemberList = this.<StudyMember, QStudyMember>createList("studyMemberList", StudyMember.class, QStudyMember.class, PathInits.DIRECT2);
 
     public final StringPath studyname = createString("studyname");
