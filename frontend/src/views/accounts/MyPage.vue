@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.01.30
-    마지막 업데이트 : 2022.02.01
+    마지막 업데이트 : 2022.02.05
     
     마이페이지
  */
@@ -14,7 +14,7 @@
     </div>
     <div>
       <h5><strong>관심분야</strong></h5>
-      <user-interests :interests="userInfo.interests"></user-interests>
+      <user-interests :interestList="getInterests()"></user-interests>
     </div>
     <div class="d-flex">
       <user-info-table :studyList="studyList"></user-info-table>
@@ -108,6 +108,11 @@ export default {
     showModal() {
       this.user.password = null,
       this.$refs['my-modal'].show()
+    },
+    getInterests: function () {
+      this.interestList = this.userInfo.interests.split('#')
+      this.interestList.shift()
+      return this.interestList
     },
   },
   created: function () {

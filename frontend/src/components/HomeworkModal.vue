@@ -3,14 +3,14 @@
     생성일 : 2022.02.04
     마지막 업데이트 : 2022.02.04
     
-    스터디 방 > 게시글 작성 모달
+    스터디 방 > 과제 생성 모달
  */
 <template>
 <div class="container">
-  <font-awesome-icon class="fa-1x mt-1 mr-1 float-left" icon="edit"/><a href="#" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>글 작성하기</strong></a>
+  <font-awesome-icon class="fa-1x mt-1 mr-1 float-left" icon="edit"/><a href="#" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>과제 추가하기</strong></a>
   <b-modal ref="my-modal"
     ok-only 
-    title="Create Ariticle"   
+    title="Create Homework"   
     hide-footer 
   >
     <b-form-group
@@ -20,8 +20,7 @@
       <b-form-input 
         id="title" 
         type="text"
-        v-model="article.title"
-        required
+        v-model="homework.title"
       >
       </b-form-input>
     </b-form-group>
@@ -32,13 +31,23 @@
       <b-form-textarea 
         id="content" 
         type="text"
-        v-model="article.content"
+        v-model="homework.content"
         rows="6"
         max-rows="6"
-        required
       >
       </b-form-textarea>
-      <b-button class="mt-5" style="float: right; background-color: rgb(130, 163, 209);" @click="createArticle()">확인</b-button>
+    </b-form-group>
+    <b-form-group
+      label="Date"
+      label-for="content"
+    >
+      <b-form-input 
+        id="content" 
+        type="date"
+        v-model="homework.endDate"
+      >
+      </b-form-input>
+      <b-button class="mt-5" style="float: right; background-color: rgb(130, 163, 209);" @click="createHomework()">확인</b-button>
     </b-form-group>
   </b-modal>
 </div>
@@ -50,14 +59,15 @@ import axios from 'axios'
 
 
 export default {
-  name: 'ArticleModal',
+  name: 'HomeworkModal',
   data: function () {
     return {
-      article: {
+      homework: {
         title: null,
         content: null,
         studyno: this.$route.params.study_no,
         userno: null,
+        endDate: null,
       },
     }
   },
@@ -70,15 +80,16 @@ export default {
         return config
       },
     showModal() {
-      this.article.title = null,
-      this.article.content = null
+      this.homework.title = null,
+      this.homework.content = null,
+      this.endDate = null
       this.$refs['my-modal'].show()
     },
-    createArticle: function () {
+    createHomework: function () {
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/study_board/create`,
-        data: this.article,
+        url: `http://localhost:8080/api/v1/homework/create`,
+        data: this.homework,
         headers: this.setToken(),
       })
         .then(res => {
@@ -86,14 +97,14 @@ export default {
           window.location.reload()
         })
         .catch(err => {
-          console.log(err, this.article)
+          console.log(err)
         })
     }
   },
     created: function () {
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
-      this.article.userno = decoded.userno
+      this.homework.userno = decoded.userno
       // console.log(decoded.userno)
     }
 }

@@ -123,6 +123,7 @@ export default {
   .content {
     background-color: rgb(240, 236, 236);
     margin-bottom: 0px;
+    word-break: break-all;
   }
   button { 
     float: right;

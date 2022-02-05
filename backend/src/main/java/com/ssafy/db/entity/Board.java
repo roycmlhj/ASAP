@@ -45,5 +45,8 @@ public class Board {
 	String interests;
 	@Column
 	String category;
+	@Column
+	String nickname;
+
 	
 }

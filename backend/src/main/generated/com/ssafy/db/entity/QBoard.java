@@ -39,6 +39,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> maxmember = createNumber("maxmember", Integer.class);
 
+    public final StringPath nickname = createString("nickname");
+
     public final NumberPath<Integer> studyno = createNumber("studyno", Integer.class);
 
     public final StringPath timestamp = createString("timestamp");

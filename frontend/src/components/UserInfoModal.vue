@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.01.30
-    마지막 업데이트 : 2022.02.01
+    마지막 업데이트 : 2022.02.05
     
     회원 상세 정보 모달
  */
@@ -21,7 +21,7 @@
         </tr>
         <tr>
           <th>세부관심분야</th>
-          <td style="width: 70%;"><user-interests :interests="member.interests"></user-interests></td>
+          <td style="width: 70%;"><user-interests :interestList="getInterests(member)"></user-interests></td>
         </tr>
         <tr>
           <th>포인트 및 레벨</th>
@@ -86,7 +86,12 @@ export default {
         .catch(err => {
           console.log(err, this.userInfo)
         })
-    }
+    },
+    getInterests: function (member) {
+      this.interestList = member.interests.split('#')
+      this.interestList.shift()
+      return this.interestList
+  },
   }
 }
 </script>

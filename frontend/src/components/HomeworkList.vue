@@ -3,36 +3,35 @@
     생성일 : 2022.02.04
     마지막 업데이트 : 2022.02.04
     
-    스터디 방 > 게시글 제목
+    스터디 방 > 과제 리스트
  */
 <template>
   <div class="container">
-    <div v-for="studyBoard in studyBoardList" :key="studyBoard.id">
-      <div v-for="board in studyBoard" :key="board.id">
-        <a href="#" @click="onFlag"><strong>{{ board.studyBoard.title }} / {{ board.nickname }}님</strong></a>
+    <div v-for="homework in homeworkList" :key="homework.id">
+      <div v-for="work in homework" :key="work.id">
+        <a href="#" @click="onFlag"><strong>{{ work.homework.title }} / {{ work.nickname }}님</strong></a>
         <hr>
-        <article-item :board="board" :onFlag="flag" @getArticleList="getArticleList"></article-item>
+        <homework-item :work="work" :onFlag="flag" @getHomeworkList="getHomeworkList"></homework-item>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ArticleItem from '@/components/ArticleItem.vue'
-
+import HomeworkItem from '@/components/HomeworkItem.vue'
 
 export default {
-  name: 'ArticleList',
+  name: 'HomeworkList',
   components: {
-    ArticleItem,
+    HomeworkItem
   },
   data: function () {
     return {
-      flag: false
+      flag: false,
     }
   },
   props: {
-    studyBoardList: {
+    homeworkList: {
       type: Object
     }
   },
@@ -40,8 +39,8 @@ export default {
     onFlag: function () {
       this.flag = !this.flag
     },
-    getArticleList: function () {
-      this.$emit('getArticleList')
+    getHomeworkList: function () {
+      this.$emit('getHomeworkList')
     }
   }
 }

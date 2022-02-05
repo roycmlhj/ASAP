@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.04
+    마지막 업데이트 : 2022.02.05
     
     스터디 방
  */
@@ -18,7 +18,15 @@
             </p>
           </div>
         </b-sidebar>
-      <font-awesome-icon class="clipboard fa-2x mb-2" icon="clipboard"/>
+      <font-awesome-icon class="clipboard fa-2x mb-2" v-b-toggle.sidebar-right-homework icon="clipboard"/>
+      <b-sidebar id="sidebar-right-homework" title="과제 게시판" right shadow>
+        <div class="px-3 py-2">
+          <p class="homework">
+            <homework-modal></homework-modal>
+            <homework-list :homeworkList="homeworkList" @getHomeworkList="getHomeworkList()"></homework-list>
+          </p>
+        </div>
+      </b-sidebar>
       <font-awesome-icon class="fa-2x mb-2" icon="calendar-week"/>
       <font-awesome-icon class="fa-2x mb-2" icon="cog"/>
     </p>
@@ -35,12 +43,16 @@ import axios from 'axios'
 // import jwt_decode from 'jwt-decode'
 import ArticleModal from '../../components/ArticleModal.vue'
 import ArticleList from '../../components/ArticleList.vue'
+import HomeworkModal from '@/components/HomeworkModal.vue'
+import HomeworkList from '../../components/HomeworkList.vue'
 
 export default {
   name: 'StudyRoom',
   components: {
     ArticleModal,
-    ArticleList
+    ArticleList,
+    HomeworkModal,
+    HomeworkList
   },
   data: function () {
     return {
@@ -48,6 +60,7 @@ export default {
       context: null,
       userno: null,
       studyBoardList: null,
+      homeworkList: null,
     }
   },
   methods: {
@@ -72,12 +85,27 @@ export default {
           console.log(err)
         })
     },
+    getHomeworkList: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/homework/homeworklist/${this.$route.params.study_no}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.homeworkList = res.data
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     onContext(ctx) {
       this.context = ctx
     },
   },
   created: function () {
     this.getArticleList()
+    this.getHomeworkList()
   }
 }
 </script>
@@ -102,6 +130,10 @@ export default {
     background-color: rgb(79, 138, 216); 
   }
   .article {
+    display: flex;
+    flex-direction: column;
+  }
+  .homework {
     display: flex;
     flex-direction: column;
   }
