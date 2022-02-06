@@ -32,8 +32,8 @@
             아이디는 이메일 형식이어야 합니다.
           </b-form-invalid-feedback>
         </p>
-        <b-button class="ml-2" @click="clickConfirmation">중복확인</b-button>
-        <b-button class="ml-2" @click="emailAuth">인증번호 발송</b-button>
+        <b-button class="ml-1" @click="clickConfirmation">중복확인</b-button>
+        <b-button class="ml-1" @click="emailAuth">인증번호 발송</b-button>
       </div>
     </b-form-group>
     <b-form-group
@@ -142,8 +142,8 @@ export default {
         interests: []
       },
       passwordcheck: '',
-      flag: null,
-      ans: null,
+      flag: 0,
+      ans: 0,
       code: null,
     }
   },
@@ -157,12 +157,12 @@ export default {
         .then(res => {
           console.log(res)
           alert("사용할 수 있는 이메일입니다.")
-          this.flag = 0
+          this.flag = 1
         })
         .catch(err => {
           console.log(err)
           alert("이미 사용중인 이메일입니다.")
-          this.flag = 1
+          this.flag = 2
         })
     },
     emailAuth: function () {
@@ -185,18 +185,18 @@ export default {
       })
         .then(res => {
           console.log(res, this.code)
-          this.ans = 0
+          this.ans = 1
         })
         .catch(err => {
           console.log(err, this.code)
-          this.ans = 1
+          this.ans = 2
         })
     },
     clickRegister: function () {
       // console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
         this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null ||
-        this.flag == 1 || this.ans == 1
+        this.flag == 2 || this.ans == 2
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {
@@ -271,7 +271,7 @@ export default {
     padding: 40px;
   }
   button {
-    font-size: 12px;
+    font-size: 11px;
     height: 38px;
     background-color: rgb(130, 163, 209);
   }

@@ -9,31 +9,31 @@
     </b-input-group>
     <span class="row d-flex justify-content-around">
 
-      <div class="col-6 " v-for="study in studies" v-bind:key="study">
+      <div class="col-6 " v-for="study in studies" v-bind:key="study.id">
         <router-link :to="{ name: 'StudyBoardDetail', params: { boardno : study.boardno }}">
-        <b-card class = "mb-3 col-12">
-        <div class="row d-flex justify-content-around">
-          <h3>{{study.boardname}}</h3>
-          <b-card-text v-if="study.is_recruit===0">
-            {{"모집중"}}
-          </b-card-text>
-          <b-card-text v-else>
-            {{"모집완료"}}
-          </b-card-text>
-          <b-card-text>
-            {{study.membercnt}}/{{study.maxmember}}
-          </b-card-text>
-        </div>
-        <div class="row d-flex justify-content-around">
-        <b-card-text>
-          <b-badge class="mx-1" v-for="topic in study.topics" v-bind:key="topic"> {{topic}}</b-badge>
-        </b-card-text>
-        <b-card-text>
-          <b-avatar :src="study.studyLeaderIconTag"></b-avatar>
-          {{study.nickname}}
-        </b-card-text>
-        </div>
-        </b-card>
+          <b-card class = "mb-3 col-12">
+          <div class="row d-flex justify-content-around">
+            <h3>{{study.boardname}}</h3>
+            <b-card-text v-if="study.is_recruit===0">
+              {{"모집중"}}
+            </b-card-text>
+            <b-card-text v-else>
+              {{"모집완료"}}
+            </b-card-text>
+            <b-card-text>
+              {{study.membercnt}}/{{study.maxmember}}
+            </b-card-text>
+          </div>
+          <div class="row d-flex justify-content-around">
+            <b-card-text>
+              <b-badge class="mx-1" v-for="topic in study.topics" v-bind:key="topic"> {{topic}}</b-badge>
+            </b-card-text>
+            <b-card-text>
+              <b-avatar :src="study.studyLeaderIconTag"></b-avatar>
+              {{study.nickname}}
+            </b-card-text>
+          </div>
+          </b-card>
         </router-link>
       </div>
     </span>

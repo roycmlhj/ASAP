@@ -81,7 +81,7 @@ export default {
   name: 'Main',
   components: { 
     StudyMemberCountBar,
-    StudyRoomList
+    StudyRoomList,
   },
   data() {
     return {
@@ -172,7 +172,7 @@ export default {
       }
       if(!StudyRoomItem.studyname || !StudyRoomItem.description || !StudyRoomItem.category || !StudyRoomItem.memberno || !StudyRoomItem.interests){
         console.log("pass")
-        alert("모든 칸에 입력해주세요!!!")
+        alert("모든 정보를 입력해주세요.")
       }
       else{
         axios({
@@ -183,6 +183,7 @@ export default {
           .then(res => {
             console.log(res)
             this.modalShow=false
+            this.getStudies()
         })
           .catch(err=> {
             console.log(err)

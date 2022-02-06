@@ -91,7 +91,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
 export default {
-  name: 'CreateStudyBoard',
+  name: 'UpdateStudyBoard',
   components: {
     StudyDropdown
   },

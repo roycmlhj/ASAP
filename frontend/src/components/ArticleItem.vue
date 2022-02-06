@@ -1,0 +1,138 @@
+/*
+    작성자 : 한슬기
+    생성일 : 2022.02.04
+    마지막 업데이트 : 2022.02.04
+    
+    스터디 방 > 게시글 수정, 삭제, 상세 정보
+ */
+<template>
+<div id="container" v-if="onFlag">
+  <p class="content" :style="{ height: board.studyBoard.content.length + 110 + 'px'}">{{ board.studyBoard.content }}</p>
+  <div class="mt-2 mb-3">
+    <b-button @click="deleteArticle(board.studyBoard.boardno)">삭제</b-button>
+    <b-button id="show-btn" @click="showModal">수정</b-button>
+  </div>
+    <b-modal ref="my-modal"
+      ok-only 
+      title="Update Ariticle"   
+      hide-footer 
+    >
+      <b-form-group
+        label="Title"
+        label-for="title"
+      >
+        <b-form-input 
+          id="title" 
+          type="text"
+          v-model="article.title"
+        >
+        </b-form-input>
+      </b-form-group>
+      <b-form-group
+        label="Content"
+        label-for="content"
+      >
+        <b-form-textarea 
+          id="content" 
+          type="text"
+          v-model="article.content"
+          rows="6"
+          max-rows="6"
+        >
+        </b-form-textarea>
+        <b-button class="mt-3" style="font-size: 15px; height: 40px;" @click="updateArticle">확인</b-button>
+      </b-form-group>
+    </b-modal>
+</div>
+</template>
+
+<script>
+import axios from 'axios'
+
+export default {
+  name: 'ArticleItem',
+  data: function () {
+    return {
+      article: {
+        title: null,
+        content: null,
+        boardno: this.board.studyBoard.boardno
+      },
+    }
+  },
+  props: {
+    board: {
+      type: Object
+    },
+    onFlag: {
+      type: Boolean
+    }
+  },
+  methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    showModal() {
+      this.article.title = this.board.studyBoard.title
+      this.article.content = this.board.studyBoard.content
+      this.$refs['my-modal'].show()
+    },
+    deleteArticle: function (boardno) {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/v1/study_board/delete/${boardno}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data)
+          alert("게시글이 삭제되었습니다.")
+          this.$emit('getArticleList')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    updateArticle: function () {
+      axios({
+        method: 'put',
+        url: `http://localhost:8080/api/v1/study_board/modify`,
+        data: this.article,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data, this.article)
+          window.location.reload()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+}
+</script>
+
+<style scoped>
+  #container {
+    display: flex;
+    flex-direction: column;
+  }
+  .content {
+    background-color: rgb(240, 236, 236);
+    margin-bottom: 0px;
+    word-break: break-all;
+  }
+  button { 
+    float: right;
+    margin-right: 2px;
+    font-size: 11px; 
+    height: 30px; 
+    background-color: rgb(130, 163, 209); 
+  } 
+  button:hover { 
+    background-color: rgb(79, 138, 216); 
+  }
+</style>

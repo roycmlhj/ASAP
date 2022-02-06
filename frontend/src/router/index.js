@@ -8,10 +8,14 @@ import Main from '../views/study/Main.vue'
 import CreateStudyBoard from '../views/study/CreateStudyBoard.vue'
 import MyPage from '../views/accounts/MyPage.vue'
 import Admin from '../views/admins/Admin.vue'
+import StudyRoom from '../views/study/StudyRoom.vue'
 import StudyBoardUpdate from '../views/study/UpdateStudyBoard.vue'
 import StudyBoardDetail from '../views/study/StudyBoardDetail.vue'
+import fullCalendar from 'vue-fullcalendar'
+import Calender from '../components/Calender.vue'
 Vue.use(VueRouter)
 
+Vue.component('full-calendar', fullCalendar)
 const routes = [
   {
     path: '/user/login',
@@ -39,6 +43,11 @@ const routes = [
     component: Main
   },
   {
+    path: '/study/studyroom/:study_no',
+    name: 'StudyRoom',
+    component: StudyRoom
+  },
+  {
     path:'/board/create/',
     name: 'CreateStudyBoard',
     component: CreateStudyBoard
@@ -63,7 +72,11 @@ const routes = [
     name: 'StudyBoardUpdate',
     component: StudyBoardUpdate,
   },
-
+  {
+    path: '/calendertest',
+    name: 'Calendertest',
+    component:Calender
+  }
 ]
 
 const router = new VueRouter({
