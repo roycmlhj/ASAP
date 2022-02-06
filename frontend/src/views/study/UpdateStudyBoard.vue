@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>모집 글 작성</h1>
+    <h1>모집 글 수정</h1>
     <b-form>
       <b-form-group
       >
@@ -58,6 +58,7 @@
           type="text"
           placeholder="git 주소를 입력해 주세요"
         >
+        {{git}}
         </b-form-input>
       </b-form-group>
       <b-form-group
@@ -74,10 +75,11 @@
           type="text"
           placeholder="연락처 또는 오픈카카오톡 주소를 알려주세요"
         >
+        {{call}}
         </b-form-input>
       </b-form-group>
       <div class="mt-3">
-        <b-button @click='createStudyRoom' class="float-right">작성하기</b-button>
+        <b-button @click='updateStudyRoom' class="float-right">수정하기</b-button>
       </div>
     </b-form>
   </div>
@@ -89,7 +91,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
 export default {
-  name: 'CreateStudyBoard',
+  name: 'UpdateStudyBoard',
   components: {
     StudyDropdown
   },
@@ -115,6 +117,31 @@ export default {
     } else {
       this.$router.push({name: 'Login'})
     }
+    this.boardno=this.$route.params.boardno
+    console.log(this.boardno)
+    axios({
+      method:'get',
+      url:`http://localhost:8080/api/v1/board/${this.boardno}`,
+    }).then(res=> {
+      console.log(res)
+      const list = res.data.list
+      for(var i = 0 ; i<list.length;i++){
+        if(list[i].position==0){
+          if(list[i].userno!=this.userno){
+            this.$router.push({name: 'Main'})
+          }
+        }
+      }
+      this.title=res.data.board.boardname
+      this.description = res.data.board.boarddescription
+      this.git = res.data.board.link
+      this.call = res.data.board.contactlink
+      console.log(res.data.board)
+      this.studyno = res.data.board.studyno
+      
+    }).catch(err=> {
+      console.log(err)
+    })
   }
   ,
   methods: {
@@ -133,8 +160,8 @@ export default {
         console.log(this.studyno,this.userno)
       })
     },
-    createStudyRoom: function() {
-      console.log(this.title,this.description,this.git,this.call,this.studyno,this.userno)
+    
+    updateStudyRoom() {
       const StudyRoomItem = {
         boardname:this.title,
         boarddescription:this.description,
@@ -143,10 +170,10 @@ export default {
         studyno:this.studyno,
         userno:this.userno,
       }
-      console.log(StudyRoomItem)
+      
       axios({
         method:'post',
-        url:`http://localhost:8080/api/v1/board/create/`,
+        url:`http://localhost:8080/api/v1/board/${this.boardno}`,
         data: StudyRoomItem,
       }).then(res => {
         console.log(res)
@@ -155,7 +182,6 @@ export default {
         console.log(err,1)
         alert(err)
       })
-      console.log(StudyRoomItem)
     }
   }
 }

@@ -9,6 +9,8 @@ import CreateStudyBoard from '../views/study/CreateStudyBoard.vue'
 import MyPage from '../views/accounts/MyPage.vue'
 import Admin from '../views/admins/Admin.vue'
 import StudyRoom from '../views/study/StudyRoom.vue'
+import StudyBoardUpdate from '../views/study/UpdateStudyBoard.vue'
+import StudyBoardDetail from '../views/study/StudyBoardDetail.vue'
 
 
 Vue.use(VueRouter)
@@ -58,7 +60,17 @@ const routes = [
     path: '/admin/userlist/',
     name: 'Admin',
     component: Admin
-  }
+  },
+  {
+    path: `/study/board/detail/:boardno`,
+    name: 'StudyBoardDetail',
+    component: StudyBoardDetail,
+  },
+  {
+    path: `/study/board/update/:boardno`,
+    name: 'StudyBoardUpdate',
+    component: StudyBoardUpdate,
+  },
 
 ]
 
