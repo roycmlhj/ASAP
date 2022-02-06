@@ -30,7 +30,7 @@
             <div class = "col-12" name="studyMembers">
               <div v-if="flag===2">
                 <ul>
-                <div v-for="member in displaymembers" v-bind:key="member">
+                <div v-for="member in displaymembers" v-bind:key="member.id">
                   <b-avatar class="float-left" :src="member.image"></b-avatar>
                   <h5>{{member.nickname}}</h5>
                 </div>
@@ -42,7 +42,7 @@
                 id="checkbox-group"
                 v-model="selected"
                 name="members">
-                  <b-form-checkbox v-for="member in displaymembers" v-bind:key="member" :value="member.userno">
+                  <b-form-checkbox v-for="member in displaymembers" v-bind:key="member.id" :value="member.userno">
                     <b-avatar class="float-left" :src="member.image"></b-avatar>
                     <h5>{{member.nickname}}</h5>
                   </b-form-checkbox>
@@ -52,7 +52,7 @@
               <div v-if="flag===1">
                   
                 <ul>
-                  <div class="mb-4" v-for="member in displaymembers" v-bind:key="member">
+                  <div class="mb-4" v-for="member in displaymembers" v-bind:key="member.id">
                     <b-avatar class="float-left" :src="member.image"></b-avatar>
                     <h5>{{member.nickname}}</h5>
                   </div>
@@ -198,7 +198,8 @@ export default {
       })
       .then(res => {
         console.log(res)
-        alert("신청하셨습니다.")
+        alert("스터디를 신청하셨습니다.")
+        window.location.reload()
       })
       .catch(err => {
         console.log(err)
@@ -219,7 +220,8 @@ export default {
         })
         .then(res => {
           console.log(res)
-          alert("수락했습니다.")
+          alert("가입을 수락했습니다.")
+          window.location.reload()
         })
         .catch(err => {
           console.log(err)
@@ -241,7 +243,8 @@ export default {
         })
         .then(res => {
           console.log(res)
-          alert("거절했습니다.")
+          alert("가입을 거절했습니다.")
+          window.location.reload()
         })
         .catch(err => {
           console.log(err)
