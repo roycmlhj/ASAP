@@ -56,6 +56,7 @@
         >
           <study-member-count-bar
             v-on:memberEvent="updateMember"
+            :memberno="information.memberno"
           >
           </study-member-count-bar>
         </b-form-group>
@@ -108,6 +109,7 @@ export default {
       this.information.studyname = this.studyInformation.studyname
       this.information.description = this.studyInformation.description
       this.information.memberno = this.studyInformation.memberno
+      
       this.information.category = this.studyInformation.category
       this.information.interests = this.interestList
       this.$refs['my-modal'].show()

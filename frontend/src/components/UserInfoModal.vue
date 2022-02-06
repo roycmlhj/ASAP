@@ -29,10 +29,10 @@
         </tr>
         <tr>
           <th :rowspan="studylist.length + 1">스터디</th>
-          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a href="#" @click="userKick">퇴출</a></td>
+          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1 || leader == this.userNumber" href="#" @click="userKick">퇴출</a></td>
         </tr>
         <tr v-for="(study, index) in studylist" :key="index.id">
-          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a href="#" @click="userKick">퇴출</a></td>
+          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick">퇴출</a></td>
         </tr>
       </tbody>
     </table>
@@ -41,6 +41,7 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import UserInterests from '@/components/UserInterests.vue'
 
 export default {
@@ -54,14 +55,19 @@ export default {
     },
     studylist: {
       type: Array
+    },
+    leader: {
+      type: Number
     }
   },
   data: function () {
     return {
       userInfo: {
         userno: null,
-        studyno: null
-      }
+        studyno: null,
+      },
+      isAdmin: null,
+      userNumber: null,
     }
   },
   methods: {
@@ -91,7 +97,18 @@ export default {
       this.interestList = member.interests.split('#')
       this.interestList.shift()
       return this.interestList
+    },
   },
+  created: function () {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      this.isAdmin = decoded.isAdmin
+      this.userNumber = decoded.userno
+      console.log(this.leader)
+    } else {
+      this.$router.push({name: 'Login'})
+    }
   }
 }
 </script>
