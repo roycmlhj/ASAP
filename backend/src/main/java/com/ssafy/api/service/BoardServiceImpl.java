@@ -61,6 +61,7 @@ public class BoardServiceImpl implements BoardService {
 		board.setContactlink(boardModifyInfo.getContactlink());
 		board.setCategory(study.getCategory());
 		board.setMaxmember(study.getMemberno());
+		board.setInterests(study.getInterests());
 		return boardRepository.save(board);
 	}
 

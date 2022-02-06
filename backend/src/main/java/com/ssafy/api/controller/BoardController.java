@@ -85,7 +85,7 @@ public class BoardController {
 	public ResponseEntity<? extends BaseResponseBody> modifyBoard(
 			@RequestBody @ApiParam(value="게시글 수정 정보", required = true) BoardCreatePostReq boardInfo, 
 			@PathVariable("boardno") @ApiParam(value = "수정할 게시판의 no", required = true) int boardno) {
-		boardService.createBoard(boardInfo);
+		boardService.modifyBoard(boardno, boardInfo);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
