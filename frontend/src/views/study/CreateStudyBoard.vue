@@ -26,15 +26,6 @@
         >{{title}}
         </b-form-input>
       </b-form-group>
-        <b-form-group label="주제" label-for="interests" label-align-sm="left">
-          <b-form-tags 
-            input-id="interests" 
-            v-model="interests"
-            tag-variant="primary"
-            tag-pills
-            placeholder="주제를 입력해주세요."
-          ></b-form-tags>
-        </b-form-group>
       
       <b-form-group
         id="input-description-group"
@@ -86,7 +77,7 @@
         </b-form-input>
       </b-form-group>
       <div class="mt-3">
-        <b-button class="float-right" type="submit">작성하기</b-button>
+        <b-button @click='createStudyRoom' class="float-right">작성하기</b-button>
       </div>
     </b-form>
   </div>
@@ -95,7 +86,7 @@
 <script>
 import StudyDropdown from '@/components/StudyDropdown.vue'
 import axios from 'axios'
-
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'CreateStudyBoard',
@@ -110,10 +101,25 @@ export default {
       git:null,
       call:null,
       study:null,
+      studyno:null,
+      userno:null,
     }
   },
+  created() {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      console.log(decoded)
+      this.userno = decoded.userno
+      
+    } else {
+      this.$router.push({name: 'Login'})
+    }
+  }
+  ,
   methods: {
     updateStudy(studyinfo) {
+      this.studyno=studyinfo.studyno
       axios({
         method:'get',
         url:`http://localhost:8080/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
@@ -121,26 +127,34 @@ export default {
       }).then(res=> {
         console.log(res)
         this.title=studyinfo.studyname
-        if (!res.data.study.interests){
-          this.interests=[]
-        }else{
-          const input_interests = res.data.study.interests
-          
-          this.interests=input_interests.split('#')
-        }
+        
         this.description= res.data.study.description
         console.log(this.description)
+        console.log(this.studyno,this.userno)
       })
     },
     createStudyRoom: function() {
+      console.log(this.title,this.description,this.git,this.call,this.studyno,this.userno)
       const StudyRoomItem = {
-        title:this.title,
-        description:this.description,
-        interests:this.interests,
-        git:this.git,
-        call: this.call,
+        boardname:this.title,
+        boarddescription:this.description,
+        link:this.git,
+        contactlink: this.call,
+        studyno:this.studyno,
+        userno:this.userno,
       }
-      //console.log(StudyRoomItem.member)
+      console.log(StudyRoomItem)
+      axios({
+        method:'post',
+        url:`http://localhost:8080/api/v1/board/create/`,
+        data: StudyRoomItem,
+      }).then(res => {
+        console.log(res)
+        this.$router.push({name:'StudyBoard'})
+      }).catch(err=> {
+        console.log(err,1)
+        alert(err)
+      })
       console.log(StudyRoomItem)
     }
   }

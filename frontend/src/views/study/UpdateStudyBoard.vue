@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>모집 글 작성</h1>
+    <h1>모집 글 수정</h1>
     <b-form>
       <b-form-group
       >
@@ -26,20 +26,7 @@
         >{{title}}
         </b-form-input>
       </b-form-group>
-
-      <b-form-group>
-        
-        
-        <b-form-tags 
-        
-        input-id="interests" 
-        v-model="interests"
-        tag-variant="primary"
-        tag-pills
-        placeholder="관심분야를 입력해주세요."
-        ></b-form-tags>
-        
-      </b-form-group>
+      
       <b-form-group
         id="input-description-group"
         lebel-for="input-description"
@@ -53,7 +40,7 @@
           v-model="description"
           type = "text"
           required
-          rows="8"
+          rows="12"
         >{{description}}
         </b-form-textarea>
       </b-form-group>
@@ -71,6 +58,7 @@
           type="text"
           placeholder="git 주소를 입력해 주세요"
         >
+        {{git}}
         </b-form-input>
       </b-form-group>
       <b-form-group
@@ -87,10 +75,11 @@
           type="text"
           placeholder="연락처 또는 오픈카카오톡 주소를 알려주세요"
         >
+        {{call}}
         </b-form-input>
       </b-form-group>
       <div class="mt-3">
-        <b-button type="submit" variant="primary">작성하기</b-button>
+        <b-button @click='updateStudyRoom' class="float-right">수정하기</b-button>
       </div>
     </b-form>
   </div>
@@ -99,7 +88,7 @@
 <script>
 import StudyDropdown from '@/components/StudyDropdown.vue'
 import axios from 'axios'
-
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'CreateStudyBoard',
@@ -114,19 +103,50 @@ export default {
       git:null,
       call:null,
       study:null,
+      studyno:null,
+      userno:null,
     }
   },
-  created: function(){
-    //axios통신을 통해 데이터 받아와서 업데이트
-    this.title="",
-    this.description="",
-    this.interests=[],
-    this.git="",
-    this.call="",
-    this.study="",
-  },
+  created() {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      console.log(decoded)
+      this.userno = decoded.userno
+      
+    } else {
+      this.$router.push({name: 'Login'})
+    }
+    this.boardno=this.$route.params.boardno
+    console.log(this.boardno)
+    axios({
+      method:'get',
+      url:`http://localhost:8080/api/v1/board/${this.boardno}`,
+    }).then(res=> {
+      console.log(res)
+      const list = res.data.list
+      for(var i = 0 ; i<list.length;i++){
+        if(list[i].position==0){
+          if(list[i].userno!=this.userno){
+            this.$router.push({name: 'Main'})
+          }
+        }
+      }
+      this.title=res.data.board.boardname
+      this.description = res.data.board.boarddescription
+      this.git = res.data.board.link
+      this.call = res.data.board.contactlink
+      console.log(res.data.board)
+      this.studyno = res.data.board.studyno
+      
+    }).catch(err=> {
+      console.log(err)
+    })
+  }
+  ,
   methods: {
     updateStudy(studyinfo) {
+      this.studyno=studyinfo.studyno
       axios({
         method:'get',
         url:`http://localhost:8080/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
@@ -134,28 +154,38 @@ export default {
       }).then(res=> {
         console.log(res)
         this.title=studyinfo.studyname
-        if (!res.data.study.interests){
-          this.interests=[]
-        }else{
-          const input_interests = res.data.study.interests
-          
-          this.interests=input_interests.split('#')
-        }
+        
         this.description= res.data.study.description
         console.log(this.description)
+        console.log(this.studyno,this.userno)
       })
     },
-    createStudyRoom: function() {
+    
+    updateStudyRoom() {
       const StudyRoomItem = {
-        title:this.title,
-        description:this.description,
-        interests:this.interests,
-        git:this.git,
-        call: this.call,
+        boardname:this.title,
+        boarddescription:this.description,
+        link:this.git,
+        contactlink: this.call,
+        studyno:this.studyno,
+        userno:this.userno,
       }
-      //console.log(StudyRoomItem.member)
-      console.log(StudyRoomItem)
+      
+      axios({
+        method:'post',
+        url:`http://localhost:8080/api/v1/board/${this.boardno}`,
+        data: StudyRoomItem,
+      }).then(res => {
+        console.log(res)
+        this.$router.push({name:'StudyBoard'})
+      }).catch(err=> {
+        console.log(err,1)
+        alert(err)
+      })
     }
   }
 }
 </script>
+<style scoped>
+  button { font-size: 15px; height: 38px; background-color: rgb(130, 163, 209); } button:hover { background-color: rgb(79, 138, 216); }
+</style>

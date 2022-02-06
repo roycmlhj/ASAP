@@ -21,7 +21,7 @@ export default {
     const token = localStorage.getItem('jwt')
     const decoded =jwt_decode(token)
     const userno = decoded.userno
-    //여기서 axios통신 일단 임시로 대충 넣자
+    
     axios({
       method:'get',
       url:`http://localhost:8080/api/v1/study/list/${userno}/`,
@@ -29,21 +29,24 @@ export default {
     }).then(res=> {
       console.log(res)
       this.studies = res.data.studyList
-      console.log("studies")
-      console.log(this.studies)
-      for (var i = 0; i<this.studies.length;i++) {
-        this.options.push({value:this.studies[i],text:this.studies[i].studyname})
-      }
-      console.log(this.options)
+      
+       for (var i = 0; i<this.studies.length;i++) {
+         this.options.push({value:this.studies[i],text:this.studies[i].studyname})
+
+       }
+      
       
     }).catch(err => {
       console.log(err)
     })
-    
+    // if(update==1){
+    //   selected = 
+    // }
   },
   methods: {
     studyUpdate(){
       console.log("updating")
+      console.log("selected is " , this.selected)
       this.$emit("studyEvent",this.selected);
     }
   }
