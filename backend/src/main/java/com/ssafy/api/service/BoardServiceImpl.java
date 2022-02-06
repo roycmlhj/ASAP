@@ -56,13 +56,13 @@ public class BoardServiceImpl implements BoardService {
 	public Board modifyBoard(int boardno, BoardCreatePostReq boardModifyInfo) {
 		Board board = getBoardByBoardno(boardno);
 		Study study = studyRepository.findById(boardModifyInfo.getStudyno()).get();
-		board.setStudyno(boardModifyInfo.getStudyno());
+		//board.setStudyno(boardModifyInfo.getStudyno());
 		board.setBoardname(boardModifyInfo.getBoardname());
 		board.setBoarddescription(boardModifyInfo.getBoarddescription());
 		board.setLink(boardModifyInfo.getLink());
 		board.setContactlink(boardModifyInfo.getContactlink());
-		board.setCategory(study.getCategory());
-		board.setMaxmember(study.getMemberno());
+//		board.setCategory(study.getCategory());
+//		board.setMaxmember(study.getMemberno());
 		return boardRepository.save(board);
 	}
 
