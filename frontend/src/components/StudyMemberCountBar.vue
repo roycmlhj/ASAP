@@ -8,6 +8,9 @@
 
 export default {
   name: 'StudyMemberCountBar',
+  props: {
+    memberno:Number,
+  }, 
   data() {
     return {
       selected: null,
@@ -26,6 +29,12 @@ export default {
     memberUpdate(){
       console.log("updating")
       this.$emit("memberEvent", this.selected);
+    }
+  },
+  created() {
+    console.log(this.memberno)
+    if(this.memberno){
+      this.selected = this.memberno
     }
   }
 }

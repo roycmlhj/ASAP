@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.05
+    마지막 업데이트 : 2022.02.06
     
     스터디 방
  */
@@ -31,8 +31,28 @@
       <font-awesome-icon class="fa-2x mb-2" icon="cog"/>
     </p>
     <p class="icon2">
-      <font-awesome-icon class="fa-2x mr-2" icon="user-friends"/>
-      <font-awesome-icon class="fa-2x mr-2" icon="info-circle"/>
+      <font-awesome-icon class="fa-2x mr-2" v-b-toggle.sidebar-left-study icon="info-circle"/>
+      <b-sidebar id="sidebar-left-study" title="스터디 상세 정보" left shadow>
+        <div class="mt-3 float-left" v-for="study in studyInformation" :key="study.id">
+          <p class="studyInfo">{{ study.studyname }}</p>
+          <p class="studyInfo">{{ study.maker }}</p>
+          <p class="studyInfo">{{ study.category }}</p>
+          <b-badge class="mx-1" v-for="interest in interestList" :key="interest.id"> {{ interest }}</b-badge>
+          <p class="studyInfo">{{ study.description }}</p>
+          <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
+        </div>
+        </b-sidebar>
+      <font-awesome-icon class="fa-2x mr-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
+      <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" left shadow>
+        <div class="px-3 py-2">
+          <div class="mt-3 float-left" v-for="members in studyMemberList" :key="members.id">
+            <p class="member" v-for="member in members" :key="member.id">
+              <img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image">
+              {{ member.nickname }}
+            </p>
+          </div>
+        </div>
+      </b-sidebar>
       <font-awesome-icon class="fa-2x mr-2" icon="comment-dots"/>
     </p>
   </div>
@@ -45,6 +65,7 @@ import ArticleModal from '../../components/ArticleModal.vue'
 import ArticleList from '../../components/ArticleList.vue'
 import HomeworkModal from '@/components/HomeworkModal.vue'
 import HomeworkList from '../../components/HomeworkList.vue'
+import UpdateStudyInformation from '@/components/UpdateStudyInformation.vue'
 
 export default {
   name: 'StudyRoom',
@@ -52,7 +73,8 @@ export default {
     ArticleModal,
     ArticleList,
     HomeworkModal,
-    HomeworkList
+    HomeworkList,
+    UpdateStudyInformation,
   },
   data: function () {
     return {
@@ -61,6 +83,9 @@ export default {
       userno: null,
       studyBoardList: null,
       homeworkList: null,
+      studyMemberList: null,
+      studyInformation: null,
+      interestList: null,
     }
   },
   methods: {
@@ -70,6 +95,23 @@ export default {
         Authorization: `JWT ${token}`
       }
       return config
+    },
+    getStudyInformation: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/study/detail/${this.$route.params.study_no}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data)
+          this.studyInformation = res.data
+          this.interestList = this.studyInformation.study.interests.split("#")
+          this.interestList.shift(0)
+          console.log(this.interestList)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     getArticleList: function () {
       axios({
@@ -99,6 +141,20 @@ export default {
           console.log(err)
         })
     },
+    getStudyMemberList: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/study/memberList/${this.$route.params.study_no}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          this.studyMemberList = res.data
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     onContext(ctx) {
       this.context = ctx
     },
@@ -106,6 +162,8 @@ export default {
   created: function () {
     this.getArticleList()
     this.getHomeworkList()
+    this.getStudyMemberList()
+    this.getStudyInformation()
   }
 }
 </script>
@@ -137,4 +195,14 @@ export default {
     display: flex;
     flex-direction: column;
   }
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 70%;
+  }
+  /* .studyInfo {
+    text-align: left;
+    width: 100%;
+    background-color: rgb(248, 239, 228);
+  } */
 </style>
