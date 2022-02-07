@@ -28,6 +28,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> exp = createNumber("exp", Integer.class);
 
+    public final NumberPath<Integer> homeworkCnt = createNumber("homeworkCnt", Integer.class);
+
     public final ListPath<Homework, QHomework> homeworkList = this.<Homework, QHomework>createList("homeworkList", Homework.class, QHomework.class, PathInits.DIRECT2);
 
     public final StringPath image = createString("image");

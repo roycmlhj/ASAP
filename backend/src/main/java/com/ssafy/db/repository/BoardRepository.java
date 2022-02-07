@@ -2,6 +2,8 @@ package com.ssafy.db.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,5 +18,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer>, BoardRep
 	List<Board> findByBoardnameContaining(String keyword, Pageable pageable);
 	List<Board> findByCategoryContaining(String keyword, Pageable pageable);
 	List<Board> findByNicknameContaining(String keyword, Pageable pageable);
+	@Transactional
+	void deleteByStudyno(int studyno);
 
 }

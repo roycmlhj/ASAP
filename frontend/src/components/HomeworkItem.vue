@@ -7,11 +7,11 @@
  */
 <template>
   <div>
-    <div id="container" v-if="onFlag">
-      <p class="content" :style="{ height: work.homework.content.length + 110 + 'px'}">{{ work.homework.content }}</p>
+    <div id="container">
+      <p class="content" :style="{ height: assignment.homework.content.length + 110 + 'px'}">{{ assignment.homework.content }}</p>
       <div class="mt-2 mb-3">
-        <b-button @click="deleteHomework(work.homework.homeworkno)">삭제</b-button>
-        <b-button id="show-btn" @click="showModal(work.homework)">수정</b-button>
+        <b-button v-if="userno==homeworkUserno" @click="deleteHomework(assignment.homework.homeworkno)">삭제</b-button>
+        <b-button v-if="userno==homeworkUserno" id="show-btn" @click="showModal(assignment.homework)">수정</b-button>
       </div>
       <b-modal ref="my-modal"
         ok-only 
@@ -61,26 +61,26 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'HomeworkItem',
   data: function () {
     return {
     homework: {
-        homeworkno: this.work.homework.homeworkno,
+        homeworkno: this.assignment.homework.homeworkno,
         title: null,
         content: null,
         endDate: null,
-      }
+      },
+      userno: 0,
+      homeworkUserno: this.assignment.homework.userno,
     }
   },
   props: {
-    work: {
+    assignment: {
       type: Object
     },
-    onFlag: {
-      type: Boolean
-    }
   },
   methods: {
     setToken: function () {
@@ -105,6 +105,7 @@ export default {
         .then(res => {
           console.log(res.data)
           alert("게시글이 삭제되었습니다.")
+          window.location.reload()
           this.$emit('getHomeworkList')
         })
         .catch(err => {
@@ -126,6 +127,13 @@ export default {
           console.log(err)
         })
     }
+  },
+    created() {
+    const token = localStorage.getItem('jwt')
+    const decoded = jwt_decode(token)
+    const userno = decoded.userno
+    this.userno = userno
+    console.log(this.assignment)
   }
 }
 </script>

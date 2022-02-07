@@ -6,11 +6,11 @@
     스터디 방 > 게시글 수정, 삭제, 상세 정보
  */
 <template>
-<div id="container" v-if="onFlag">
-  <p class="content" :style="{ height: board.studyBoard.content.length + 110 + 'px'}">{{ board.studyBoard.content }}</p>
+<div id="container">
+  <p class="content" :style="{ height: post.studyBoard.content.length + 110 + 'px'}">{{ post.studyBoard.content }}</p>
   <div class="mt-2 mb-3">
-    <b-button @click="deleteArticle(board.studyBoard.boardno)">삭제</b-button>
-    <b-button id="show-btn" @click="showModal">수정</b-button>
+    <b-button v-if="userno===articleuserno" @click="deleteArticle(post.studyBoard.boardno)">삭제</b-button>
+    <b-button v-if="userno===articleuserno" id="show-btn" @click="showModal">수정</b-button>
   </div>
     <b-modal ref="my-modal"
       ok-only 
@@ -48,6 +48,7 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'ArticleItem',
@@ -56,15 +57,17 @@ export default {
       article: {
         title: null,
         content: null,
-        boardno: this.board.studyBoard.boardno
+        boardno: this.post.studyBoard.boardno
       },
+      userno: 0,
+      articleuserno: this.post.studyBoard.userno,
     }
   },
   props: {
-    board: {
+    post: {
       type: Object
     },
-    onFlag: {
+    flag: {
       type: Boolean
     }
   },
@@ -77,8 +80,8 @@ export default {
       return config
     },
     showModal() {
-      this.article.title = this.board.studyBoard.title
-      this.article.content = this.board.studyBoard.content
+      this.article.title = this.post.studyBoard.title
+      this.article.content = this.post.studyBoard.content
       this.$refs['my-modal'].show()
     },
     deleteArticle: function (boardno) {
@@ -111,7 +114,14 @@ export default {
           console.log(err)
         })
     }
+  },
+  created() {
+    const token = localStorage.getItem('jwt')
+    const decoded = jwt_decode(token)
+    const userno = decoded.userno
+    this.userno = userno
   }
+
 }
 </script>
 

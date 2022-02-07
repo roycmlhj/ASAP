@@ -72,4 +72,11 @@ public class HomeworkServiceImpl implements HomeworkService {
 		}
 		return false;
 	}
+
+	@Override
+	public Homework getSHomeworkDetail(int homeworkno) {
+		Homework homework = homeworkRepository.findById(homeworkno).get();
+		
+		return homework;
+	}
 }

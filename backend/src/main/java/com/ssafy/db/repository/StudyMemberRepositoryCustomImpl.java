@@ -49,4 +49,31 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 		.execute();
 	}
 
+	@Override
+	public StudyMember findByUsernoNStudyNo(int userno, int studyno) {
+		StudyMember studyMember = jpaQueryFactory.select(qStudyMember).from(qStudyMember)
+				.where(qStudyMember.userno.eq(userno).
+						and(qStudyMember.studyno.eq(studyno)))
+				.fetchOne();
+		return studyMember;
+	}
+
+	//나중에는 스터디 참여도가 높은 사람한테 위임될수 있게 바꾸자
+	@Override
+	public StudyMember findByStudynoMandate(int studyno) {
+		StudyMember studyMember = jpaQueryFactory.selectFrom(qStudyMember)
+				.where(qStudyMember.studyno.eq(studyno)
+						.and(qStudyMember.position.eq(1)))
+				.fetchFirst();
+		return studyMember;
+	}
+
+	@Override
+	@Transactional
+	public void studyLeaderMandate(int userno, int studyno) {
+		jpaQueryFactory.update(qStudyMember)
+		.set(qStudyMember.position, 0)
+		.execute();
+	}
+
 }

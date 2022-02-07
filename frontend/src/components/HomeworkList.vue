@@ -1,43 +1,65 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.04
+    마지막 업데이트 : 2022.02.07
     
     스터디 방 > 과제 리스트
  */
 <template>
   <div class="container">
     <div v-for="homework in homeworkList" :key="homework.id">
-      <div v-for="work in homework" :key="work.id">
-        <a href="#" @click="onFlag"><strong>{{ work.homework.title }} / {{ work.nickname }}님</strong></a>
-        <hr>
-        <homework-item :work="work" :onFlag="flag" @getHomeworkList="getHomeworkList"></homework-item>
-      </div>
+      <a href="#" @click="getHomeworkInformation(homework.homework.homeworkno)"><strong>{{ homework.homework.title }} / {{ homework.nickname }}</strong></a>
+      <hr>
+      <p v-if="assignment && assignment.homework.homeworkno == homework.homework.homeworkno">
+        <homework-item :assignment="assignment"></homework-item>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import HomeworkItem from '@/components/HomeworkItem.vue'
+import axios from 'axios'
 
 export default {
   name: 'HomeworkList',
+  data: function () {
+    return {
+      assignment: null
+    }
+  },
   components: {
     HomeworkItem
   },
-  data: function () {
-    return {
-      flag: false,
-    }
-  },
   props: {
     homeworkList: {
-      type: Object
+      type: Array
     }
   },
   methods: {
-    onFlag: function () {
-      this.flag = !this.flag
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    getHomeworkInformation: function (homeworkno) {
+      if (this.assignment != null && homeworkno == this.assignment.homework.homeworkno) {
+        this.assignment.homework.homeworkno = -1
+      } else {
+        axios({
+          method: 'get',
+          url: `http://localhost:8080/api/v1/homework/homework/detail/${homeworkno}`,
+          headers: this.setToken(),
+        })
+          .then(res => {
+            this.assignment = res.data
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
     },
     getHomeworkList: function () {
       this.$emit('getHomeworkList')
