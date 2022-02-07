@@ -20,6 +20,12 @@ export default {
       fcEvents : demoEvents
     }
   },
+  method: {
+    dayClick(day){
+      console.log(day)
+    }
+  }
+  ,
   created() {
     axios({
       method: 'get',
@@ -33,6 +39,7 @@ export default {
           title:homeworkList[i].title,
           start:homeworkList[i].endDate,
           end:homeworkList[i].endDate,
+          
         })
       }
     })

@@ -87,7 +87,7 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          console.log(res)
+          console.log(res.data)
           this.userlist = res.data
         })
         .catch(err => {

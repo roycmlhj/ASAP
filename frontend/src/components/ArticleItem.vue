@@ -9,8 +9,8 @@
 <div id="container" v-if="onFlag">
   <p class="content" :style="{ height: board.studyBoard.content.length + 110 + 'px'}">{{ board.studyBoard.content }}</p>
   <div class="mt-2 mb-3">
-    <b-button @click="deleteArticle(board.studyBoard.boardno)">삭제</b-button>
-    <b-button id="show-btn" @click="showModal">수정</b-button>
+    <b-button v-if="userno===articleuserno" @click="deleteArticle(board.studyBoard.boardno)">삭제</b-button>
+    <b-button v-if="userno===articleuserno" id="show-btn" @click="showModal">수정</b-button>
   </div>
     <b-modal ref="my-modal"
       ok-only 
@@ -48,7 +48,7 @@
 
 <script>
 import axios from 'axios'
-
+import jwt_decode from 'jwt-decode'
 export default {
   name: 'ArticleItem',
   data: function () {
@@ -58,6 +58,8 @@ export default {
         content: null,
         boardno: this.board.studyBoard.boardno
       },
+      userno:0,
+      articleuserno:this.board.studyBoard.userno,
     }
   },
   props: {
@@ -111,6 +113,12 @@ export default {
           console.log(err)
         })
     }
+  },
+  created() {
+    const token = localStorage.getItem('jwt')
+    const decoded = jwt_decode(token)
+    const userno = decoded.userno
+    this.userno = userno
   }
 }
 </script>

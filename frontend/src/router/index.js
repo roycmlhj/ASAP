@@ -11,7 +11,6 @@ import Admin from '../views/admins/Admin.vue'
 import StudyRoom from '../views/study/StudyRoom.vue'
 import StudyBoardUpdate from '../views/study/UpdateStudyBoard.vue'
 import StudyBoardDetail from '../views/study/StudyBoardDetail.vue'
-import Calender from '../components/Calender.vue'
 import fullCalendar from 'vue-fullcalendar' 
 
 Vue.component('full-calendar', fullCalendar)
@@ -74,12 +73,6 @@ const routes = [
     name: 'StudyBoardUpdate',
     component: StudyBoardUpdate,
   },
-  {
-    path: '/calendertest',
-    name: 'Calendertest',
-    component:Calender
-  }
-
 ]
 
 const router = new VueRouter({
