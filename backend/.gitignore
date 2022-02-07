@@ -5,7 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-asap_web.log
+### Log ###
+asap_web.log*
 
 ### STS ###
 .apt_generated
@@ -39,4 +40,4 @@ out/
 .vscode/
 
 ### Image ###
-file_[profiles, boardfiles, homeworkfiles]
+file_{profiles, boardfiles, homeworkfiles}/
