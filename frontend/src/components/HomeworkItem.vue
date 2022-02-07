@@ -1,0 +1,153 @@
+/*
+    작성자 : 한슬기
+    생성일 : 2022.02.05
+    마지막 업데이트 : 2022.02.05
+    
+    스터디 방 > 과제 상세보기, 수정, 삭제
+ */
+<template>
+  <div>
+    <div id="container" v-if="onFlag">
+      <p class="content" :style="{ height: work.homework.content.length + 110 + 'px'}">{{ work.homework.content }}</p>
+      <div class="mt-2 mb-3">
+        <b-button @click="deleteHomework(work.homework.homeworkno)">삭제</b-button>
+        <b-button id="show-btn" @click="showModal(work.homework)">수정</b-button>
+      </div>
+      <b-modal ref="my-modal"
+        ok-only 
+        title="Update Homework"   
+        hide-footer 
+      >
+        <b-form-group
+          label="Title"
+          label-for="title"
+        >
+          <b-form-input 
+            id="title" 
+            type="text"
+            v-model="homework.title"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Content"
+          label-for="content"
+        >
+          <b-form-textarea 
+            id="content" 
+            type="text"
+            v-model="homework.content"
+            rows="6"
+            max-rows="6"
+          >
+          </b-form-textarea>
+        </b-form-group>
+        <b-form-group
+          label="Date"
+          label-for="content"
+        >
+          <b-form-input 
+            id="content" 
+            type="date"
+            v-model="homework.endDate"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-button style="float-right; font-size: 15px; height: 40px;" @click="updateHomework()">확인</b-button>
+      </b-modal>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+
+export default {
+  name: 'HomeworkItem',
+  data: function () {
+    return {
+    homework: {
+        homeworkno: this.work.homework.homeworkno,
+        title: null,
+        content: null,
+        endDate: null,
+      }
+    }
+  },
+  props: {
+    work: {
+      type: Object
+    },
+    onFlag: {
+      type: Boolean
+    }
+  },
+  methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    showModal(homework) {
+      this.homework.title = homework.title,
+      this.homework.content = homework.content,
+      this.homework.endDate = homework.endDate
+      this.$refs['my-modal'].show()
+    },
+    deleteHomework: function (homeworkno) {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/v1/homework/delete/${homeworkno}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data)
+          alert("게시글이 삭제되었습니다.")
+          this.$emit('getHomeworkList')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    updateHomework: function () {
+      axios({
+        method: 'put',
+        url: `http://localhost:8080/api/v1/homework/modify`,
+        data: this.homework,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data)
+          window.location.reload()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+}
+</script>
+
+<style scoped>
+  #container {
+    display: flex;
+    flex-direction: column;
+  }
+  .content {
+    background-color: rgb(240, 236, 236);
+    margin-bottom: 0px;
+    word-break: break-all;
+  }
+  button { 
+    float: right;
+    margin-right: 2px;
+    font-size: 11px; 
+    height: 30px; 
+    background-color: rgb(130, 163, 209); 
+  } 
+  button:hover { 
+    background-color: rgb(79, 138, 216); 
+  }
+</style>
