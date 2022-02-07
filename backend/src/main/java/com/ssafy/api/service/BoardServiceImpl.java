@@ -25,8 +25,7 @@ public class BoardServiceImpl implements BoardService {
 	StudyRepository studyRepository;
 	@Autowired
 	UserService userService;
-
-
+	
 	@Override
 	public Board createBoard(BoardCreatePostReq boardCreateInfo) {
 		Board board = new Board();

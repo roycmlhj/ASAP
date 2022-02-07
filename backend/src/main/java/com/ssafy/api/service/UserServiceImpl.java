@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
-	HomeworkRepository homeworkRepository;
-	@Autowired
 	StudyMemberRepository studyMemberRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -116,14 +114,6 @@ public class UserServiceImpl implements UserService {
 		return userlist;
 	}
 	
-	// flag 0 = 진행중 과제 / 1 = 완료 과제 / 2 = 전체 과제 
-	// homework service 만들까
-	@Override
-	public List<Homework> getHomeworkListbyUserno(int userno, int flag) {
-		List<Homework> homeworkList = homeworkRepository.findHomeworkByuserno(userno, flag).get();
-		return homeworkList;
-	}
-
 	@Override
 	public boolean kickUser(int userno, int studyno) {
 		studyMemberRepository.kickStudyMember(userno, studyno);

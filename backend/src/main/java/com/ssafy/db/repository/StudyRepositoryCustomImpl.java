@@ -25,7 +25,7 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 		super(Study.class);
 	}
 
-	@Override
+	@Override // 수정
 	public Optional<List<Study>> findByUserno(int userno) {
 		/*
 		 * select a.studyno, a.name
@@ -39,6 +39,7 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 
 		List<Study> studyList = jpaQueryFactory.select(qStudy).from(qStudy)
 		.innerJoin(qStudy.studyMemberList, qStudyMember)
+		.on(qStudy.studyno.eq(qStudyMember.studyno))
 		.where(qStudyMember.userno.eq(userno).and(qStudyMember.position.ne(2)))
 		.fetch();
 		
@@ -55,7 +56,6 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 		.set(qStudy.memberno, studyPutInfo.getMemberno())
 		.where(qStudy.studyno.eq(studyPutInfo.getStudyno()))
 		.execute();
-		
 	}
 	
 	@Override

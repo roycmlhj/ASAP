@@ -1,8 +1,10 @@
 package com.ssafy.api.service;
 
-import java.security.cert.PKIXRevocationChecker.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,5 +73,26 @@ public class HomeworkServiceImpl implements HomeworkService {
 			return true;
 		}
 		return false;
+	}
+	
+	// flag 0 = 진행중 과제 / 1 = 완료 과제 / 2 = 전체 과제 
+	@Override
+	@Transactional
+	public List<Homework> getUserHomeworkList(int userno, int flag) {
+		List<UserHomework> userhomeworkList = userHomeworkRepository.findUserHomeworkByuserno(userno).get();
+		List<Homework> homeworkList = new ArrayList<Homework>();
+		if(flag == 2) {
+			for (UserHomework userHomework : userhomeworkList) {
+					homeworkList.add(homeworkRepository.findById(userHomework.getHomeworkno()).get());
+			}
+		}else {
+			for (UserHomework userHomework : userhomeworkList) {
+				if(userHomework.getIsDone() == flag) {
+					homeworkList.add(homeworkRepository.findById(userHomework.getHomeworkno()).get());
+				}
+			}
+		}
+		
+		return homeworkList;
 	}
 }

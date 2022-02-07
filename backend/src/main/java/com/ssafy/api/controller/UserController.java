@@ -22,6 +22,7 @@ import com.ssafy.api.response.UserDetailInfoRes;
 import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.service.EmailService;
+import com.ssafy.api.service.HomeworkService;
 import com.ssafy.api.service.StudyService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -48,6 +49,8 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	StudyService studyService;
+	@Autowired
+	HomeworkService homeworkService;
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
@@ -147,8 +150,8 @@ public class UserController {
 		// 여기에 유저 analyze 추가
 		User user = userService.getUserByUserno(userno);
 		List<Study> studyList = studyService.getStudyList(userno);
-		List<Homework> onHomeworkList = userService.getHomeworkListbyUserno(userno, 0);
-		List<Homework> doneHomeworkList = userService.getHomeworkListbyUserno(userno, 1);
+		List<Homework> onHomeworkList = homeworkService.getUserHomeworkList(userno, 0);
+		List<Homework> doneHomeworkList = homeworkService.getUserHomeworkList(userno, 1);
 		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList));
 	}
 }
