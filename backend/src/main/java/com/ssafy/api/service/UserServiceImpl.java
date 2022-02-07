@@ -104,8 +104,12 @@ public class UserServiceImpl implements UserService {
 		for (Integer boardno : boardlist) {
 			boardService.deleteBoard(boardno);
 		}
-		//study 위임 -> 아무도 없으면 삭제
-		studyMemberRepository.deleteByUserno(userno);
+
+		List<StudyMember> studyMemberList = studyMemberRepository.findByUserno(userno);
+		for(int i = 0; i < studyMemberList.size(); i++) {
+			kickUser(userno, studyMemberList.get(i).getStudyno());
+		}
+		
 		//push테이블 삭제
 		return true;
 	}
