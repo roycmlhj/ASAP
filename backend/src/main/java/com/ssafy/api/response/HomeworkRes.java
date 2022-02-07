@@ -1,8 +1,6 @@
 package com.ssafy.api.response;
 
-import java.util.List;
-
-import com.ssafy.db.entity.StudyBoard;
+import com.ssafy.db.entity.Homework;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,16 +9,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("StudyBoardResponse")
-public class StudyBoardRes {
+@ApiModel("HomeworkResponse")
+public class HomeworkRes {
 	@ApiModelProperty(name = "스터디 게시글")
-	StudyBoard studyBoard;
+	Homework homework;
 	@ApiModelProperty(name = "작성자 닉네임")
 	String nickname;
 	
-	public static StudyBoardRes of(StudyBoard studyBoard, String nickname) {
-		StudyBoardRes res = new StudyBoardRes();
-		res.studyBoard = studyBoard;
+	public static HomeworkRes of(Homework homework, String nickname) {
+		HomeworkRes res = new HomeworkRes();
+		res.homework = homework;
 		res.nickname = nickname;
 		return res;
 	}

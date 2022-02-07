@@ -27,4 +27,12 @@ public class UserHomeworkRepositoryCustomImpl extends QuerydslRepositorySupport 
 		.execute();
 	}
 
+	@Override
+	@Transactional
+	public void deleteByIdNUserno(Integer homeworkno, int userno) {
+		jpaQueryFactory.delete(qUserHomework)
+		.where(qUserHomework.homeworkno.eq(homeworkno).and(qUserHomework.userno.eq(userno)))
+		.execute();
+	}
+
 }

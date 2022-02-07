@@ -12,10 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.BoardMember;
+import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.Homework;
+import com.ssafy.db.entity.StudyMember;
 import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.BoardRepository;
 import com.ssafy.db.repository.HomeworkRepository;
+import com.ssafy.db.repository.ScheduleRepository;
+import com.ssafy.db.repository.StudyBoardRepository;
 import com.ssafy.db.repository.StudyMemberRepository;
+import com.ssafy.db.repository.UserHomeworkRepository;
 import com.ssafy.db.repository.UserRepository;
 
 @Service("userService")
@@ -30,7 +36,14 @@ public class UserServiceImpl implements UserService {
 	PasswordEncoder passwordEncoder;
 	@Autowired
 	BoardService boardService;
-
+	@Autowired
+	UserHomeworkRepository userHomeworkRepository;
+	@Autowired
+	BoardRepository boardRepository;
+	@Autowired
+	ScheduleRepository scheduleRepository;
+	@Autowired
+	StudyBoardRepository studyBoardRepository;
 	
 	@Override
 	public User signUp(UserRegisterPostReq registerInfo) {
@@ -126,6 +139,50 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean kickUser(int userno, int studyno) {
+		StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(userno, studyno);
+		
+		if(studyMember.getPosition() == 0) {
+			StudyMember studyMemberMandate = studyMemberRepository.findByStudynoMandate(studyno);
+			if(studyMemberMandate == null) {
+				//System.out.println("스터디 폭파 시키자");
+				//스터디 신청 인원 studymember에서 삭제
+				List<StudyMember> studyMemberList = studyMemberRepository.findByStudyno(studyno);
+				for(int i = 0; i < studyMemberList.size(); i++)
+					studyMemberRepository.kickStudyMember(studyMemberList.get(i).getUserno(), studyMemberList.get(i).getStudyno());
+				
+				//board 삭제
+				boardRepository.deleteByStudyno(studyno);
+				
+				//나중에 해줘야하나...? conference 삭제
+				
+				//schedule 삭제
+				scheduleRepository.deleteByStudyno(studyno);
+				
+				//user_homework 삭제
+				List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get();
+				for(int i = 0; i < homeworkList.size(); i++)
+					userHomeworkRepository.deleteByHomeworkno(homeworkList.get(i).getHomeworkno());
+				
+				//homework 삭제
+				homeworkRepository.deleteByStudyno(studyno);
+				
+				//file 삭제
+				
+				//study_board 삭제
+				studyBoardRepository.deleteByStudyno(studyno);
+			}
+			else {
+				//System.out.println("스터디장 위임 시키자");
+				studyMemberRepository.studyLeaderMandate(studyMemberMandate.getUserno(), studyno);
+			}
+		}
+		
+		//스터디 homework 삭제
+		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get();
+		for(int i = 0; i < homeworkList.size(); i++) {
+			userHomeworkRepository.deleteByIdNUserno(homeworkList.get(i).getHomeworkno(), userno);
+		}
+		
 		studyMemberRepository.kickStudyMember(userno, studyno);
 		return true;
 	}

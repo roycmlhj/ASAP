@@ -20,7 +20,9 @@ import com.ssafy.api.request.StudyBoardCreatePostReq;
 import com.ssafy.api.request.StudyBoardPutReq;
 import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
+import com.ssafy.api.response.HomeworkRes;
 import com.ssafy.api.response.StudyBoardListRes;
+import com.ssafy.api.response.StudyBoardRes;
 import com.ssafy.api.service.HomeworkService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -74,6 +76,19 @@ public class HomeworkController {
 		}
 		
 		return ResponseEntity.status(200).body(HomeworkListRes.of(homeworkNNicknameList));
+	};
+	
+	@GetMapping("/homework/detail/{homeworkno}")
+	@ApiOperation(value = "과제 글 상세정보", notes = "과제 글 상세정보를 반환해준다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<HomeworkRes> getStudyBoardDetail(@PathVariable("homeworkno") @ApiParam(value = "homework pk", required = true) int homeworkno){
+		Homework homework = homeworkService.getSHomeworkDetail(homeworkno);
+		String nickname = userService.getUserNickname(homework.getUserno());
+		return ResponseEntity.status(200).body(HomeworkRes.of(homework, nickname));
 	};
 	
 	@PutMapping("/modify")

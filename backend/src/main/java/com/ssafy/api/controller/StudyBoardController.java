@@ -85,8 +85,8 @@ public class StudyBoardController {
 	})
 	public ResponseEntity<StudyBoardRes> getStudyBoardDetail(@PathVariable("boardno") @ApiParam(value = "board pk", required = true) int boardno){
 		StudyBoard studyBoard = studyBoardService.getStudyBoardDetail(boardno);
-		
-		return ResponseEntity.status(200).body(StudyBoardRes.of(studyBoard));
+		String nickname = userService.getUserNickname(studyBoard.getUserno());
+		return ResponseEntity.status(200).body(StudyBoardRes.of(studyBoard, nickname));
 	};
 	
 	@PutMapping("/modify")
