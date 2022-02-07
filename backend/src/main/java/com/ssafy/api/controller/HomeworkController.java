@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.api.request.FileSavePostReq;
 import com.ssafy.api.request.HomeworkCreatePostReq;
 import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.api.request.StudyBoardCreatePostReq;
@@ -22,8 +26,10 @@ import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
 import com.ssafy.api.response.StudyBoardListRes;
 import com.ssafy.api.service.HomeworkService;
+import com.ssafy.api.service.UserHomeworkService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.util.MD5Generator;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.StudyBoard;
 
@@ -41,6 +47,8 @@ public class HomeworkController {
 	HomeworkService homeworkService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserHomeworkService userHomeworkService;
 	
 	@PostMapping("/create")
 	@ApiOperation(value = "과제 생성", notes = "과제 글을 생성한다.")
@@ -106,5 +114,43 @@ public class HomeworkController {
 			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));
 	}
 	
-	
+	@PostMapping("/upload")
+	@ApiOperation(value = "파일 업로드", notes = "파일을 업로드한다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> fileUpload(
+			@RequestParam @ApiParam(value="과제파일 정보", required = true) MultipartFile files,
+			@RequestParam @ApiParam(value="과제 no", required = true) int homeworkno,
+			@RequestParam @ApiParam(value="유저 no", required = true) int userno){
+		try {
+            String origFilename = files.getOriginalFilename();
+            String filename = new MD5Generator(origFilename).toString();
+            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            String savePath = System.getProperty("user.dir") + "\\homeworkfiles";
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(savePath).exists()) {
+                try{
+                    new File(savePath).mkdir();
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }
+            String filePath = savePath + "\\" + filename;
+            files.transferTo(new File(filePath));
+            
+            FileSavePostReq file = new FileSavePostReq();
+            file.setFilepath(filePath);
+            file.setOgfilename(origFilename);
+            file.setFilename(filename);
+            
+            userHomeworkService.saveFile(file, userno, homeworkno);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
 }

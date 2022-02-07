@@ -73,8 +73,6 @@ public class UserServiceImpl implements UserService {
 			}
 			user.setInterests(sb.toString());
 		}
-		if(userModifyInfo.getImage() != null) 
-			user.setImage(userModifyInfo.getImage());
 		return userRepository.save(user);
 	}
 
@@ -123,6 +121,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String getUserNickname(Integer userno) {
 		return userRepository.findById(userno).get().getNickname();
+	}
+
+	@Override
+	public User saveProfile(String image, int userno) {
+		User user = userRepository.findById(userno).get();
+		user.setImage(image);
+		return userRepository.save(user);
 	}
 
 }

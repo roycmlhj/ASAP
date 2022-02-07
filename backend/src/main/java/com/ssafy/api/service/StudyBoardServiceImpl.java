@@ -1,14 +1,19 @@
 package com.ssafy.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.api.request.FileSavePostReq;
 import com.ssafy.api.request.StudyBoardCreatePostReq;
 import com.ssafy.api.request.StudyBoardPutReq;
+import com.ssafy.common.util.FileUtil;
 import com.ssafy.db.entity.StudyBoard;
 import com.ssafy.db.repository.StudyBoardRepository;
 
@@ -16,18 +21,30 @@ import com.ssafy.db.repository.StudyBoardRepository;
 public class StudyBoardServiceImpl implements StudyBoardService {
 	@Autowired
 	StudyBoardRepository studyBoardRepository;
-
+	@Autowired
+	FileService fileService;
+	
 	@Override
-	public boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo) {
+	@Transactional
+	public boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, List<MultipartFile> filelist) {
 		StudyBoard studyBoard = new StudyBoard();
 		studyBoard.setContent(studyBoardInfo.getContent());
 		studyBoard.setStudyno(studyBoardInfo.getStudyno());
 		studyBoard.setTitle(studyBoardInfo.getTitle());
 		studyBoard.setUserno(studyBoardInfo.getUserno());
-		if(studyBoardRepository.save(studyBoard) != null)
+		int boardno = -1;
+		boardno = studyBoardRepository.save(studyBoard).getBoardno();
+		if(boardno >= 0) {
+			if(!CollectionUtils.isEmpty(filelist)) {
+				List<FileSavePostReq> files = new FileUtil(filelist, "boardfiles").toFile();
+				for (FileSavePostReq file : files) {
+					fileService.saveFile(file, boardno);
+				}
+			}
 			return true;
-		
-		return false;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
@@ -45,9 +62,17 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 	}
 
 	@Override
-	public boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo) {
+	@Transactional
+	public boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo, List<MultipartFile> filelist) {
 		if(Optional.ofNullable(studyBoardRepository.findById(studyBoardPutInfo.getBoardno())).get() != null) {
 			studyBoardRepository.modifyStudyBoard(studyBoardPutInfo);
+			fileService.deleteFileByBoardno(studyBoardPutInfo.getBoardno());
+			if(!CollectionUtils.isEmpty(filelist)) {
+				List<FileSavePostReq> files = new FileUtil(filelist, "boardfiles").toFile();
+				for (FileSavePostReq file : files) {
+					fileService.saveFile(file, studyBoardPutInfo.getBoardno());
+				}
+			}
 			return true;
 		}
 		else
@@ -55,9 +80,11 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteStudyBoard(int boardno) {
 		if(Optional.ofNullable(studyBoardRepository.findById(boardno)).get() != null) {
 			studyBoardRepository.deleteStudyBoard(boardno);
+			fileService.deleteFileByBoardno(boardno);
 			return true;
 		}
 		else {

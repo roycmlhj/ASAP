@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
@@ -27,6 +31,7 @@ import com.ssafy.api.service.StudyService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.common.util.MD5Generator;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.Study;
 import com.ssafy.db.entity.User;
@@ -153,5 +158,53 @@ public class UserController {
 		List<Homework> onHomeworkList = homeworkService.getUserHomeworkList(userno, 0);
 		List<Homework> doneHomeworkList = homeworkService.getUserHomeworkList(userno, 1);
 		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList));
+	}
+	
+	@PostMapping("upload/{userno}")
+	@ApiOperation(value = "프로필사진 업로드", notes = "사진을 업로드한다") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "확장자 오류"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> uploadProfile(
+			@PathVariable("userno") @ApiParam(value = "업로드할 회원의 userno", required = true) int userno,
+			@RequestPart("image") MultipartFile files){
+		try {
+			if(!files.isEmpty()) {
+				String contentType = files.getContentType();
+				String originalFileExtension;
+				if(contentType.contains("image/jpeg")){
+                    originalFileExtension = ".jpg";
+                }
+                else if(contentType.contains("image/png")){
+                    originalFileExtension = ".png";
+                }
+                else if(contentType.contains("image/gif")){
+                    originalFileExtension = ".gif";
+                }else {
+                	return ResponseEntity.status(404).body(BaseResponseBody.of(404, "사용할 수 없는 확장자입니다."));
+                }
+				String origFilename = files.getOriginalFilename();
+				String filename = new MD5Generator(origFilename).toString();
+				String savePath = System.getProperty("user.dir") + "\\file_profiles";
+				if (!new File(savePath).exists()) {
+					try{
+						new File(savePath).mkdir();
+					}
+					catch(Exception e){
+						e.getStackTrace();
+					}
+				}
+				String filePath = savePath + "\\" + filename + originalFileExtension;
+				files.transferTo(new File(filePath));
+				
+				userService.saveProfile(filePath, userno);
+			}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 }

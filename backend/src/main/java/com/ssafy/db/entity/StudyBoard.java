@@ -41,5 +41,5 @@ public class StudyBoard {
 	
 	@OneToMany
 	@JoinColumn(name = "boardno")
-	List<File> fileList = new ArrayList<File>();
+	List<FileData> fileList = new ArrayList<FileData>();
 }

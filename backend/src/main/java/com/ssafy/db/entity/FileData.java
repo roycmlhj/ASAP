@@ -17,7 +17,7 @@ import lombok.Setter;
 @Entity(name = "file")
 @Getter
 @Setter
-public class File {
+public class FileData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer fileno;

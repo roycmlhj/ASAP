@@ -19,13 +19,15 @@ public class QUserHomework extends EntityPathBase<UserHomework> {
 
     public static final QUserHomework userHomework = new QUserHomework("userHomework");
 
-    public final StringPath filedata = createString("filedata");
-
     public final StringPath filename = createString("filename");
+
+    public final StringPath filepath = createString("filepath");
 
     public final NumberPath<Integer> homeworkno = createNumber("homeworkno", Integer.class);
 
     public final NumberPath<Integer> isDone = createNumber("isDone", Integer.class);
+
+    public final StringPath ogfilename = createString("ogfilename");
 
     public final NumberPath<Integer> userhomeworkno = createNumber("userhomeworkno", Integer.class);
 
