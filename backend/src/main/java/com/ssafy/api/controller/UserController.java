@@ -106,6 +106,25 @@ public class UserController {
 		return ResponseEntity.status(404).body(BaseResponseBody.of(404, "이미 존재하는 이메일입니다."));
 	}
 	
+	
+	@GetMapping("/nickname/{nickname}")
+	@ApiOperation(value = "회원 닉네임 조회", notes = "회원 닉네임이 존재하는지 여부를 응답한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 있음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> nicknameCheck (
+			@PathVariable("nickname") @ApiParam(value = "확인할 회원의 닉네임", required = true) String nickname) throws NoSuchElementException{
+		try {
+			User user = userService.getUserByNickname(nickname);
+		} catch (Exception e) {
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));	
+		}
+		return ResponseEntity.status(404).body(BaseResponseBody.of(404, "이미 존재하는 이메일입니다."));
+	}
+	
 	@PostMapping("/{userno}")
 	@ApiOperation(value = "회원정보 수정", notes = "회원의 정보를 수정한다.") 
     @ApiResponses({

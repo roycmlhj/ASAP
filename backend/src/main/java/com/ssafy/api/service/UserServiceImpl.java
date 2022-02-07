@@ -192,4 +192,11 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findById(userno).get().getNickname();
 	}
 
+	@Override
+	public User getUserByNickname(String nickname) {
+		User user = userRepository.findByNickname(nickname).get();
+		
+		return user;
+	}
+
 }
