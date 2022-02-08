@@ -8,4 +8,5 @@ import com.ssafy.api.request.StudyAcceptPutReq;
 public interface StudyMemberRepositoryCustom {
 	void acceptStudy(StudyAcceptPutReq acceptInfo);
 	void rejectStudy(StudyAcceptPutReq acceptInfo);
+	void kickStudyMember(int userno, int studyno);
 }

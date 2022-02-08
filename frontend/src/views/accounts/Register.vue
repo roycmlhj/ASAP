@@ -90,16 +90,21 @@
       label-for="nickname"
       label-align-sm="left"
     >
-      <b-form-input 
-        id="nickname"
-        v-model="user.nickname"
-        :state="nameState"
-        aria-describedby="input-live-help input-live-feedback"
-      >
-      </b-form-input>
-      <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
-        닉네임은 두 글자 이상이어야 합니다.
-      </b-form-invalid-feedback>
+    <div class="d-flex">
+      <p>
+        <b-form-input 
+          id="nickname"
+          v-model="user.nickname"
+          :state="nameState"
+          aria-describedby="input-live-help input-live-feedback"
+        >
+        </b-form-input>
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+          닉네임은 두 글자 이상이어야 합니다.
+        </b-form-invalid-feedback>
+      </p>
+      <b-button class="ml-2" @click="nicnameCheck">중복체크</b-button>
+    </div>
     </b-form-group>
     <b-form-group
       label="관심분야 *"
@@ -142,8 +147,9 @@ export default {
         interests: []
       },
       passwordcheck: '',
-      flag: 0,
-      ans: 0,
+      flag: 2,
+      ans: 2,
+      nicFlag: 2,
       code: null,
     }
   },
@@ -177,6 +183,22 @@ export default {
           console.log(err, this.user.email)
         })
     },
+    nicnameCheck: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/user/nickname/${this.user.nickname}/`,
+      })
+        .then(res => {
+          this.nicFlag = 1
+          console.log(res)
+          alert("사용할 수 있는 닉네임입니다.")
+        })
+        .catch(err => {
+          this.nicFlag = 2
+          console.log(err, this.user.email)
+          alert("사용중인 닉네임입니다.")
+        })
+    },
     codeConfirm: function () {
       axios({
         method: 'post',
@@ -186,17 +208,19 @@ export default {
         .then(res => {
           console.log(res, this.code)
           this.ans = 1
+          alert("인증번호 확인이 완료되었습니다.")
         })
         .catch(err => {
           console.log(err, this.code)
           this.ans = 2
+          alert("인증번호를 확인해주세요.")
         })
     },
     clickRegister: function () {
       // console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
         this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null ||
-        this.flag == 2 || this.ans == 2
+        this.flag == 2 || this.ans == 2 || this.nicFlag == 2
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {

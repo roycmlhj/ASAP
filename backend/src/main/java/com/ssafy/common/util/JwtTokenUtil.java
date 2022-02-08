@@ -60,6 +60,7 @@ public class JwtTokenUtil {
                 .withClaim("image", user.getImage())
                 .withClaim("mainCategory", user.getMainCategory())
                 .withClaim("interests", user.getInterests())
+                .withClaim("isAdmin", user.getIsAdmin())
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }

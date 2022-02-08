@@ -7,31 +7,36 @@
  */
 <template>
   <div class="container">
-    <div class="icon">
-      <font-awesome-icon type="button" class="fa-2x mb-2" icon="bell"/>
-      <font-awesome-icon type="button" class="fa-2x mb-2" v-b-toggle.sidebar-right icon="edit"/>
-        <b-sidebar id="sidebar-right" title="스터디 게시판" right shadow>
+    <div class="d-flex justify-content-between">
+      <div class="icon">
+        <font-awesome-icon type="button" class="fa-2x mb-2" icon="bell"/>
+        <font-awesome-icon type="button" class="fa-2x mb-2" v-b-toggle.sidebar-right icon="edit"/>
+          <b-sidebar id="sidebar-right" title="스터디 게시판" right shadow>
+            <div class="px-3 py-2">
+              <p class="article">
+                <article-modal></article-modal>
+                <article-list :studyBoardList="studyBoardList" @getArticleList="getArticleList()"></article-list>
+              </p>
+            </div>
+          </b-sidebar>
+        <font-awesome-icon type="button" class="clipboard fa-2x mb-2" v-b-toggle.sidebar-right-homework icon="clipboard"/>
+        <b-sidebar id="sidebar-right-homework" title="과제 게시판" right shadow>
           <div class="px-3 py-2">
-            <p class="article">
-              <article-modal></article-modal>
-              <article-list :studyBoardList="studyBoardList" @getArticleList="getArticleList()"></article-list>
+            <p class="homework">
+              <homework-modal></homework-modal>
+              <homework-list :homeworkList="homeworkList" @getHomeworkList="getHomeworkList()"></homework-list>
             </p>
           </div>
         </b-sidebar>
-      <font-awesome-icon type="button" class="clipboard fa-2x mb-2" v-b-toggle.sidebar-right-homework icon="clipboard"/>
-      <b-sidebar id="sidebar-right-homework" title="과제 게시판" right shadow>
-        <div class="px-3 py-2">
-          <p class="homework">
-            <homework-modal></homework-modal>
-            <homework-list :homeworkList="homeworkList" @getHomeworkList="getHomeworkList()"></homework-list>
-          </p>
-        </div>
-      </b-sidebar>
-      <font-awesome-icon class="fa-2x mb-2" v-b-modal.modal-xl type="button" id="show-btn" @click="calendarShowModal" icon="calendar-week"/>
-        <b-modal ref="calendar-modal" id="modal-xl" size="xl" hide-header hide-footer>
-          <calendar :studyLeaderno="getLeader()" :studyno="this.$route.params.study_no" :demoEvents="demoEvents"></calendar>
-        </b-modal>
-      <font-awesome-icon type="button" class="fa-2x mb-2" icon="cog"/>
+        <font-awesome-icon class="fa-2x mb-2" v-b-modal.modal-xl type="button" id="show-btn" @click="calendarShowModal" icon="calendar-week"/>
+          <b-modal ref="calendar-modal" id="modal-xl" size="xl" hide-header hide-footer>
+            <calendar :studyLeaderno="leader" :studyno="this.$route.params.study_no" :demoEvents="demoEvents"></calendar>
+          </b-modal>
+        <font-awesome-icon type="button" class="fa-2x mb-2" icon="cog"/>
+      </div>
+      <div>
+        <p></p>
+      </div>
     </div>
     <p class="icon2">
       <font-awesome-icon type="button" class="fa-2x mr-2" v-b-toggle.sidebar-left-study icon="info-circle"/>
@@ -47,19 +52,21 @@
         </b-sidebar>
       <font-awesome-icon type="button" class="fa-2x mr-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
       <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" left shadow>
-        <div class="px-3 py-2">
-          <div class="mt-3 float-left" v-for="members in studyMemberList" :key="members.id">
-            <p class="member" v-for="member in members" :key="member.id">
+        <div class="px-5 py-2 mt-3" v-for="members in studyMemberList" :key="members.id">
+          <div class="d-flex justify-content-between" v-for="member in members" :key="member.id">
+            <p>
               <img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image">
-              <a id="show-btn" href="#" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
+              <a id="show-btn" href="#" class="ml-2" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
             </p>
+            <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 28px; background-color: black;" @click="userKick(member.studyMember.userno)">강퇴</b-button>
           </div>
         </div>
+        <a class="kick" href="#" @click="userKick(userNumber)">회원탈퇴</a>
       </b-sidebar>
       <b-modal ref="my-modal" :member="member" hide-header hide-footer>
         <div class="d-block text-center">
           <div v-if="member">
-            <user-info-modal :member="member" :studylist="studylist" :leader="getLeader()"></user-info-modal>
+            <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
           </div>
         </div>
       </b-modal>
@@ -70,7 +77,7 @@
 
 <script>
 import axios from 'axios'
-// import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode'
 import ArticleModal from '../../components/ArticleModal.vue'
 import ArticleList from '../../components/ArticleList.vue'
 import HomeworkModal from '@/components/HomeworkModal.vue'
@@ -78,6 +85,7 @@ import HomeworkList from '../../components/HomeworkList.vue'
 import UpdateStudyInformation from '@/components/UpdateStudyInformation.vue'
 import UserInfoModal from '@/components/UserInfoModal.vue'
 import Calendar from '@/components/Calendar.vue'
+
 
 export default {
   name: 'StudyRoom',
@@ -94,7 +102,6 @@ export default {
     return {
       value: '',
       context: null,
-      userno: null,
       studyBoardList: null,
       homeworkList: null,
       studyMemberList: null,
@@ -104,6 +111,11 @@ export default {
       member: null,
       leader: null,
       demoEvents: [],
+      userInfo: {
+        userno: null,
+        studyno: this.$route.params.study_no
+      },
+      userNumber: null,
     }
   },
   methods: {
@@ -146,7 +158,7 @@ export default {
       })
         .then(res => {
           console.log(res.data)
-          this.studyBoardList = res.data
+          this.studyBoardList = res.data.studyBoardList
         })
         .catch(err => {
           console.log(err)
@@ -159,8 +171,8 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          this.homeworkList = res.data
-          console.log(res)
+          this.homeworkList = res.data.homeworkList
+          console.log(this.homeworkList)
         })
         .catch(err => {
           console.log(err)
@@ -174,7 +186,6 @@ export default {
       })
         .then(res => {
           this.studyMemberList = res.data
-          console.log(this.studyMemberList)
         })
         .catch(err => {
           console.log(err)
@@ -229,6 +240,28 @@ export default {
           console.log(err)
         })
     },
+    userKick: function (userno) {
+      this.userInfo.userno = userno
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/admin/kick`,
+        data: this.userInfo
+      })
+        .then(res => {
+          if (this.userNumber == this.userInfo.userno) {
+            console.log(res, this.userInfo)
+            alert("스터디에서 탈퇴하였습니다.")
+            this.$router.push({name: 'Main'})
+          } else {
+            console.log(res, this.userInfo)
+            alert("스터디에서 해당 회원을 강퇴시켰습니다.")
+            window.location.reload()
+          }
+        })
+        .catch(err => {
+          console.log(err, this.userInfo)
+        })
+    },
     getLeader: function () {
       for (let index = 0; index < this.studyMemberList.studyMemberList.length; index++) {
         if (this.studyMemberList.studyMemberList[index].studyMember.position == 0) {
@@ -239,11 +272,19 @@ export default {
     }
   },
   created: function () {
+    this.getStudyMemberList()
     this.getArticleList()
     this.getHomeworkList()
-    this.getStudyMemberList()
     this.getStudyInformation()
     this.getCalendar()
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      this.userNumber = decoded.userno
+      console.log(this.userNumber)
+    } else {
+      this.$router.push({name: 'Login'})
+    }
   }
 }
 </script>
@@ -256,11 +297,16 @@ export default {
   .icon2 {
     float: right;
   }
+  .kick {
+    position: fixed;
+    bottom: 8px;
+    right: 16px;
+  }
   .clipboard {
     margin-left: 1px;
   }
   button { 
-    font-size: 15px; 
+    font-size: 11px; 
     height: 38px; 
     background-color: rgb(130, 163, 209); 
   } 
@@ -280,9 +326,7 @@ export default {
     height: 40px;
     border-radius: 70%;
   }
-  /* .studyInfo {
-    text-align: left;
-    width: 100%;
-    background-color: rgb(248, 239, 228);
-  } */
+  a {
+    color: black;
+  }
 </style>

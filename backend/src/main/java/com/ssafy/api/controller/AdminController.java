@@ -1,6 +1,5 @@
 package com.ssafy.api.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.api.request.UserKickPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserInfoStudyListRes;
 import com.ssafy.api.response.UserListRes;
@@ -69,6 +69,21 @@ public class AdminController {
 			@RequestBody @ApiParam(value = "회원 수정정보", required = false) UserRegisterPostReq modifyInfo,
 			@PathVariable("userno") @ApiParam(value = "수정할 회원의 userno", required = true) int userno){ 
 		User user = userService.modifyUser(userno, modifyInfo);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+	
+	@PostMapping("/kick")
+	@ApiOperation(value = "스터디 회원 퇴출", notes = "스터디 회원을 퇴출한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<? extends BaseResponseBody> kickUser(
+			@RequestBody @ApiParam(value = "방출할 스터디no, 유저no", required = true) UserKickPostReq userKickInfo) {
+		userService.kickUser(userKickInfo.getUserno(), userKickInfo.getStudyno());
+
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	

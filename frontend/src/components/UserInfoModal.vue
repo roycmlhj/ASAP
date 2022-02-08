@@ -29,10 +29,10 @@
         </tr>
         <tr>
           <th :rowspan="studylist.length + 1">스터디</th>
-          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1 || leader == this.userNumber" href="#" @click="userKick">퇴출</a></td>
+          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(studylist[0].studyno, member.userno)">퇴출</a></td>
         </tr>
         <tr v-for="(study, index) in studylist" :key="index.id">
-          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick">퇴출</a></td>
+          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(study.studyno, member.userno)">퇴출</a></td>
         </tr>
       </tbody>
     </table>
@@ -78,7 +78,9 @@ export default {
       }
       return config
     },
-    userKick: function () {
+    userKick: function (studyno, userno) {
+      this.userInfo.studyno = studyno
+      this.userInfo.userno = userno
       axios({
         method: 'post',
         url: `http://localhost:8080/api/v1/admin/kick`,
@@ -86,8 +88,8 @@ export default {
       })
         .then(res => {
           console.log(res, this.userInfo)
-          window.location.reload()
           alert("스터디에서 해당 회원을 강퇴시켰습니다.")
+          window.location.reload()
         })
         .catch(err => {
           console.log(err, this.userInfo)

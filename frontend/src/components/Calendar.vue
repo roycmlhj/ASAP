@@ -7,14 +7,19 @@
     <b-modal
       v-model="modalShow1"
       @ok="createSchedule"
+      title="Create schedule"
+      id="modal-lg" size="lg"
+      ok-only
     >
-      <h5>다음 스터디를 {{this.selecteddate}}에 하시겠습니까?</h5>
+      <h5>다음 스터디 일정을 {{ this.selecteddate }}로 설정하시겠습니까?</h5>
     </b-modal>
     <b-modal
       v-model="modalShow2"
       @ok="deleteSchedule"
+      title="Delete schedule"
+      ok-only
     >
-      <h5>이 일정을 삭제하시겠습니까??</h5>
+      <h5>스터디 일정을 삭제하시겠습니까?</h5>
     </b-modal>
   </div>
 </template>
@@ -89,7 +94,7 @@ export default {
       console.log(this.studyno)
       console.log(typeof(day))
       var dayarray = String(day).split(' ')
-      this.selecteddate=dayarray[3]+'/'+this.monthToNum[dayarray[1]]+'/'+dayarray[2]+'/'+'00/00'
+      this.selecteddate=dayarray[3]+'년 '+this.monthToNum[dayarray[1]]+'월 '+dayarray[2]+'일'
       if(this.studyLeaderno==userno){
         this.modalShow1=!this.modalShow1
       }
@@ -146,5 +151,7 @@ export default {
 </script>
 
 <style scoped>
-  
+  h5 {
+    text-align: center;
+  }
 </style>

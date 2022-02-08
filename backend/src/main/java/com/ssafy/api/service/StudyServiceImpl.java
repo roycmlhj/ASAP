@@ -7,9 +7,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.api.request.ScheduleCreatePostReq;
+import com.ssafy.api.request.SchedulePutReq;
 import com.ssafy.api.request.StudyAcceptPutReq;
 import com.ssafy.api.request.StudyApplyPostReq;
 import com.ssafy.api.request.StudyCreatePostReq;
+import com.ssafy.api.request.StudyPutReq;
 import com.ssafy.api.response.StudyInfo;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.Schedule;
@@ -77,9 +80,9 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public StudyInfo getStudyInfo(int studyno, String studyName) {
-		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno);
-		Schedule schedule = scheduleRepository.findByStudyno(studyno);
+	public StudyInfo getStudyInfo(int studyno, String studyName, String category) {
+		List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get(); //
+		Schedule schedule = scheduleRepository.findByStudynoOne(studyno);
 		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
 		List<String> memberImage = new ArrayList<String>();
 		for(int i = 0; i < members.size(); i++) {
@@ -90,6 +93,9 @@ public class StudyServiceImpl implements StudyService {
 		studyInfo.setHomeworkList(homeworkList);
 		studyInfo.setMemberImage(memberImage);
 		studyInfo.setStudyName(studyName);
+		studyInfo.setCategory(category);
+		studyInfo.setStudyno(studyno);
+		
 		if(schedule != null)
 			studyInfo.setNextDate(schedule.getNextDate());
 		
@@ -146,6 +152,67 @@ public class StudyServiceImpl implements StudyService {
 			userList.add(userRepository.findById(members.get(i).getUserno()).get());
 		}
 		return userList;
+	}
+
+	@Override
+	public Study getStudyByStudyname(String studyname) {
+		Study study = studyRepository.findByStudyname(studyname).get();
+		return study;
+	}
+
+	@Override
+	public boolean createSchedule(ScheduleCreatePostReq scheduleInfo) {
+		Schedule schedule = new Schedule();
+		schedule.setStudyno(scheduleInfo.getStudyno());
+		schedule.setNextDate(scheduleInfo.getNextDate());
+		
+		if(scheduleRepository.save(schedule) != null)
+			return true;
+		
+		return false;
+	}
+
+	@Override
+	public boolean changeSchdule(SchedulePutReq scheduleChangeInfo) {
+		if(scheduleRepository.findById(scheduleChangeInfo.getScheduleno()) != null) {
+			scheduleRepository.updateSchdule(scheduleChangeInfo);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteSchedule(int scheduleno) {
+		if(scheduleRepository.findById(scheduleno) != null) {
+			scheduleRepository.deleteById(scheduleno);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<Schedule> getScheduleList(int studyno) {
+		return scheduleRepository.findByStudyno(studyno);
+	}
+
+	@Override
+	public boolean modifyStudy(StudyPutReq studyPutInfo) {
+		if(studyRepository.findById(studyPutInfo.getStudyno()) != null) {
+			String interests = "";
+			for(int i = 0; i < studyPutInfo.getInterests().size(); i++) {
+				interests += "#";
+				interests += studyPutInfo.getInterests().get(i);
+			}
+			
+			studyRepository.updateStudy(studyPutInfo, interests);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<StudyMember> getStudyMemberListSimple(int studyno) {
+		return studyMemberRepository.findByStudyno(studyno);
 	}
 
 }

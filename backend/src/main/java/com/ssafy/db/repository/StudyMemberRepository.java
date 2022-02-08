@@ -10,4 +10,5 @@ import com.ssafy.db.entity.StudyMember;
 @Repository
 public interface StudyMemberRepository extends JpaRepository<StudyMember, Integer>, StudyMemberRepositoryCustom{
 	List<StudyMember> findByStudyno(int studyno);
+	void deleteByUserno(int userno);
 }
