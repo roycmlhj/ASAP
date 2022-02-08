@@ -270,7 +270,7 @@ public class StudyController {
 		@ApiResponse(code = 401, message = "실패"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> accept(
+	public ResponseEntity<? extends BaseResponseBody> modify(
 			@RequestBody @ApiParam(value="과제 글 수정 정보", required = true) StudyPutReq studyPutInfo){
 		if(studyService.modifyStudy(studyPutInfo))
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
