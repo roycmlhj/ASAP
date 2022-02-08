@@ -126,7 +126,7 @@ public class StudyBoardController {
 		@ApiResponse(code = 401, message = "실패"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> accept(
+	public ResponseEntity<? extends BaseResponseBody> modify(
 			@RequestParam(value = "boardno") int boardno,
 			@RequestParam(value = "title") String title,
 			@RequestParam(value = "content") String content,
