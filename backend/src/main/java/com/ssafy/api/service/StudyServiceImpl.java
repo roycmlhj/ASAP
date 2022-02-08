@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.api.request.AddTimeReq;
 import com.ssafy.api.request.ScheduleCreatePostReq;
 import com.ssafy.api.request.SchedulePutReq;
 import com.ssafy.api.request.StudyAcceptPutReq;
@@ -213,6 +214,47 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public List<StudyMember> getStudyMemberListSimple(int studyno) {
 		return studyMemberRepository.findByStudyno(studyno);
+	}
+
+	@Override
+	public boolean addTime(AddTimeReq addTimeInfo) {
+		
+		if(userRepository.findById(addTimeInfo.getUserno()) == null || studyRepository.findById(addTimeInfo.getStudyno()) == null)
+			return false;
+		else {
+			StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(addTimeInfo.getUserno(), addTimeInfo.getStudyno());
+			int OrginSec = TimeToSec(studyMember.getStudyTime());
+			int	AddSec = TimeToSec(addTimeInfo.getTime());
+			
+			studyMemberRepository.addTime(addTimeInfo.getUserno(), addTimeInfo.getStudyno(), SecToTime(OrginSec + AddSec));
+			return true;
+		}
+	}
+	
+	public int TimeToSec(String time) {
+		int sec = 0;
+		
+		String[] timeSplit = time.split(":");
+		
+		sec += Integer.parseInt(timeSplit[0]) * 3600;
+		sec += Integer.parseInt(timeSplit[1]) * 60;
+		sec += Integer.parseInt(timeSplit[2]);
+		
+		return sec;
+	}
+	
+	public String SecToTime(int sec) {
+		String time = "";
+		
+		time += Integer.toString(sec / 3600);
+		sec %= 3600;
+		time += ":";
+		time += Integer.toString(sec / 60);
+		sec %= 60;
+		time += ":";
+		time += Integer.toString(sec);
+		
+		return time;
 	}
 
 }

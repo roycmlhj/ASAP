@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.api.request.AddTimeReq;
 import com.ssafy.api.request.StudyAcceptPutReq;
 import com.ssafy.db.entity.QStudyMember;
 import com.ssafy.db.entity.StudyMember;
@@ -73,6 +74,15 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 	public void studyLeaderMandate(int userno, int studyno) {
 		jpaQueryFactory.update(qStudyMember)
 		.set(qStudyMember.position, 0)
+		.execute();
+	}
+
+	@Override
+	@Transactional
+	public void addTime(int userno, int studyno, String time) {
+		jpaQueryFactory.update(qStudyMember)
+		.set(qStudyMember.studyTime, time)
+		.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.userno.eq(userno)))
 		.execute();
 	}
 
