@@ -39,7 +39,6 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 		.execute();
 	}
 
-	// 민추가
 	@Override
 	@Transactional
 	public void kickStudyMember(int userno, int studyno) {
@@ -48,5 +47,40 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 				.and(qStudyMember.studyno.eq(studyno)))
 		.execute();
 	}
+	
+	@Override
+	public StudyMember findByUsernoNStudyNo(int userno, int studyno) {
+		StudyMember studyMember = jpaQueryFactory.select(qStudyMember).from(qStudyMember)
+				.where(qStudyMember.userno.eq(userno).
+						and(qStudyMember.studyno.eq(studyno)))
+				.fetchOne();
+		return studyMember;
+	}
 
+	//나중에는 스터디 참여도가 높은 사람한테 위임될수 있게 바꾸자
+	@Override
+	public StudyMember findByStudynoMandate(int studyno) {
+		StudyMember studyMember = jpaQueryFactory.selectFrom(qStudyMember)
+				.where(qStudyMember.studyno.eq(studyno)
+						.and(qStudyMember.position.eq(1)))
+				.fetchFirst();
+		return studyMember;
+	}
+
+	@Override
+	@Transactional
+	public void studyLeaderMandate(int userno, int studyno) {
+		jpaQueryFactory.update(qStudyMember)
+		.set(qStudyMember.position, 0)
+		.execute();
+	}
+
+	@Override
+	@Transactional
+	public void addTime(int userno, int studyno, String time) {
+		jpaQueryFactory.update(qStudyMember)
+		.set(qStudyMember.studyTime, time)
+		.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.userno.eq(userno)))
+		.execute();
+	}
 }

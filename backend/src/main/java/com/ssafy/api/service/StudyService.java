@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import java.util.List;
 
+import com.ssafy.api.request.AddTimeReq;
 import com.ssafy.api.request.ScheduleCreatePostReq;
 import com.ssafy.api.request.SchedulePutReq;
 import com.ssafy.api.request.StudyAcceptPutReq;
@@ -29,4 +30,5 @@ public interface StudyService {
 	List<Schedule> getScheduleList(int studyno);
 	boolean modifyStudy(StudyPutReq studyPutInfo);
 	List<StudyMember> getStudyMemberListSimple(int studyno);
+	boolean addTime(AddTimeReq addTimeInfo);
 }

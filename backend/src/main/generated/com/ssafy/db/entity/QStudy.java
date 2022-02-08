@@ -28,8 +28,6 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final ListPath<Homework, QHomework> homeworkList = this.<Homework, QHomework>createList("homeworkList", Homework.class, QHomework.class, PathInits.DIRECT2);
 
-    public final StringPath image = createString("image");
-
     public final StringPath interests = createString("interests");
 
     public final StringPath maker = createString("maker");

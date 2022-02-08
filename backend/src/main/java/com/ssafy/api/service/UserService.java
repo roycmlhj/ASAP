@@ -19,4 +19,5 @@ public interface UserService {
 	List<BoardMember> getBoardMember(int studyno);
 	String getNicknameByUserno(int userno);
 	User saveProfile(String image, int userno);
+	User getUserByNickname(String nickname);
 }

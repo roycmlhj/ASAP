@@ -9,4 +9,5 @@ import com.ssafy.db.entity.UserHomework;
 public interface UserHomeworkRepositoryCustom {
 	void deleteUserHomework(int homeworkno);
 	Optional<List<UserHomework>> findUserHomeworkByuserno(int userno);
+	void deleteByIdNUserno(Integer homeworkno, int userno);
 }
