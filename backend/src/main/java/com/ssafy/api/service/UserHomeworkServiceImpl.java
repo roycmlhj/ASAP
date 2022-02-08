@@ -1,5 +1,8 @@
 package com.ssafy.api.service;
 
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,7 @@ public class UserHomeworkServiceImpl implements UserHomeworkService {
 	UserHomeworkRepository userHomeworkRepository;
 
 	@Override
+	@Transactional
 	public UserHomework saveFile(FileSavePostReq fileInfo, int userno, int homeworkno) {
 		UserHomework userHomework = userHomeworkRepository.findByUsernoAndHomeworkno(userno, homeworkno).get();
 		userHomework.setFilename(fileInfo.getFilename());
@@ -23,8 +27,9 @@ public class UserHomeworkServiceImpl implements UserHomeworkService {
 	}
 
 	@Override
+	@Transactional
 	public UserHomework getFile(int userhomeworkno) {
-		return null;
+		UserHomework userHomework = userHomeworkRepository.findById(userhomeworkno).get();
+		return userHomework;
 	}
-	
 }

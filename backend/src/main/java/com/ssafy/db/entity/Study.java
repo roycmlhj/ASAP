@@ -40,8 +40,6 @@ public class Study {
 	@Column
 	String studyname;
 	@Column
-	String image;
-	@Column
 	String interests;
 	@Column
 	String timestamp;

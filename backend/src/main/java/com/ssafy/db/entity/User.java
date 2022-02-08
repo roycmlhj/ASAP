@@ -55,6 +55,8 @@ public class User {
 	Integer level;
 	@Column(name = "del_flag")
 	Integer delFlag;
+	@Column(name = "homework_cnt")
+	Integer homeworkCnt;
 	
 	@OneToMany
 	@JoinColumn(name = "userno")

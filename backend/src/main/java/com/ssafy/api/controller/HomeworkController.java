@@ -1,10 +1,18 @@
 package com.ssafy.api.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,18 +28,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.api.request.FileSavePostReq;
 import com.ssafy.api.request.HomeworkCreatePostReq;
 import com.ssafy.api.request.HomeworkPutReq;
-import com.ssafy.api.request.StudyBoardCreatePostReq;
-import com.ssafy.api.request.StudyBoardPutReq;
 import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
-import com.ssafy.api.response.StudyBoardListRes;
 import com.ssafy.api.service.HomeworkService;
 import com.ssafy.api.service.UserHomeworkService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.MD5Generator;
 import com.ssafy.db.entity.Homework;
-import com.ssafy.db.entity.StudyBoard;
+import com.ssafy.db.entity.UserHomework;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +70,6 @@ public class HomeworkController {
 			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));	
 	}
 	
-	///homeworklist/{studyno}
 	@GetMapping("/homeworklist/{studyno}")
 	@ApiOperation(value = "과제 글 리스트", notes = "스터디 내의 과제 글 리스트를 반환해준다.")
 	@ApiResponses({
@@ -125,6 +129,7 @@ public class HomeworkController {
 			@RequestParam @ApiParam(value="과제파일 정보", required = true) MultipartFile files,
 			@RequestParam @ApiParam(value="과제 no", required = true) int homeworkno,
 			@RequestParam @ApiParam(value="유저 no", required = true) int userno){
+		
 		try {
             String origFilename = files.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString();
@@ -144,13 +149,32 @@ public class HomeworkController {
             
             FileSavePostReq file = new FileSavePostReq();
             file.setFilepath(filePath);
-            file.setOgfilename(origFilename);
-            file.setFilename(filename);
-            
+			file.setOgfilename(origFilename);
+			file.setFilename(filename);
+
             userHomeworkService.saveFile(file, userno, homeworkno);
         } catch(Exception e) {
             e.printStackTrace();
         }
+		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+	
+	@GetMapping("/download/{fileno}")
+	@ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드한다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<Resource> fileDownload(
+			@PathVariable("fileno") @ApiParam(value = "다운로드할 파일 no", required = true) int fileno) throws IOException {
+		
+		UserHomework userHomework = userHomeworkService.getFile(fileno);
+		Path path = Paths.get(userHomework.getFilepath());
+		Resource resource = new InputStreamResource(Files.newInputStream(path));
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userHomework.getOgfilename()+ "\"")
+				.body(resource);
 	}
 }
