@@ -39,7 +39,6 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 		.execute();
 	}
 
-	// 민추가
 	@Override
 	@Transactional
 	public void kickStudyMember(int userno, int studyno) {
@@ -48,7 +47,7 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 				.and(qStudyMember.studyno.eq(studyno)))
 		.execute();
 	}
-
+	
 	@Override
 	public StudyMember findByUsernoNStudyNo(int userno, int studyno) {
 		StudyMember studyMember = jpaQueryFactory.select(qStudyMember).from(qStudyMember)
@@ -76,4 +75,12 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 		.execute();
 	}
 
+	@Override
+	@Transactional
+	public void addTime(int userno, int studyno, String time) {
+		jpaQueryFactory.update(qStudyMember)
+		.set(qStudyMember.studyTime, time)
+		.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.userno.eq(userno)))
+		.execute();
+	}
 }

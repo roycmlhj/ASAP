@@ -1,6 +1,5 @@
 package com.ssafy.db.repository;
 
-import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.UserHomework;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +14,7 @@ import javax.transaction.Transactional;
  */
 @Repository
 public interface UserHomeworkRepository extends JpaRepository<UserHomework, Integer>, UserHomeworkRepositoryCustom {
+	Optional<UserHomework> findByUsernoAndHomeworkno(int userno, int homeworkno);
 	@Transactional
 	void deleteByHomeworkno(Integer homeworkno);
-
 }

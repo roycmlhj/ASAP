@@ -12,5 +12,6 @@ public interface HomeworkService {
 	List<Homework> getHomeworkList(int studyno);
 	boolean modifyHomework(HomeworkPutReq homeworkPutInfo);
 	boolean deletehomework(int homeworkno);
+	List<Homework> getUserHomeworkList(int userno, int flag);
 	Homework getSHomeworkDetail(int homeworkno);
 }

@@ -14,6 +14,7 @@ import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.QHomework;
 import com.ssafy.db.entity.QUserHomework;
+import com.ssafy.db.entity.UserHomework;
 
 public class HomeworkRepositoryCustomImpl extends QuerydslRepositorySupport implements HomeworkRepositoryCustom {
 	@Autowired
@@ -32,33 +33,6 @@ public class HomeworkRepositoryCustomImpl extends QuerydslRepositorySupport impl
 		return Optional.ofNullable(homeworkList);
 	}
 	
-	// add
-	@Override
-	public Optional<List<Homework>> findHomeworkByuserno(int userno, int flag) {
-//		select * from homework
-//		where homeworkno = 
-//			(select homeworkno from user_homework 
-//					where userno = {userno})
-		List<Homework> homeworkList;
-		if(flag == 2) {
-			homeworkList = jpaQueryFactory.selectFrom(qHomework)
-					.where(qHomework.homeworkno.eq(
-							JPAExpressions.select(qUserHomework.homeworkno)
-							.from(qUserHomework)
-							.where(qUserHomework.userno.eq(userno))))
-					.fetch();
-		}else {
-			homeworkList = jpaQueryFactory.selectFrom(qHomework)
-					.where(qHomework.homeworkno.eq(
-							JPAExpressions.select(qUserHomework.homeworkno)
-							.from(qUserHomework)
-							.where(qUserHomework.userno.eq(userno).and(qUserHomework.isDone.eq(flag)))))
-					.fetch();
-		}
-		return Optional.ofNullable(homeworkList);
-	}
-
-	//추가
 	@Override
 	@Transactional
 	public void modifyHomework(HomeworkPutReq homeworkPutInfo) {

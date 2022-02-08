@@ -14,10 +14,10 @@ public interface UserService {
 	User modifyUser(int userno, UserRegisterPostReq userModifyInfo);
 	boolean deleteUser(int userno);
 	List<User> getUserList();
-	List<Homework> getHomeworkListbyUserno(int userno, int flag);
 	boolean kickUser(int userno, int studyno);
 	String getUserNickname(Integer userno);
 	List<BoardMember> getBoardMember(int studyno);
 	String getNicknameByUserno(int userno);
+	User saveProfile(String image, int userno);
 	User getUserByNickname(String nickname);
 }

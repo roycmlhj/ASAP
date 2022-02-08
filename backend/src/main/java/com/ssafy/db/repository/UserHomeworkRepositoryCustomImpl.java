@@ -1,5 +1,8 @@
 package com.ssafy.db.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,15 @@ public class UserHomeworkRepositoryCustomImpl extends QuerydslRepositorySupport 
 		.where(qUserHomework.homeworkno.eq(homeworkno))
 		.execute();
 	}
-
+	
+	@Override
+	public Optional<List<UserHomework>> findUserHomeworkByuserno(int userno) {
+		List<UserHomework> userHomeworkList = jpaQueryFactory.select(qUserHomework).from(qUserHomework)
+				.where(qUserHomework.userno.eq(userno))
+				.fetch();
+		return Optional.ofNullable(userHomeworkList);
+	}
+	
 	@Override
 	@Transactional
 	public void deleteByIdNUserno(Integer homeworkno, int userno) {

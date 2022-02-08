@@ -30,7 +30,9 @@ public class UserHomework {
 	@Column(name = "is_done")
 	Integer isDone;
 	@Column
+	String filepath;
+	@Column
 	String filename;
 	@Column
-	String filedata;
+	String ogfilename;
 }

@@ -25,8 +25,7 @@ public class BoardServiceImpl implements BoardService {
 	StudyRepository studyRepository;
 	@Autowired
 	UserService userService;
-
-
+	
 	@Override
 	public Board createBoard(BoardCreatePostReq boardCreateInfo) {
 		Board board = new Board();
@@ -61,6 +60,7 @@ public class BoardServiceImpl implements BoardService {
 		board.setContactlink(boardModifyInfo.getContactlink());
 		board.setCategory(study.getCategory());
 		board.setMaxmember(study.getMemberno());
+		board.setInterests(study.getInterests());
 		return boardRepository.save(board);
 	}
 

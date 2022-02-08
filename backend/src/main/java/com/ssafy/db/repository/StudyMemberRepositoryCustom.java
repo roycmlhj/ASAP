@@ -13,4 +13,5 @@ public interface StudyMemberRepositoryCustom {
 	StudyMember findByUsernoNStudyNo(int userno, int studyno);
 	StudyMember findByStudynoMandate(int studyno);
 	void studyLeaderMandate(int userno, int studyno);
+	void addTime(int userno, int studyno, String time);
 }

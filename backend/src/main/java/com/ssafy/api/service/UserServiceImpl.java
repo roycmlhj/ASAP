@@ -1,8 +1,6 @@
 package com.ssafy.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.BoardMember;
-import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.StudyMember;
 import com.ssafy.db.entity.User;
@@ -88,8 +85,6 @@ public class UserServiceImpl implements UserService {
 			}
 			user.setInterests(sb.toString());
 		}
-		if(userModifyInfo.getImage() != null) 
-			user.setImage(userModifyInfo.getImage());
 		return userRepository.save(user);
 	}
 
@@ -104,12 +99,11 @@ public class UserServiceImpl implements UserService {
 		for (Integer boardno : boardlist) {
 			boardService.deleteBoard(boardno);
 		}
-
+		
 		List<StudyMember> studyMemberList = studyMemberRepository.findByUserno(userno);
 		for(int i = 0; i < studyMemberList.size(); i++) {
 			kickUser(userno, studyMemberList.get(i).getStudyno());
 		}
-		
 		//push테이블 삭제
 		return true;
 	}
@@ -133,14 +127,6 @@ public class UserServiceImpl implements UserService {
 		return userlist;
 	}
 	
-	// flag 0 = 진행중 과제 / 1 = 완료 과제 / 2 = 전체 과제 
-	// homework service 만들까
-	@Override
-	public List<Homework> getHomeworkListbyUserno(int userno, int flag) {
-		List<Homework> homeworkList = homeworkRepository.findHomeworkByuserno(userno, flag).get();
-		return homeworkList;
-	}
-
 	@Override
 	public boolean kickUser(int userno, int studyno) {
 		StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(userno, studyno);
@@ -186,7 +172,7 @@ public class UserServiceImpl implements UserService {
 		for(int i = 0; i < homeworkList.size(); i++) {
 			userHomeworkRepository.deleteByIdNUserno(homeworkList.get(i).getHomeworkno(), userno);
 		}
-		
+
 		studyMemberRepository.kickStudyMember(userno, studyno);
 		return true;
 	}
@@ -197,10 +183,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User saveProfile(String image, int userno) {
+		User user = userRepository.findById(userno).get();
+		if(image.equals("no")) {
+			user.setImage("");
+		}else {
+			user.setImage(image);
+		}
+		return userRepository.save(user);
+	}
+	
+	@Override
 	public User getUserByNickname(String nickname) {
 		User user = userRepository.findByNickname(nickname).get();
 		
 		return user;
 	}
-
 }

@@ -13,9 +13,7 @@ import com.ssafy.db.entity.StudyBoard;
 
 @Repository
 public interface StudyBoardRepository extends JpaRepository<StudyBoard, Integer>, StudyBoardRepositoryCustom{
-
 	Optional<List<StudyBoard>> findByStudyno(int studyno);
 	@Transactional
 	void deleteByStudyno(int studyno);
-
 }

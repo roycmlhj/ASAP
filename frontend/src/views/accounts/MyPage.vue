@@ -87,6 +87,11 @@ export default {
           this.studyList = res.data.studyList
           this.homeworkList = res.data.onHomeworkList
           this.user.email = res.data.user.email
+          this.homeworkList.sort(function(a,b){
+            if(a.endDate<b.endDate) return -1;
+            if(a.endDate > b.endDate) return 1;
+            if(a.endDate == b.endDate) return 0;
+          })
           console.log(res.data)
         })
         .catch(err => {

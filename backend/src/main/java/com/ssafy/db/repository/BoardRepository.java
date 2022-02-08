@@ -20,5 +20,4 @@ public interface BoardRepository extends JpaRepository<Board, Integer>, BoardRep
 	List<Board> findByNicknameContaining(String keyword, Pageable pageable);
 	@Transactional
 	void deleteByStudyno(int studyno);
-
 }

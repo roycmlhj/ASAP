@@ -8,24 +8,22 @@
 <template>
   <div class="container">
     <h5 class="float-left"><strong>과제 목록</strong></h5><br>
-    <table class="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th id="th" scope="col">스터디</th>
-          <th id="th" scope="col">과제</th>
-          <th id="th" scope="col">제출 기한</th>
-          <th id="th" scope="col">진행 상태</th>
-        </tr>
-      </thead>
-      <tbody v-for="homework in homeworkList" :key="homework.id">
-        <tr>
-          <td>{{ homework.studyname }}</td>
-          <td>{{ homework.content }}</td>
-          <td>{{  dateTime(homework.endDate) }}</td>
-          <td>진행</td>
-        </tr>
-      </tbody>
-    </table>
+    <b-table
+      id="my-table"
+      :items="items"
+      :per-page="perPage"
+      :current-page="currentPage"
+      small
+    >
+    </b-table>
+    
+    <b-pagination
+      class="justify-content-center"
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="my-table"
+    ></b-pagination>
   </div>
 </template>
 
@@ -34,6 +32,13 @@ import moment from 'moment';
 
 export default {
   name: 'UserInfoTable',
+  data() {
+    return{
+      perPage: 5,
+      currentPage: 1,
+      items : [],
+    }
+  },
   props: {
     homeworkList: {
       type: Array,
@@ -44,6 +49,29 @@ export default {
       return moment(value).format('YYYY-MM-DD');
     },
   },
+  computed: {
+    rows() {
+      
+      return this.homeworkList.length
+    }
+  },
+  created() {
+    console.log(this.homeworkList,"UHT")
+    for(var i = 0; i<this.homeworkList.length;i++){
+      this.items.push({
+        스터디:this.homeworkList[i].studyno,
+        과제: this.homeworkList[i].title,
+        제출기한: this.dateTime(this.homeworkList[i].endDate),
+        진행상태: ''
+      })
+      if(!this.homeworkList[i].isActivate){
+        this.items[i].진행상태="진행중"
+      }else{
+        this.items[i].진행상태="완료"
+      }
+      
+    }
+  }
 }
 </script>
 

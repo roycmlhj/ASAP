@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.api.request.AddTimeReq;
 import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.api.request.ScheduleCreatePostReq;
 import com.ssafy.api.request.SchedulePutReq;
@@ -68,7 +69,6 @@ public class StudyController {
 	 *  /study/apply post
 	 *  /study/accept put
 	 */
-	
 	
 	//interests 추가하기!!!!!
 	@PostMapping("/create")
@@ -269,7 +269,7 @@ public class StudyController {
 		@ApiResponse(code = 401, message = "실패"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> accept(
+	public ResponseEntity<? extends BaseResponseBody> modify(
 			@RequestBody @ApiParam(value="과제 글 수정 정보", required = true) StudyPutReq studyPutInfo){
 		if(studyService.modifyStudy(studyPutInfo))
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
@@ -285,7 +285,7 @@ public class StudyController {
         @ApiResponse(code = 401, message = "실패"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<StudyMemberListRes> studyMemberList (@PathVariable("studyno") @ApiParam(value = "확인할 스터디 이름", required = true) int studyno){
+	public ResponseEntity<StudyMemberListRes> studyMemberList(@PathVariable("studyno") @ApiParam(value = "확인할 스터디 이름", required = true) int studyno){
 		List<StudyMember> studyMemberListSimple = studyService.getStudyMemberListSimple(studyno);
 		List<StudyMemberInfo> studyMemberList = new ArrayList<StudyMemberInfo>();
 		
@@ -296,4 +296,20 @@ public class StudyController {
 		
 		return ResponseEntity.status(200).body(StudyMemberListRes.of(studyMemberList));
 	}
+	
+	@PostMapping("/time")
+	@ApiOperation(value = "스터디 참여 시간 저장", notes = "스터디 참여 시간을 저장해 준다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> addTime(
+			@RequestBody @ApiParam(value="시간, 유저 pk, 스터디 pk", required = true) AddTimeReq addTimeInfo){	
+		if(studyService.addTime(addTimeInfo))
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
+		else
+			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
+	}
+
 }
