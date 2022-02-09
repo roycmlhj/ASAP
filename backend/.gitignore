@@ -40,6 +40,10 @@ out/
 .vscode/
 
 ### Properties ###
+<<<<<<< HEAD
 src/main/resources/application.properties
+=======
+application.properties
+>>>>>>> ceb6c86444e5203cba12f2c1f265f2c428c08237
 
 ### Image ###
