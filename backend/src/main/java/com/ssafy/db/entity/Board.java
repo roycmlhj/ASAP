@@ -47,6 +47,4 @@ public class Board {
 	String category;
 	@Column
 	String nickname;
-
-	
 }
