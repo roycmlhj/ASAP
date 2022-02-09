@@ -27,7 +27,7 @@ public class EmailController {
 	EmailService emailService;
 	
 	@GetMapping("/{email}")
-	@ApiOperation(value = "회원 가입시 이메인 인증번호 전송", notes = "기존 사용하고 있는 이메일에 인증번호 전송")
+	@ApiOperation(value = "회원 가입시 이메일 인증번호 전송", notes = "기존 사용하고 있는 이메일에 인증번호 전송")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
