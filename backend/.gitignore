@@ -40,6 +40,5 @@ out/
 .vscode/
 
 ### Properties ###
-/src/main/resources/application.properties
-
-### Image ###
+s3.properties
+mail.properties
