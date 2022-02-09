@@ -24,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.api.response.StudyAnalyze;
+import com.ssafy.api.response.StudyTime;
 import com.ssafy.api.response.UserDetailInfoRes;
 import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
@@ -36,6 +38,7 @@ import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.common.util.MD5Generator;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.Study;
+import com.ssafy.db.entity.StudyMember;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 
@@ -173,12 +176,26 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<UserDetailInfoRes> detailUser(@PathVariable("userno") @ApiParam(value = "조회할 회원의 userno", required = true) int userno){
-		// 여기에 유저 analyze 추가
 		User user = userService.getUserByUserno(userno);
 		List<Study> studyList = studyService.getStudyList(userno);
 		List<Homework> onHomeworkList = homeworkService.getUserHomeworkList(userno, 0);
 		List<Homework> doneHomeworkList = homeworkService.getUserHomeworkList(userno, 1);
-		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList));
+		
+		// 여기에 유저 analyze 추가
+		StudyAnalyze studyAnalyze = new StudyAnalyze();
+		int total_time = 0;
+		for(int i = 0; i < studyList.size(); i++) {
+			int studyTime = studyService.getStudyTime(userno, studyList.get(i).getStudyno());
+			total_time += studyTime;
+			StudyTime studyTimeAdd = new StudyTime();
+			studyTimeAdd.setStudyName(studyList.get(i).getStudyname());
+			studyTimeAdd.setStudyno(studyList.get(i).getStudyno());
+			studyTimeAdd.setTime(studyTime);
+			studyAnalyze.addStudyTime(studyTimeAdd);
+		}
+		studyAnalyze.setTotal_time(total_time);
+		
+		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList, studyAnalyze));
 	}
 	
 	@PostMapping("upload/{userno}")

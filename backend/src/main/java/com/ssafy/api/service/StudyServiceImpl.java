@@ -218,7 +218,7 @@ public class StudyServiceImpl implements StudyService {
 	
 	@Override
 	public boolean addTime(AddTimeReq addTimeInfo) {
-		if(userRepository.findById(addTimeInfo.getUserno()) == null || studyRepository.findById(addTimeInfo.getStudyno()) == null)
+		if(!userRepository.findById(addTimeInfo.getUserno()).isPresent() || !studyRepository.findById(addTimeInfo.getStudyno()).isPresent())
 			return false;
 		else {
 			StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(addTimeInfo.getUserno(), addTimeInfo.getStudyno());
@@ -229,6 +229,15 @@ public class StudyServiceImpl implements StudyService {
 			return true;
 		}
 	}
+	
+	@Override
+	public int getStudyTime(int userno, int studyno) {
+		String studyTimeStr = studyMemberRepository.findByUsernoNStudyNo(userno, studyno).getStudyTime();
+		int studyTime = TimeToSec(studyTimeStr);
+		studyTime /= 60;
+		return studyTime;
+	}
+
 	
 	public int TimeToSec(String time) {
 		int sec = 0;
@@ -254,6 +263,4 @@ public class StudyServiceImpl implements StudyService {
 		
 		return time;
 	}
-
-
 }

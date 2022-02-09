@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.BoardMember;
-import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.User;
 
 public interface UserService {
