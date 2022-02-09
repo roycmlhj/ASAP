@@ -26,7 +26,7 @@ ASAP은 'As Study as possible'을 줄여서 만든 네이밍입니다.
 
   `DB` : MySQL, firebase
 
-![기술스택](README.assets/기술스택.PNG)
+![기술스택](산출물/README.assets/기술스택.PNG)
 
 
 
@@ -36,11 +36,11 @@ ASAP은 'As Study as possible'을 줄여서 만든 네이밍입니다.
 
 
 
-![주요기능2](README.assets/주요기능2.PNG)
+![주요기능2](산출물/README.assets/주요기능2.PNG)
 
 
 
-![주요기능3](README.assets/주요기능3.PNG)
+![주요기능3](산출물/README.assets/주요기능3.PNG)
 
 
 
