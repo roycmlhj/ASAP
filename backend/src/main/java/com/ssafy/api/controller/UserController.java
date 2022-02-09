@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -207,6 +209,7 @@ public class UserController {
                 }
 				String origFilename = files.getOriginalFilename();
 				String filename = new MD5Generator(origFilename).toString();
+				
 				String savePath = System.getProperty("user.dir") + "\\file_profiles";
 				if (!new File(savePath).exists()) {
 					try{

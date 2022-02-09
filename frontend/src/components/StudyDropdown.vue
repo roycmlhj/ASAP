@@ -5,31 +5,51 @@
 </template>
 
 <script>
+import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 export default {
   name: 'StudyDropdown',
   data() {
     return {
       dropdownContent: [],
+      studies: [],
       selected: null,
-      options: this.studies,
+      options: [],
     }
   },
-  mounted() {
-    //여기서 axios통신 일단 임시로 대충 넣자
-    var a = [{title:"a",topic:"atopic",description:"adescription",},{title:"b",topic:"btopic",description:"bdescription",},{title:"c",topic:"ctopic",description:"cdescription",}]
-    var res = []
-    console.log(a)
-    for (var i = 0; i<a.length;i++) {
-      res.push({value:a[i],text:a[i].title})
-    }
-    console.log(res)
-    this.options = res
+  created() {
+    const token = localStorage.getItem('jwt')
+    const decoded =jwt_decode(token)
+    const userno = decoded.userno
+    
+    axios({
+      method:'get',
+      url:`http://localhost:8080/api/v1/study/list/${userno}/`,
+      
+    }).then(res=> {
+      console.log(res)
+      this.studies = res.data.studyList
+      
+       for (var i = 0; i<this.studies.length;i++) {
+         this.options.push({value:this.studies[i],text:this.studies[i].studyname})
+
+       }
+      
+      
+    }).catch(err => {
+      console.log(err)
+    })
+    // if(update==1){
+    //   selected = 
+    // }
   },
   methods: {
     studyUpdate(){
       console.log("updating")
+      console.log("selected is " , this.selected)
       this.$emit("studyEvent",this.selected);
     }
   }
 }
 </script>
+

@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.01.30
-    마지막 업데이트 : 2022.02.01
+    마지막 업데이트 : 2022.02.05
     
     회원 상세 정보 모달
  */
@@ -21,7 +21,7 @@
         </tr>
         <tr>
           <th>세부관심분야</th>
-          <td style="width: 70%;"><user-interests :interests="member.interests"></user-interests></td>
+          <td style="width: 70%;"><user-interests :interestList="getInterests(member)"></user-interests></td>
         </tr>
         <tr>
           <th>포인트 및 레벨</th>
@@ -29,10 +29,10 @@
         </tr>
         <tr>
           <th :rowspan="studylist.length + 1">스터디</th>
-          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a href="#" @click="userKick">퇴출</a></td>
+          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(studylist[0].studyno, member.userno)">퇴출</a></td>
         </tr>
         <tr v-for="(study, index) in studylist" :key="index.id">
-          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a href="#" @click="userKick">퇴출</a></td>
+          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(study.studyno, member.userno)">퇴출</a></td>
         </tr>
       </tbody>
     </table>
@@ -41,6 +41,7 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import UserInterests from '@/components/UserInterests.vue'
 
 export default {
@@ -54,14 +55,19 @@ export default {
     },
     studylist: {
       type: Array
+    },
+    leader: {
+      type: Number
     }
   },
   data: function () {
     return {
       userInfo: {
-        userno: 3,
-        studyno: 8
-      }
+        userno: null,
+        studyno: null,
+      },
+      isAdmin: null,
+      userNumber: null,
     }
   },
   methods: {
@@ -72,21 +78,39 @@ export default {
       }
       return config
     },
-    userKick: function () {
+    userKick: function (studyno, userno) {
+      this.userInfo.studyno = studyno
+      this.userInfo.userno = userno
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/admin/kick/`,
+        url: `http://localhost:8080/api/v1/admin/kick`,
         data: this.userInfo
       })
         .then(res => {
-          console.log(res)
-          window.location.reload()
+          console.log(res, this.userInfo)
           alert("스터디에서 해당 회원을 강퇴시켰습니다.")
+          window.location.reload()
         })
         .catch(err => {
-          console.log(err)
+          console.log(err, this.userInfo)
         })
     },
+    getInterests: function (member) {
+      this.interestList = member.interests.split('#')
+      this.interestList.shift()
+      return this.interestList
+    },
+  },
+  created: function () {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      this.isAdmin = decoded.isAdmin
+      this.userNumber = decoded.userno
+      console.log(this.leader)
+    } else {
+      this.$router.push({name: 'Login'})
+    }
   }
 }
 </script>

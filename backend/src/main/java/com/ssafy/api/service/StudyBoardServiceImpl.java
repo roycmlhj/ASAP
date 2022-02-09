@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.api.request.FileSavePostReq;
@@ -26,7 +27,7 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 	
 	@Override
 	@Transactional
-	public boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, List<MultipartFile> filelist) {
+	public boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, MultipartFile files) {
 		StudyBoard studyBoard = new StudyBoard();
 		studyBoard.setContent(studyBoardInfo.getContent());
 		studyBoard.setStudyno(studyBoardInfo.getStudyno());
@@ -35,9 +36,9 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 		int boardno = -1;
 		boardno = studyBoardRepository.save(studyBoard).getBoardno();
 		if(boardno >= 0) {
-			if(!CollectionUtils.isEmpty(filelist)) {
-				List<FileSavePostReq> files = new FileUtil(filelist, "boardfiles").toFile();
-				for (FileSavePostReq file : files) {
+			if(!ObjectUtils.isEmpty(files)) {
+				if(boardno >= 0) {
+					FileSavePostReq file = new FileUtil(files, "boardfiles").toFile();
 					fileService.saveFile(file, boardno);
 				}
 			}
@@ -63,15 +64,13 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 
 	@Override
 	@Transactional
-	public boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo, List<MultipartFile> filelist) {
+	public boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo, MultipartFile files) {
 		if(Optional.ofNullable(studyBoardRepository.findById(studyBoardPutInfo.getBoardno())).get() != null) {
 			studyBoardRepository.modifyStudyBoard(studyBoardPutInfo);
 			fileService.deleteFileByBoardno(studyBoardPutInfo.getBoardno());
-			if(!CollectionUtils.isEmpty(filelist)) {
-				List<FileSavePostReq> files = new FileUtil(filelist, "boardfiles").toFile();
-				for (FileSavePostReq file : files) {
-					fileService.saveFile(file, studyBoardPutInfo.getBoardno());
-				}
+			if(!ObjectUtils.isEmpty(files)) {
+				FileSavePostReq file = new FileUtil(files, "boardfiles").toFile();
+				fileService.saveFile(file, studyBoardPutInfo.getBoardno());
 			}
 			return true;
 		}

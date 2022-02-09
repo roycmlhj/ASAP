@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <study-room-list :studies="studies"></study-room-list>
-    <a @click="modalShow=!modalShow" href="#">스터디방 만들기</a>
+    <a @click="modalTurn" href="#">스터디방 만들기</a>
     <b-modal v-model="modalShow" title="Create Study" hide-footer>
       <b-form>
         <b-form-group
@@ -81,7 +81,7 @@ export default {
   name: 'Main',
   components: { 
     StudyMemberCountBar,
-    StudyRoomList
+    StudyRoomList,
   },
   data() {
     return {
@@ -95,9 +95,22 @@ export default {
       maker:'',
       userno: null,
       studies: null,
+      flag: 2,
     }
   },
   methods: {
+    modalTurn: function() {
+      if (!this.modalShow){
+        this.title=''
+        this.description=''
+        this.memberno=''
+        this.mainCategory=''
+        this.interests=[]
+        this.maker=''
+      }
+      this.modalShow=!this.modalShow
+    }
+    ,
     setToken: function () {
       const token = localStorage.getItem('jwt')
       const config = {
@@ -110,19 +123,25 @@ export default {
       //console.log(this.member)
     },
     nameCheck: function () {
-      axios({
-        method: 'get',
-        url: `http://localhost:8080/api/v1/study/name_check/${this.title}/`,
-        data: this.title
-      })
+      if (this.title == '') {
+        alert("스터디 이름을 입력해주세요.")
+      } else {
+        axios({
+          method: 'get',
+          url: `http://localhost:8080/api/v1/study/name_check/${this.title}`,
+          data: this.title
+        })
         .then(res => {
           console.log(res)
+          this.flag = 1
           alert("사용할 수 있는 스터디 이름입니다.")
         })
         .catch(err => {
-          console.log(err)
+          console.log(err, this.title)
+          this.flag = 2
           alert("이미 사용중인 스터디 이름입니다.")
         })
+      }
     },
     getStudies: function () {
       axios({
@@ -151,19 +170,25 @@ export default {
         userno: decoded.userno,
         interests: this.interests,
       }
-
-      axios({
-        method: 'post',
-        url: `http://localhost:8080/api/v1/study/create`,
-        data: StudyRoomItem
-      })
-        .then(res => {
-          console.log(res)
-          this.modalShow=false
-      })
-        .catch(err=> {
-          console.log(err)
-      })
+      if(!StudyRoomItem.studyname || !StudyRoomItem.description || !StudyRoomItem.category || !StudyRoomItem.memberno || !StudyRoomItem.interests){
+        console.log("pass")
+        alert("모든 정보를 입력해주세요.")
+      }
+      else{
+        axios({
+          method: 'post',
+          url: `http://localhost:8080/api/v1/study/create`,
+          data: StudyRoomItem
+        })
+          .then(res => {
+            console.log(res)
+            this.modalShow=false
+            this.getStudies()
+        })
+          .catch(err=> {
+            console.log(err)
+        })
+      }
     }
   },
   created: function () {

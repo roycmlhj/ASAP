@@ -1,14 +1,13 @@
 /*
     작성자 : 한슬기
-    생성일 : 2022.02.01
-    마지막 업데이트 : 2022.02.01
+    생성일 : 2022.02.07
+    마지막 업데이트 : 2022.02.07
     
-    마이페이지 > 과제, 스터디 목록 테이블
+    마이페이지 > 과제 목록 테이블
  */
 <template>
   <div class="container">
-    <h5 class="float-left"><strong>스터디 목록</strong></h5>
-    
+    <h5 class="float-left"><strong>과제 목록</strong></h5><br>
     <b-table
       id="my-table"
       :items="items"
@@ -33,11 +32,6 @@ import moment from 'moment';
 
 export default {
   name: 'UserInfoTable',
-  props: {
-    studyList: {
-      type: Array,
-    }
-  },
   data() {
     return{
       perPage: 5,
@@ -45,10 +39,9 @@ export default {
       items : [],
     }
   },
-  computed: {
-    rows() {
-      
-      return this.studyList.length
+  props: {
+    homeworkList: {
+      type: Array,
     }
   },
   methods: {
@@ -56,20 +49,27 @@ export default {
       return moment(value).format('YYYY-MM-DD');
     },
   },
+  computed: {
+    rows() {
+      
+      return this.homeworkList.length
+    }
+  },
   created() {
-    console.log(this.studyList,"UHT")
-    for(var i = 0; i<this.studyList.length;i++){
+    console.log(this.homeworkList,"UHT")
+    for(var i = 0; i<this.homeworkList.length;i++){
       this.items.push({
-        스터디:this.studyList[i].studyname,
-        스터디주제: this.studyList[i].category,
-        시작일: this.dateTime(this.studyList[i].timestamp),
+        스터디:this.homeworkList[i].studyno,
+        과제: this.homeworkList[i].title,
+        제출기한: this.dateTime(this.homeworkList[i].endDate),
         진행상태: ''
       })
-      if(!this.studyList[i].isActivate){
+      if(!this.homeworkList[i].isActivate){
         this.items[i].진행상태="진행중"
       }else{
-        this.items[i].진행상태="종료"
+        this.items[i].진행상태="완료"
       }
+      
     }
   }
 }

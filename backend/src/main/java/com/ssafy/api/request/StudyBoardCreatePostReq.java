@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 @ApiModel("StudyBoardCreatePostRequest")
 public class StudyBoardCreatePostReq {
-	@ApiModelProperty(name = "게시글 종류 0:공지글, 1:일반글", example = "0")
-	int type;
 	@ApiModelProperty(name = "스터디 pk", example = "1")
 	int studyno;
 	@ApiModelProperty(name = "작성 유저 pk", example = "1")
