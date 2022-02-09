@@ -28,12 +28,8 @@ import lombok.Setter;
 @DynamicUpdate
 @IdClass(StudyMemberId.class)
 public class StudyMember implements Serializable{
-//	@ManyToOne(targetEntity = )
-//	@JoinColumn(name = "userno")
 	@Id
 	Integer userno;
-//	@ManyToOne(targetEntity = Study.class)
-//	@JoinColumn(name = "studyno")
 	@Id
 	Integer studyno;
 	@Column
@@ -42,8 +38,4 @@ public class StudyMember implements Serializable{
 	String studyTime;
 	@Column(name = "is_join")
 	Integer isJoin;
-
-//	@ManyToOne
-//	@JoinColumn(name = "study_rewfwefqfefq")
-//	Study study;
 }

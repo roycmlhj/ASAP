@@ -39,5 +39,7 @@ out/
 ### VS Code ###
 .vscode/
 
+### Properties ###
+application.properties
+
 ### Image ###
-file_{profiles, boardfiles, homeworkfiles}/
