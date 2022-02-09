@@ -32,7 +32,7 @@ ASAP은 'As Study as possible'을 줄여서 만든 네이밍입니다.
 
 #### 주요기능
 
-![주요기능1](README.assets/주요기능1.PNG)
+![주요기능1](산출물/README.assets/주요기능1.PNG)
 
 
 
