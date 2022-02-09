@@ -6,8 +6,9 @@
     메인페이지 > 스터디 리스트
  */
 <template>
-  <div class="container d-flex flex-wrap justify-content-center">
-    <div class="mb-5" v-for="study in studies" :key="study.id">
+<div class="container">
+  <div class="container d-flex flex-wrap">
+    <div class="col-3 mb-5" v-for="study in studies" :key="study.id">
       <div class="studyRoom">
         <h5><strong>{{ study.studyName }}</strong></h5>
         <div class="d-flex justify-content-center">
@@ -23,6 +24,7 @@
       </div>  
     </div>
   </div>
+</div>
 </template>
 
 <script>

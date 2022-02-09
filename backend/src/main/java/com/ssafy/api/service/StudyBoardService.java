@@ -9,9 +9,9 @@ import com.ssafy.api.request.StudyBoardPutReq;
 import com.ssafy.db.entity.StudyBoard;
 
 public interface StudyBoardService {
-	boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, List<MultipartFile> filelist);
+	boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, MultipartFile files);
 	List<StudyBoard> getStudyBoardList(int studyno);
 	StudyBoard getStudyBoardDetail(int boardno);
-	boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo, List<MultipartFile> filelist);
+	boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo, MultipartFile files);
 	boolean deleteStudyBoard(int boardno);
 }

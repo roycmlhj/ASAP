@@ -10,8 +10,8 @@
   <div class="container">
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
-      <img src='./assets/logo.png' alt="default-img">
-      <img src="C:\Users\SSAFY\Desktop\lab\S06P12A107\backend\file_profiles\3bd5257db06dec7b9dcef53941b4046e.jpg" alt="">
+      <!-- <img src='./assets/logo.png' alt="default-img">-->
+      <!-- <img src="./../Users/SSAFY/Desktop/lab/S06P12A107/backend/file_profiles/cc2930433d57629d9b8ee0f1d29b862d.jpg" alt=""> -->
       <p>{{ this.user.email }}</p>
       <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
     </b-card>
@@ -75,12 +75,9 @@
         <div class="image">
           <h5 class="float-left"><strong>이미지 업로드</strong></h5>
         </div>
-        <div class="d-flex justify-content-between mt-3">
-          <b-form-file ref="image" method="post" enctype="multipart/form-data">
-            <!-- <input ref="image" type="file" id="files" name="files" style="width: 120%;"> -->
-          </b-form-file>
-          <b-button @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
-        </div>
+        <b-form-file ref="image" method="post" enctype="multipart/form-data"> 
+        </b-form-file>
+        <b-button class="mt-2 float-right" @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
         <b-form-checkbox
           id="checkbox-1"
           name="checkbox-1"
@@ -178,7 +175,7 @@ export default {
       console.log('이미지')
       var image = this.$refs['image'].files[0]
       const formData = new FormData()
-      formData.append('files', image)
+      formData.append('image', image)
       axios({
         method: 'post',
         url: `http://localhost:8080/api/v1/user/upload/${this.userno}`,

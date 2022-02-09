@@ -67,20 +67,18 @@ public class StudyBoardController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<? extends BaseResponseBody> create(
-			@RequestParam(value = "type") int type,
 			@RequestParam(value = "studyno") int studyno,
 			@RequestParam(value = "userno") int userno,
 			@RequestParam(value = "title") String title,
 			@RequestParam(value = "content") String content,
-			@RequestParam(value = "files", required = false) List<MultipartFile> filelist){	
+			@RequestParam(value = "files", required = false) MultipartFile files){	
 		StudyBoardCreatePostReq studyBoardInfo = new StudyBoardCreatePostReq();
-		studyBoardInfo.setType(type);
 		studyBoardInfo.setStudyno(studyno);
 		studyBoardInfo.setUserno(userno);
 		studyBoardInfo.setTitle(title);
 		studyBoardInfo.setContent(content);
 		
-		if(studyBoardService.createStudyBoard(studyBoardInfo, filelist)) {
+		if(studyBoardService.createStudyBoard(studyBoardInfo, files)) {
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
 		}
 		else
@@ -130,13 +128,13 @@ public class StudyBoardController {
 			@RequestParam(value = "boardno") int boardno,
 			@RequestParam(value = "title") String title,
 			@RequestParam(value = "content") String content,
-			@RequestParam(value = "files", required = false) List<MultipartFile> filelist){
+			@RequestParam(value = "files", required = false) MultipartFile files){
 		StudyBoardPutReq studyBoardPutInfo = new StudyBoardPutReq();
 		studyBoardPutInfo.setBoardno(boardno);
 		studyBoardPutInfo.setTitle(title);
 		studyBoardPutInfo.setContent(content);
 		
-		if(studyBoardService.modifyStudyBoard(studyBoardPutInfo, filelist))
+		if(studyBoardService.modifyStudyBoard(studyBoardPutInfo, files))
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
 		else
 			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));

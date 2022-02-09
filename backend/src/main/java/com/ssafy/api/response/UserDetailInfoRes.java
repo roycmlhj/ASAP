@@ -25,13 +25,16 @@ public class UserDetailInfoRes {
 	List<Homework> onHomeworkList;
 	@ApiModelProperty(name = "완료 과제 목록")
 	List<Homework> doneHomeworkList;
+	@ApiModelProperty(name = "스터디 시간 분석")
+	StudyAnalyze study_analyze;
 	
-	public static UserDetailInfoRes of(User user, List<Study> studyList, List<Homework> onHomeworkList, List<Homework> doneHomeworkList) {
+	public static UserDetailInfoRes of(User user, List<Study> studyList, List<Homework> onHomeworkList, List<Homework> doneHomeworkList, StudyAnalyze study_analyze) {
 		UserDetailInfoRes res = new UserDetailInfoRes();
 		res.user = user;
 		res.studyList = studyList;
 		res.onHomeworkList = onHomeworkList;
 		res.doneHomeworkList = doneHomeworkList;
+		res.study_analyze = study_analyze;
 		return res;
 	}
 }

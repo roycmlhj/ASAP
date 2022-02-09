@@ -7,10 +7,9 @@
         <b-button class="mb-3" @click="search">search</b-button>
       </b-input-group-append>
     </b-input-group>
-    <span class="row d-flex justify-content-around">
-
+    <span class="row d-flex">
       <div class="col-6 " v-for="study in studies" v-bind:key="study.id">
-        <router-link :to="{ name: 'StudyBoardDetail', params: { boardno : study.boardno }}">
+        <router-link :to="{ name: 'StudyBoardDetail', params: { boardno : study.boardno }}" style="color: black;">
           <b-card class = "mb-3 col-12">
           <div class="row d-flex justify-content-around">
             <h3>{{study.boardname}}</h3>
@@ -161,3 +160,7 @@ import axios from 'axios'
     }
   }
 </script>
+
+<style scoped>
+
+</style>

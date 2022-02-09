@@ -58,6 +58,7 @@ export default {
         content: null,
         studyno: this.$route.params.study_no,
         userno: null,
+        type: 1,
       },
     }
   },
@@ -82,11 +83,11 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          console.log(res.data)
+          console.log(res.data, 123)
           window.location.reload()
         })
         .catch(err => {
-          console.log(err, this.article)
+          console.log(err)
         })
     }
   },

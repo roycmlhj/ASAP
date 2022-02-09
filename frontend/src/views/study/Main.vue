@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <study-room-list :studies="studies"></study-room-list>
+    <div class="d-flex justify-content-center">
+      <study-room-list :studies="studies"></study-room-list>
+    </div>
     <a @click="modalTurn" href="#">스터디방 만들기</a>
     <b-modal v-model="modalShow" title="Create Study" hide-footer>
       <b-form>
@@ -66,6 +68,11 @@
     </b-modal>
     <br>
     <router-link :to="{ name: 'CreateStudyBoard' }">스터디 모집하기</router-link>
+    <div class="d-flex flex-wrap justify-content-around">
+      <div class="post1">1</div>
+      <div class="post2">2</div>
+      <div class="post3">3</div>
+    </div>
   </div>
 </template>
 
@@ -189,7 +196,7 @@ export default {
             console.log(err)
         })
       }
-    }
+    },
   },
   created: function () {
     if (localStorage.getItem('jwt')) {
@@ -209,7 +216,20 @@ export default {
   form {
     padding: 0px 20px;
   }
-  /* button {
-    width: 100%;
-  } */
+  .post1 {
+    background-color: #b0e0e6;
+    width: 30%;
+    height: 300px;
+  }
+  .post2 {
+    background-color: #FFF44F;
+    width: 30%;
+  }
+  .post3 {
+    background-color: #ffc0cb;
+    width: 30%;
+  }
+  .post4 {
+    background-color: antiquewhite;
+  }
 </style>
