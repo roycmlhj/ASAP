@@ -7,18 +7,30 @@
  */
 <template>
   <div class="container d-flex flex-wrap" v-if="userInfo">
-    <div>
-      <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
-      <p>{{ userInfo.nickname }}</p>
-      <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
+    <div class="d-flex col-12">
+      <div class="col-2">
+      <p v-if="img">
+        <img :src="img" alt="default-img">
+      </p>
+      <p v-else>
+        <img src="./assets/default.png">
+      </p>
+        <p>{{ userInfo.nickname }}</p>
+        <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
+      </div>
+      <div class="col-5 d-flex justify-content-center">
+        <study-chart :StudyTime="StudyTime"></study-chart>
+      </div>
+      <div class="col-5">
+        <study-point-bar :userInfo="userInfo"></study-point-bar>
+        <h5 style="text-align : start;"><strong>관심분야</strong></h5>
+        <user-interests :interestList="getInterests()"></user-interests>
+      </div>
     </div>
-    <div>
-      <h5><strong>관심분야</strong></h5>
-      <user-interests :interestList="getInterests()"></user-interests>
-    </div>
-    <chart></chart>
-    <div class="d-flex">
+    <div class="col-6">
       <user-info-table :studyList="studyList"></user-info-table>
+    </div>
+    <div class="col-6">
       <user-homework-table :homeworkList="homeworkList"></user-homework-table>
     </div>
     <b-modal ref="my-modal"
@@ -49,7 +61,8 @@ import jwt_decode from 'jwt-decode'
 import UserInterests from '@/components/UserInterests.vue'
 import UserInfoTable from '@/components/UserInfoTable.vue'
 import UserHomeworkTable from '@/components/UserHomeworkTable.vue'
-import Chart from '@/components/Chart.vue'
+import StudyChart from '@/components/StudyChart.vue'
+import StudyPointBar from '@/components/StudyPointBar.vue'
 
 export default {
   name: 'MyPage',
@@ -57,7 +70,8 @@ export default {
     UserInterests,
     UserInfoTable,
     UserHomeworkTable,
-    Chart
+    StudyChart,
+    StudyPointBar
   },
   data: function () {
     return {
@@ -69,6 +83,8 @@ export default {
       userInfo: null,
       studyList: null,
       homeworkList: null,
+      StudyTime: null,
+      img: null,
     }
   },
   methods: {
@@ -86,10 +102,13 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
+          console.log(res.data)
           this.userInfo = res.data.user
+          this.img = this.userInfo.image
           this.studyList = res.data.studyList
           this.homeworkList = res.data.onHomeworkList
           this.user.email = res.data.user.email
+          this.StudyTime = res.data.study_analyze.studyTime
           this.homeworkList.sort(function(a,b){
             if(a.endDate<b.endDate) return -1;
             if(a.endDate > b.endDate) return 1;
@@ -143,5 +162,8 @@ export default {
   }
   p {
     margin: 0px;
+  }
+  h5 {
+    margin-top: 7rem;
   }
 </style>

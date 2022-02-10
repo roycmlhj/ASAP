@@ -134,7 +134,7 @@ export default {
       //console.log(this.member)
     },
     getHomeworkList: function() {
-      
+      console.log(this.userno,1123)
       axios({
         method: 'get',
         url: `http://localhost:8080/api/v1/user/detail/${this.userno}`

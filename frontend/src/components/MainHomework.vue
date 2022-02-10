@@ -2,7 +2,7 @@
   <div>
     <h4>이번 주 과제 목록</h4>
     <div v-for="homework in getHomeworkList" :key="homework.id" >
-      <p>{{homework.title}}</p>
+      <p>{{homework.homework.title}}</p>
       </div>
   </div>
 </template>
@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     dayToNum(day) {
+      console.log(day,1111)
       const beforenum = day.split(' ')[0].split('-')
       const months = [0,31,59,90,120,151,181,212,243,273,304,334,365]
       
@@ -46,7 +47,9 @@ export default {
       var date = today.getDate()
       var day = today.getDay()
       var weekstart = year*365+months[month]+date-day
+      console.log(this.onHomeworkList,123123123123)
       for(var i = 0; i<this.doneHomeworkList.length;i++){
+        console.log("여긴왜와")
         var hwDay = this.dayToNum(this.doneHomeworkList[i].endDate)
         
         if(hwDay <= weekstart+7 && hwDay>weekstart){
@@ -54,7 +57,8 @@ export default {
         }
       }
       for(i = 0; i<this.onHomeworkList.length;i++){
-        hwDay = this.dayToNum(this.onHomeworkList[i].endDate)
+        console.log(this.onHomeworkList[i].homework.endDate)
+        hwDay = this.dayToNum(this.onHomeworkList[i].homework.endDate)
         
         if(hwDay <= weekstart+7 && hwDay>weekstart){
           homeworkList.push(this.onHomeworkList[i])
@@ -66,6 +70,7 @@ export default {
         if(a.endDate > b.endDate) return 1;
         if(a.endDate == b.endDate) return 0;
       })
+      console.log(homeworkList)
       return homeworkList
     },
   }

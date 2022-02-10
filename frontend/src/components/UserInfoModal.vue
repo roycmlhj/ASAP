@@ -7,7 +7,12 @@
  */
 <template>
   <div class="container">
-    <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
+    <p v-if="member.image">
+      <img :src="member.image" alt="default-img">
+    </p>
+    <p v-else>
+      <img src="../views/accounts/assets/default.png">
+    </p>
     <p>{{ member.email }}</p>
     <table class="table table-bordered">
       <tbody>

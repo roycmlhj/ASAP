@@ -8,7 +8,13 @@
 <template>
   <div>
     <div id="container">
-      <p class="content" :style="{ height: assignment.homework.content.length + 110 + 'px'}">{{ assignment.homework.content }}</p>
+      <div class="content" :style="{ height: assignment.homework.content.length + 230 + 'px'}">
+        <p><strong>작성자 : {{ assignment.nickname }}</strong></p>
+        <p>{{ assignment.homework.content }}</p>
+        <b-form-file ref="image" method="post" enctype="multipart/form-data" class="mt-3"> 
+        </b-form-file>
+        <b-button class="mt-2 float-right" @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
+      </div>
       <div class="mt-2 mb-3">
         <b-button v-if="userno==homeworkUserno" @click="deleteHomework(assignment.homework.homeworkno)">삭제</b-button>
         <b-button v-if="userno==homeworkUserno" id="show-btn" @click="showModal(assignment.homework)">수정</b-button>
@@ -144,9 +150,22 @@ export default {
     flex-direction: column;
   }
   .content {
-    background-color: rgb(240, 236, 236);
-    margin-bottom: 0px;
+    border: 1px solid #0000004d;
+    position: relative;
+    background-color: white;
+    box-shadow: 5px 5px 5px 0px gray;
     word-break: break-all;
+    white-space:pre;
+    padding: 20px;
+  }
+  .content:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top: 15px solid palevioletred;
+    border-left: 15px solid rgba(0, 0, 0, 0);
+    width: 0;
   }
   button { 
     float: right;

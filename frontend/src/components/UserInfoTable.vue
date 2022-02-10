@@ -6,7 +6,7 @@
     마이페이지 > 과제, 스터디 목록 테이블
  */
 <template>
-  <div class="container">
+  <div>
     <h5 class="float-left"><strong>스터디 목록</strong></h5>
     
     <b-table
@@ -66,7 +66,7 @@ export default {
         진행상태: ''
       })
       if(!this.studyList[i].isActivate){
-        this.items[i].진행상태="진행중"
+        this.items[i].진행상태="진행"
       }else{
         this.items[i].진행상태="종료"
       }

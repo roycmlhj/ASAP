@@ -1,10 +1,3 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.04
-    
-    스터디 방 > 게시글 작성 모달
- */
 <template>
 <div class="container">
   <font-awesome-icon class="fa-1x mt-1 mr-1 float-left" icon="edit"/><a href="#" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>글 작성하기</strong></a>

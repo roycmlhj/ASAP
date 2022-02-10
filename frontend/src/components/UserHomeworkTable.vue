@@ -6,7 +6,7 @@
     마이페이지 > 과제 목록 테이블
  */
 <template>
-  <div class="container">
+  <div>
     <h5 class="float-left"><strong>과제 목록</strong></h5><br>
     <b-table
       id="my-table"
@@ -59,13 +59,14 @@ export default {
     console.log(this.homeworkList,"UHT")
     for(var i = 0; i<this.homeworkList.length;i++){
       this.items.push({
-        스터디:this.homeworkList[i].studyno,
-        과제: this.homeworkList[i].title,
+        스터디:this.homeworkList[i].studyname,
+        과제: this.homeworkList[i].homework.title,
         제출기한: this.dateTime(this.homeworkList[i].endDate),
-        진행상태: ''
+        진행상태: '',
       })
+      console.log(456)
       if(!this.homeworkList[i].isActivate){
-        this.items[i].진행상태="진행중"
+        this.items[i].진행상태="진행"
       }else{
         this.items[i].진행상태="완료"
       }

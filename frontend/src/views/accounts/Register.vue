@@ -219,8 +219,7 @@ export default {
     clickRegister: function () {
       // console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
-        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null ||
-        this.flag == 2 || this.ans == 2 || this.nicFlag == 2
+        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null 
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {

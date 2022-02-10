@@ -54,10 +54,15 @@
       <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" left shadow>
         <div class="px-5 py-2 mt-3" v-for="members in studyMemberList" :key="members.id">
           <div class="d-flex justify-content-between" v-for="member in members" :key="member.id">
-            <p>
-              <img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image">
-              <a id="show-btn" href="#" class="ml-2" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
-            </p>
+            <div class="d-flex">
+              <p v-if="member.image">
+                <img :src="member.image" alt="default-img">
+              </p>
+              <p v-else>
+                <img src="./../accounts/assets/default.png">
+              </p>
+              <a id="show-btn" href="#" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
+            </div>
             <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 28px; background-color: black;" @click="userKick(member.studyMember.userno)">강퇴</b-button>
           </div>
         </div>
@@ -186,6 +191,7 @@ export default {
       })
         .then(res => {
           this.studyMemberList = res.data
+          console.log(this.studyMemberList, 111)
         })
         .catch(err => {
           console.log(err)
@@ -206,7 +212,7 @@ export default {
           console.log(err)
         })
     },
-    getCalendar: function () {
+     getCalendar: function () {
       axios({
         method: 'get',
         url: `http://localhost:8080/api/v1/study/calendar/${this.$route.params.study_no}`,
@@ -221,7 +227,6 @@ export default {
             end: homeworkList[i].endDate,
             isHomework:true,
             eventno:homeworkList[i].homeworkno,
-            cssClass : 'homeworkCalendar',
           })
         }
         const scheduleList = res.data.scheduleList
@@ -291,9 +296,6 @@ export default {
 </script>
 
 <style scoped>
-  .homeworkCalendar{
-    color : #FFFF8C
-  }
   .icon {
     display: flex;
     flex-direction: column;
