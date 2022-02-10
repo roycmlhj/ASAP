@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.db.entity.FileData;
 
 @Repository
-public interface FileRepository extends JpaRepository<FileData, Integer>, FileRepositoryCustom{
-
+public interface FileDataRepository extends JpaRepository<FileData, Integer>, FileDataRepositoryCustom{
 }

@@ -29,8 +29,24 @@
           <td style="width: 70%;"><user-interests :interestList="getInterests(member)"></user-interests></td>
         </tr>
         <tr>
-          <th>포인트 및 레벨</th>
-          <td>{{ member.exp }} point  {{ member.level }} level</td>
+          <th>Level</th>
+          <td>
+            <p v-if="this.member.level == 1" class="mb-0">
+              <font-awesome-icon class="fa-2x mb-2" icon="star"/>
+            </p>
+            <p v-if="member.level == 2" class="mb-0">
+              <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
+            </p>
+            <p v-if="member.level == 3" class="mb-0">
+              <font-awesome-icon class="fa-2x mb-2" icon="bahai"/>
+            </p>
+            <p v-if="member.level == 4" class="mb-0">
+              <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+            </p>
+            <p v-if="member.level == 5" class="mb-0">
+              <font-awesome-icon class="fa-2x mb-2" icon="trophy"/>
+            </p>
+          </td>
         </tr>
         <tr>
           <th :rowspan="studylist.length + 1">스터디</th>

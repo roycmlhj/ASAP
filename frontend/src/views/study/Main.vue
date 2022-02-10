@@ -134,16 +134,12 @@ export default {
       //console.log(this.member)
     },
     getHomeworkList: function() {
-      
       axios({
         method: 'get',
         url: `http://localhost:8080/api/v1/user/detail/${this.userno}`
       }).then(res => {
-        console.log(res,"getHome")
         this.onHomeworkList = res.data.onHomeworkList
-        console.log(this.onHomeworkList,"on")
         this.doneHomeworkList = res.data.doneHomeworkList
-        console.log(this.doneHomeworkList,"done")
         this.studyList = res.data.studyList
       }).catch(err => {
         console.log(err)
@@ -165,7 +161,7 @@ export default {
           alert("사용할 수 있는 스터디 이름입니다.")
         })
         .catch(err => {
-          console.log(err, this.title)
+          console.log(err)
           this.flag = 2
           alert("이미 사용중인 스터디 이름입니다.")
         })

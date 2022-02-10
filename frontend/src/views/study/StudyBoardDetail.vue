@@ -101,12 +101,10 @@
                   가입 거절
                 </b-button>
                 <router-link :to="`/study/board/update/${boardno}`">
-                  <b-button  class="col-8 bg-warning mb-3">
-                    
-                      글 수정
-                  </b-button>
+                  <b-button  class="col-8 mb-3">글 수정</b-button>
                 </router-link>
               </div>
+              <b-button class="col-8" @click="deleteBoard(boardno)">글 삭제</b-button>
             </div>
           </div>
           
@@ -242,6 +240,11 @@ export default {
         studyno: this.studyno,
         userno: this.userno,
       }
+      // if () {
+
+      // } else {
+
+      // }
       axios({
         method: 'post',
         url: 'http://localhost:8080/api/v1/study/apply',
@@ -303,6 +306,20 @@ export default {
           console.log(err)
         })
       }
+    },
+    deleteBoard: function (boardno) {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/v1/board/${boardno}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res)
+          this.$router.push({name: 'StudyBoard'})
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }

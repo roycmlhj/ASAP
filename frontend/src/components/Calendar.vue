@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <full-calendar :events="fcEvents" locale="en"
+    <full-calendar :events="fcEvents" locale="en" 
       @dayClick="dayClick"
       @eventClick="eventClick"
     ></full-calendar>
@@ -8,13 +8,13 @@
       v-model="modalShow1"
       @ok="createSchedule"
       title="Create schedule"
-      id="modal-lg" size="lg"
       ok-only
     >
-      <h5>시간을 정해주십시오.</h5>
-      <b-form-select class="col-1" v-model="selectedHour" :options="optionsHour"></b-form-select>시
-      <b-form-select class="col-1" v-model="selectedMinute" :options="optionsMinute"></b-form-select>분
-
+      <h5>다음 스터디 일정과 시간을 정해주세요.</h5>
+      <div class="mt-4 d-flex justify-content-center">
+        <b-form-select class="col-2" v-model="selectedHour" :options="optionsHour"></b-form-select><p class="mt-2">&nbsp;시&nbsp;&nbsp;&nbsp;</p>
+        <b-form-select class="col-2" v-model="selectedMinute" :options="optionsMinute"></b-form-select><p class="mt-2">&nbsp;분</p>
+      </div>
     </b-modal>
     <b-modal
       v-model="modalShow2"

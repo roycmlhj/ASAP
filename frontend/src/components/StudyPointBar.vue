@@ -8,9 +8,27 @@
 <template>
   <div>
     <h5><strong>스터디 포인트</strong></h5>
-    <div class="d-flex justify-content-between">
-      <p>현재 레벨 : {{ userInfo.level }}</p>
-      <p>다음 레벨 : {{ userInfo.level + 1 }}</p>
+    <div>
+      <p v-if="this.userInfo.level == 1" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="star"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
+      </p>
+      <p v-if="userInfo.level == 2" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="bahai"/>
+      </p>
+      <p v-if="userInfo.level == 3" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="bahai"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+      </p>
+      <p v-if="userInfo.level == 4" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="trophy"/>
+      </p>
+      <p v-if="userInfo.level == 5" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="trophy"/>
+      </p>
     </div>
     <b-progress :max="max" height="3rem">
       <b-progress-bar :value="value" style="background-color: #78c0e2;">

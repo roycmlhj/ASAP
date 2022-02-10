@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.common.util.MD5Generator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,5 +64,9 @@ public class AwsS3Service {
             	fos.write(file.getBytes());
             }
         return Optional.of(convertFile);
+	}
+	
+	public void deleteFile(String filename) {
+		amazonS3Client.deleteObject(bucket, (filename).replace(File.separatorChar, '/'));
 	}
 }

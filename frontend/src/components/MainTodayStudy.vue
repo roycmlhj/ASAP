@@ -50,7 +50,6 @@ export default {
           }
         }
       }
-      console.log(studyList,123123123)
       // homeworkList.sort(function(a,b){
       //   if(a.endDate<b.endDate) return -1;
       //   if(a.endDate > b.endDate) return 1;

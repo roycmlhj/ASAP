@@ -43,6 +43,8 @@
           max-rows="6"
         >
         </b-form-textarea>
+        <b-form-file class="mt-5" multiple="multiple" ref="file" method="post" enctype="multipart/form-data">
+        </b-form-file>
         <b-button class="mt-3" style="font-size: 15px; height: 40px;" @click="updateArticle">확인</b-button>
       </b-form-group>
     </b-modal>
@@ -60,7 +62,7 @@ export default {
       article: {
         title: null,
         content: null,
-        boardno: this.post.studyBoard.boardno
+        boardno: this.post.studyBoard.boardno,
       },
       userno: 0,
       articleuserno: this.post.studyBoard.userno,
@@ -103,14 +105,22 @@ export default {
         })
     },
     updateArticle: function () {
+      var file = this.$refs['file'].files[0]
+      const formData = new FormData()
+      console.log(this.article.title, this.article.content, this.article.boardno)
+
+      formData.append('files', file)
+      formData.append('title', this.article.title)
+      formData.append('content', this.article.content)
+      formData.append('boardno', this.article.boardno)
       axios({
         method: 'put',
         url: `http://localhost:8080/api/v1/study_board/modify`,
-        data: this.article,
         headers: this.setToken(),
+        data: formData,
       })
         .then(res => {
-          console.log(res.data, this.article)
+          console.log(res.data)
           window.location.reload()
         })
         .catch(err => {
@@ -123,6 +133,7 @@ export default {
     const decoded = jwt_decode(token)
     const userno = decoded.userno
     this.userno = userno
+    // console.log(this.post.studyBoard.fileList[0].ogfilename, 111)
   }
 
 }

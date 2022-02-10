@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,7 @@ import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
 import com.ssafy.api.response.HomeworkRes;
+import com.ssafy.api.service.AwsS3Service;
 import com.ssafy.api.service.HomeworkService;
 import com.ssafy.api.service.UserHomeworkService;
 import com.ssafy.api.service.UserService;
@@ -55,6 +57,8 @@ public class HomeworkController {
 	UserService userService;
 	@Autowired
 	UserHomeworkService userHomeworkService;
+	@Autowired
+	AwsS3Service awsS3Service;
 	
 	@PostMapping("/create")
 	@ApiOperation(value = "과제 생성", notes = "과제 글을 생성한다.")
@@ -141,31 +145,17 @@ public class HomeworkController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<? extends BaseResponseBody> fileUpload(
-			@RequestParam @ApiParam(value="과제파일 정보", required = true) MultipartFile files,
 			@RequestParam @ApiParam(value="과제 no", required = true) int homeworkno,
-			@RequestParam @ApiParam(value="유저 no", required = true) int userno){
+			@RequestParam @ApiParam(value="유저 no", required = true) int userno,
+			@RequestPart @ApiParam(value="과제파일 정보", required = true) MultipartFile files){
 		
 		try {
-            String origFilename = files.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
-            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-            String savePath = System.getProperty("user.dir") + "\\homeworkfiles";
-            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-            if (!new File(savePath).exists()) {
-                try{
-                    new File(savePath).mkdir();
-                }
-                catch(Exception e){
-                    e.getStackTrace();
-                }
-            }
-            String filePath = savePath + "\\" + filename;
-            files.transferTo(new File(filePath));
-            
-            FileSavePostReq file = new FileSavePostReq();
-            file.setFilepath(filePath);
-			file.setOgfilename(origFilename);
-			file.setFilename(filename);
+			String filePath = awsS3Service.upload(files, "homework");
+			FileSavePostReq file = new FileSavePostReq();
+			file.setFilepath(filePath);
+			file.setFilename("test");
+			file.setOgfilename(files.getOriginalFilename());
+            files.getOriginalFilename();
 
             userHomeworkService.saveFile(file, userno, homeworkno);
         } catch(Exception e) {
