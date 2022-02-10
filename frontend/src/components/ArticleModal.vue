@@ -1,10 +1,3 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.04
-    
-    스터디 방 > 게시글 작성 모달
- */
 <template>
 <div class="container">
   <font-awesome-icon class="fa-1x mt-1 mr-1 float-left" icon="edit"/><a href="#" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>글 작성하기</strong></a>
@@ -38,6 +31,9 @@
         required
       >
       </b-form-textarea>
+      <b-form-file class="mt-5" multiple="multiple" ref="file" method="post" enctype="multipart/form-data">
+      <!-- <input ref="image" type="file" id="files" name="files" style="width: 120%;"> -->
+      </b-form-file>
       <b-button class="mt-5" style="float: right; background-color: rgb(130, 163, 209);" @click="createArticle()">확인</b-button>
     </b-form-group>
   </b-modal>
@@ -56,9 +52,9 @@ export default {
       article: {
         title: null,
         content: null,
-        studyno: this.$route.params.study_no,
+        studyno: Number(this.$route.params.study_no),
         userno: null,
-        type: 1,
+        files:null,
       },
     }
   },
@@ -76,19 +72,30 @@ export default {
       this.$refs['my-modal'].show()
     },
     createArticle: function () {
+      var article = this.article
+      console.log(article,"article")
+      var image = this.$refs['file'].files
+      console.log(image)
+      if(image.length!=0){
+        console.log(image,100)
+        const frm = new FormData()
+        frm.append('files', image)
+        article['files'] = frm
+      }
+      console.log(article,"final_article")
       axios({
         method: 'post',
         url: `http://localhost:8080/api/v1/study_board/create`,
-        data: this.article,
+        data: article,
         headers: this.setToken(),
       })
-        .then(res => {
-          console.log(res.data, 123)
-          window.location.reload()
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      .then(res => {
+        console.log(res.data)
+        window.location.reload()
+      })
+      .catch(err => {
+        console.log(err, article)
+      })
     }
   },
     created: function () {

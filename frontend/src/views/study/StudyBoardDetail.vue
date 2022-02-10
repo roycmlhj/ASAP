@@ -16,47 +16,68 @@
             <div  name="description">
               <p align="left">{{description}}</p>
             </div>
-            
             <div align="left" name="link">
               <p>스터디 git : {{link}}</p>
             </div>
-            
             <div align="left" name="call">
               <p>스터디 연락처 : {{call}}</p>
             </div>
-            
           </div>
+
           <div class="col-4">
             <div class = "col-12" name="studyMembers">
               <div v-if="flag===2">
-                <ul>
-                <div v-for="member in displaymembers" v-bind:key="member.id">
-                  <b-avatar class="float-left" :src="member.image"></b-avatar>
-                  <h5>{{member.nickname}}</h5>
+                <div class="d-flex justify-content-center" v-for="(member, index) in displaymembers" :key="index.id">
+                  <p v-if="member.image"><img :src="member.image"></p>
+                  <p v-else><img src="../../views/accounts/assets/default.png"></p>
+                  <p class="mt-2">
+                    <a id="show-btn" href="#" class="mt-2" @click="showModal(member)">
+                      {{ member.nickname }}
+                    </a>
+                  </p>
                 </div>
-                </ul>
+                <b-modal ref="my-modal" :member="member" hide-header hide-footer>
+                  <div class="d-block text-center">
+                    <div v-if="member">
+                      <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
+                    </div>
+                  </div>
+                </b-modal>
               </div>
-
               <div v-if="flag===0">
                 <b-form-checkbox-group
                 id="checkbox-group"
                 v-model="selected"
-                name="members">
-                  <b-form-checkbox v-for="member in displaymembers" v-bind:key="member.id" :value="member.userno">
-                    <b-avatar class="float-left" :src="member.image"></b-avatar>
-                    <h5>{{member.nickname}}</h5>
+                name="members"
+                >
+                  <b-form-checkbox class="d-flex justify-content-center" v-for="member in displaymembers" v-bind:key="member.id" :value="member.userno">
+                    <p v-if="member.image"><img :src="member.image"><a id="show-btn" href="#" @click="showModal(member)">{{member.nickname}}</a></p>
+                    <p v-else><img src="../../views/accounts/assets/default.png"><a id="show-btn" href="#" @click="showModal(member)">{{member.nickname}}</a></p>
                   </b-form-checkbox>
                 </b-form-checkbox-group>
-              </div>
-            
-              <div v-if="flag===1">
-                  
-                <ul>
-                  <div class="mb-4" v-for="member in displaymembers" v-bind:key="member.id">
-                    <b-avatar class="float-left" :src="member.image"></b-avatar>
-                    <h5>{{member.nickname}}</h5>
+                <b-modal ref="my-modal" :member="member" hide-header hide-footer>
+                  <div class="d-block text-center">
+                    <div v-if="member">
+                      <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
+                    </div>
                   </div>
-                </ul>
+                </b-modal>
+              </div>
+              <div v-if="flag===1">
+                <div class="d-flex justify-content-center" v-for="(member, index) in displaymembers" v-bind:key="index.id">
+                  <p v-if="member.image"><img :src="member.image"></p>
+                  <p v-else><img src="../../views/accounts/assets/default.png"></p>
+                  <p class="mt-2"><a id="show-btn" href="#" class="mt-2" @click="showModal(member)">
+                    {{member.nickname}}</a>
+                  </p>
+                </div>
+                <b-modal ref="my-modal" :member="member" hide-header hide-footer>
+                  <div class="d-block text-center">
+                    <div v-if="member">
+                      <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
+                    </div>
+                  </div>
+                </b-modal>
               </div>
             </div>
             <br>
@@ -101,11 +122,12 @@
 
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
+import UserInfoModal from '@/components/UserInfoModal.vue'
 
 export default {
   name: 'StudyBoardDetail',
   components: {
-    
+    UserInfoModal
   },
   data() {
     return {
@@ -124,6 +146,8 @@ export default {
       flag:2,
       selected:[],
       userno:-1,
+      member: null,
+      studylist: null,
     }
   },
   created() {
@@ -153,6 +177,7 @@ export default {
         this.studytag.shift(0)
         this.studytopic = board.category
         this.studyno = board.studyno
+        console.log(this.members, 100)
         //유저가 스터디 소속인지, 스터디장인지, 외부인인지 여부 판별
         //0이면 스터디장, 1이면 신청자 또는 회원 2이면 외부인
         
@@ -186,6 +211,32 @@ export default {
   },
   
   methods: {
+    setToken: function () {
+      const token = localStorage.getItem('jwt')
+      const config = {
+        Authorization: `JWT ${token}`
+      }
+      return config
+    },
+    showModal: function (user) {
+      this.$refs['my-modal'].show()
+      this.getUserInformation(user)
+    },
+    getUserInformation: function (user) {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/admin/${user.userno}/`,
+        headers: this.setToken()
+      })
+        .then(res => {
+          console.log(res)
+          this.member = res.data.user
+          this.studylist = res.data.studyList
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     studyApply() {
       const data = {
         studyno: this.studyno,
@@ -194,6 +245,7 @@ export default {
       axios({
         method: 'post',
         url: 'http://localhost:8080/api/v1/study/apply',
+        headers: this.setToken(),
         data: data
       })
       .then(res => {
@@ -216,11 +268,11 @@ export default {
         axios({
           method: 'put',
           url: 'http://localhost:8080/api/v1/study/accept',
+          headers: this.setToken(),
           data: data
         })
         .then(res => {
           console.log(res)
-          alert("가입을 수락했습니다.")
           window.location.reload()
         })
         .catch(err => {
@@ -239,6 +291,7 @@ export default {
         axios({
           method: 'put',
           url: 'http://localhost:8080/api/v1/study/accept',
+          headers: this.setToken(),
           data: data
         })
         .then(res => {
@@ -256,5 +309,21 @@ export default {
 
 </script>
 <style scoped>
-  button { font-size: 15px; height: 38px; background-color: rgb(130, 163, 209); } button:hover { background-color: rgb(79, 138, 216); }
+  button { 
+    font-size: 15px; 
+    height: 38px; 
+    background-color: rgb(130, 163, 209); 
+  } 
+  button:hover { 
+    background-color: rgb(79, 138, 216); 
+  }
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 70%;
+    margin-right: 1rem;
+  }
+  a {
+    color: black;
+  }
 </style>

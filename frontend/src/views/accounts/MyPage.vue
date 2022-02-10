@@ -7,9 +7,14 @@
  */
 <template>
   <div class="container d-flex flex-wrap" v-if="userInfo">
-    <div class="d-flex">
+    <div class="d-flex col-12">
       <div class="col-2">
-        <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
+      <p v-if="img">
+        <img :src="img" alt="default-img">
+      </p>
+      <p v-else>
+        <img src="./assets/default.png">
+      </p>
         <p>{{ userInfo.nickname }}</p>
         <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
       </div>
@@ -79,6 +84,7 @@ export default {
       studyList: null,
       homeworkList: null,
       StudyTime: null,
+      img: null,
     }
   },
   methods: {
@@ -96,7 +102,9 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
+          console.log(res.data)
           this.userInfo = res.data.user
+          this.img = this.userInfo.image
           this.studyList = res.data.studyList
           this.homeworkList = res.data.onHomeworkList
           this.user.email = res.data.user.email

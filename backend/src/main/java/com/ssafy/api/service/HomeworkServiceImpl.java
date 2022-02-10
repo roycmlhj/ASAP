@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.HomeworkCreatePostReq;
 import com.ssafy.api.request.HomeworkPutReq;
+import com.ssafy.api.response.HomeworkNStudy;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.StudyMember;
 import com.ssafy.db.entity.UserHomework;
@@ -26,6 +27,8 @@ public class HomeworkServiceImpl implements HomeworkService {
 	StudyMemberRepository studyMemberRepository;
 	@Autowired
 	UserHomeworkRepository userHomeworkRepository;
+	@Autowired
+	StudyService studyService;
 
 	@Override
 	public boolean createHomework(HomeworkCreatePostReq homeworkInfo) {
@@ -78,21 +81,24 @@ public class HomeworkServiceImpl implements HomeworkService {
 	// flag 0 = 진행중 과제 / 1 = 완료 과제 / 2 = 전체 과제 
 	@Override
 	@Transactional
-	public List<Homework> getUserHomeworkList(int userno, int flag) {
+	public List<HomeworkNStudy> getUserHomeworkList(int userno, int flag) {
 		List<UserHomework> userhomeworkList = userHomeworkRepository.findUserHomeworkByuserno(userno).get();
-		List<Homework> homeworkList = new ArrayList<Homework>();
+		List<HomeworkNStudy> homeworkList = new ArrayList<>();
 		if(flag == 2) {
 			for (UserHomework userHomework : userhomeworkList) {
-					homeworkList.add(homeworkRepository.findById(userHomework.getHomeworkno()).get());
+					Homework homework = homeworkRepository.findById(userHomework.getHomeworkno()).get();
+					String studyname = studyService.getStudyByStudyno(homework.getStudyno()).getStudyname();
+					homeworkList.add(new HomeworkNStudy(homework, studyname));
 			}
 		}else {
 			for (UserHomework userHomework : userhomeworkList) {
 				if(userHomework.getIsDone() == flag) {
-					homeworkList.add(homeworkRepository.findById(userHomework.getHomeworkno()).get());
+					Homework homework = homeworkRepository.findById(userHomework.getHomeworkno()).get();
+					String studyname = studyService.getStudyByStudyno(homework.getStudyno()).getStudyname();
+					homeworkList.add(new HomeworkNStudy(homework, studyname));
 				}
 			}
 		}
-		
 		return homeworkList;
 	}
 	

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,7 +72,7 @@ public class StudyBoardController {
 			@RequestParam(value = "userno") int userno,
 			@RequestParam(value = "title") String title,
 			@RequestParam(value = "content") String content,
-			@RequestParam(value = "files", required = false) MultipartFile files){	
+			@RequestPart(value = "files", required = false) MultipartFile files){	
 		StudyBoardCreatePostReq studyBoardInfo = new StudyBoardCreatePostReq();
 		studyBoardInfo.setStudyno(studyno);
 		studyBoardInfo.setUserno(userno);

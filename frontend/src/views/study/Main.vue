@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <div class="d-flex justify-content-center">
-      <study-room-list :studies="studies"></study-room-list>
-    </div>
+    <study-room-list :studies="studies"></study-room-list>
     <a @click="modalTurn" href="#">스터디방 만들기</a>
     <b-modal v-model="modalShow" title="Create Study" hide-footer>
       <b-form>
@@ -68,11 +66,9 @@
     </b-modal>
     <br>
     <router-link :to="{ name: 'CreateStudyBoard' }">스터디 모집하기</router-link>
-    <div class="d-flex flex-wrap justify-content-around">
-      <div class="post1">1</div>
-      <div class="post2">2</div>
-      <div class="post3">3</div>
-    </div>
+    <main-homework :onHomeworkList="onHomeworkList" :doneHomeworkList="doneHomeworkList"></main-homework>
+    <main-undo-homework :onHomeworkList="onHomeworkList"></main-undo-homework>
+    <main-today-study :studyList="studyList"></main-today-study>
   </div>
 </template>
 
@@ -82,13 +78,18 @@ import axios from 'axios'
 import StudyMemberCountBar from '@/components/StudyMemberCountBar.vue'
 import interest from "@/views/accounts/assets/interests.json"
 import StudyRoomList from '@/components/StudyRoomList.vue'
-
+import MainHomework from '@/components/MainHomework.vue'
+import MainUndoHomework from '@/components/MainUndoHomework.vue'
+import MainTodayStudy from '@/components/MainTodayStudy.vue'
 
 export default {
   name: 'Main',
   components: { 
     StudyMemberCountBar,
     StudyRoomList,
+    MainHomework,
+    MainUndoHomework,
+    MainTodayStudy,
   },
   data() {
     return {
@@ -103,6 +104,9 @@ export default {
       userno: null,
       studies: null,
       flag: 2,
+      doneHomeworkList:[],
+      onHomeworkList:[],
+      studyList: [],
     }
   },
   methods: {
@@ -129,6 +133,23 @@ export default {
       this.memberno=memberNum
       //console.log(this.member)
     },
+    getHomeworkList: function() {
+      
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/user/detail/${this.userno}`
+      }).then(res => {
+        console.log(res,"getHome")
+        this.onHomeworkList = res.data.onHomeworkList
+        console.log(this.onHomeworkList,"on")
+        this.doneHomeworkList = res.data.doneHomeworkList
+        console.log(this.doneHomeworkList,"done")
+        this.studyList = res.data.studyList
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+    ,
     nameCheck: function () {
       if (this.title == '') {
         alert("스터디 이름을 입력해주세요.")
@@ -196,19 +217,23 @@ export default {
             console.log(err)
         })
       }
-    },
+    }
   },
   created: function () {
     if (localStorage.getItem('jwt')) {
+      
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       console.log(decoded)
       this.userno = decoded.userno
+      this.getHomeworkList()
       this.getStudies()
+      
     } else {
       this.$router.push({name: 'Login'})
     }
-  }
+  },
+  
 }
 </script>
 
@@ -216,20 +241,7 @@ export default {
   form {
     padding: 0px 20px;
   }
-  .post1 {
-    background-color: #b0e0e6;
-    width: 30%;
-    height: 300px;
-  }
-  .post2 {
-    background-color: #FFF44F;
-    width: 30%;
-  }
-  .post3 {
-    background-color: #ffc0cb;
-    width: 30%;
-  }
-  .post4 {
-    background-color: antiquewhite;
-  }
+  /* button {
+    width: 100%;
+  } */
 </style>

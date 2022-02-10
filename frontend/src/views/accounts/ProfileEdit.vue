@@ -10,8 +10,12 @@
   <div class="container">
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
-      <!-- <img src='./assets/logo.png' alt="default-img">-->
-      <!-- <img src="./../Users/SSAFY/Desktop/lab/S06P12A107/backend/file_profiles/cc2930433d57629d9b8ee0f1d29b862d.jpg" alt=""> -->
+      <p v-if="img">
+        <img :src="img" alt="default-img">
+      </p>
+      <p v-else>
+        <img src="./assets/default.png">
+      </p>
       <p>{{ this.user.email }}</p>
       <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
     </b-card>
@@ -184,6 +188,7 @@ export default {
       })
         .then(res => {
           console.log(res)
+          localStorage.setItem('jwt', res.data.accessToken)
           window.location.reload(this.$route.params.user_no)
         })
         .catch(err => {
@@ -244,7 +249,7 @@ export default {
       this.interestTmp = decoded.interests
       this.user.interests = this.interestTmp.split('#')
       this.img = decoded.image
-      console.log(this.img)
+      console.log(decoded)
     },
     getUserInformationByAdmin: function (user_no) {
       axios({

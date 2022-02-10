@@ -237,6 +237,11 @@ public class StudyServiceImpl implements StudyService {
 		studyTime /= 60;
 		return studyTime;
 	}
+	
+	@Override
+	public Study getStudyByStudyno(int studyno) {
+		return studyRepository.findById(studyno).get();
+	}
 
 	
 	public int TimeToSec(String time) {
@@ -246,7 +251,6 @@ public class StudyServiceImpl implements StudyService {
 		sec += Integer.parseInt(timeSplit[0]) * 3600;
 		sec += Integer.parseInt(timeSplit[1]) * 60;
 		sec += Integer.parseInt(timeSplit[2]);
-		
 		return sec;
 	}
 
@@ -260,7 +264,8 @@ public class StudyServiceImpl implements StudyService {
 		sec %= 60;
 		time += ":";
 		time += Integer.toString(sec);
-		
 		return time;
 	}
+
+
 }
