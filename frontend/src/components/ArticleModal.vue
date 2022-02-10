@@ -38,6 +38,9 @@
         required
       >
       </b-form-textarea>
+      <b-form-file class="mt-5" multiple="multiple" ref="file" method="post" enctype="multipart/form-data">
+      <!-- <input ref="image" type="file" id="files" name="files" style="width: 120%;"> -->
+      </b-form-file>
       <b-button class="mt-5" style="float: right; background-color: rgb(130, 163, 209);" @click="createArticle()">확인</b-button>
     </b-form-group>
   </b-modal>
@@ -56,8 +59,9 @@ export default {
       article: {
         title: null,
         content: null,
-        studyno: this.$route.params.study_no,
+        studyno: Number(this.$route.params.study_no),
         userno: null,
+        files:null,
       },
     }
   },
@@ -75,19 +79,30 @@ export default {
       this.$refs['my-modal'].show()
     },
     createArticle: function () {
+      var article = this.article
+      console.log(article,"article")
+      var image = this.$refs['file'].files
+      console.log(image)
+      if(image.length!=0){
+        console.log(image,100)
+        const frm = new FormData()
+        frm.append('files', image)
+        article['files'] = frm
+      }
+      console.log(article,"final_article")
       axios({
         method: 'post',
         url: `http://localhost:8080/api/v1/study_board/create`,
-        data: this.article,
+        data: article,
         headers: this.setToken(),
       })
-        .then(res => {
-          console.log(res.data)
-          window.location.reload()
-        })
-        .catch(err => {
-          console.log(err, this.article)
-        })
+      .then(res => {
+        console.log(res.data)
+        window.location.reload()
+      })
+      .catch(err => {
+        console.log(err, article)
+      })
     }
   },
     created: function () {

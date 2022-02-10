@@ -62,7 +62,7 @@ export default {
       this.items.push({
         스터디:this.studyList[i].studyname,
         스터디주제: this.studyList[i].category,
-        시작일: this.studyList[i].timestamp,
+        시작일: this.dateTime(this.studyList[i].timestamp),
         진행상태: ''
       })
       if(!this.studyList[i].isActivate){

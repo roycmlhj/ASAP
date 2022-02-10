@@ -16,6 +16,7 @@
       <h5><strong>관심분야</strong></h5>
       <user-interests :interestList="getInterests()"></user-interests>
     </div>
+    <chart></chart>
     <div class="d-flex">
       <user-info-table :studyList="studyList"></user-info-table>
       <user-homework-table :homeworkList="homeworkList"></user-homework-table>
@@ -48,13 +49,15 @@ import jwt_decode from 'jwt-decode'
 import UserInterests from '@/components/UserInterests.vue'
 import UserInfoTable from '@/components/UserInfoTable.vue'
 import UserHomeworkTable from '@/components/UserHomeworkTable.vue'
+import Chart from '@/components/Chart.vue'
 
 export default {
   name: 'MyPage',
   components: {
     UserInterests,
     UserInfoTable,
-    UserHomeworkTable
+    UserHomeworkTable,
+    Chart
   },
   data: function () {
     return {

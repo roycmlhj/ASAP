@@ -221,6 +221,7 @@ export default {
             end: homeworkList[i].endDate,
             isHomework:true,
             eventno:homeworkList[i].homeworkno,
+            cssClass : 'homeworkCalendar',
           })
         }
         const scheduleList = res.data.scheduleList
@@ -290,6 +291,9 @@ export default {
 </script>
 
 <style scoped>
+  .homeworkCalendar{
+    color : #FFFF8C
+  }
   .icon {
     display: flex;
     flex-direction: column;

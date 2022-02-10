@@ -66,6 +66,9 @@
     </b-modal>
     <br>
     <router-link :to="{ name: 'CreateStudyBoard' }">스터디 모집하기</router-link>
+    <main-homework :onHomeworkList="onHomeworkList" :doneHomeworkList="doneHomeworkList"></main-homework>
+    <main-undo-homework :onHomeworkList="onHomeworkList"></main-undo-homework>
+    <main-today-study :studyList="studyList"></main-today-study>
   </div>
 </template>
 
@@ -75,13 +78,18 @@ import axios from 'axios'
 import StudyMemberCountBar from '@/components/StudyMemberCountBar.vue'
 import interest from "@/views/accounts/assets/interests.json"
 import StudyRoomList from '@/components/StudyRoomList.vue'
-
+import MainHomework from '@/components/MainHomework.vue'
+import MainUndoHomework from '@/components/MainUndoHomework.vue'
+import MainTodayStudy from '@/components/MainTodayStudy.vue'
 
 export default {
   name: 'Main',
   components: { 
     StudyMemberCountBar,
     StudyRoomList,
+    MainHomework,
+    MainUndoHomework,
+    MainTodayStudy,
   },
   data() {
     return {
@@ -96,6 +104,9 @@ export default {
       userno: null,
       studies: null,
       flag: 2,
+      doneHomeworkList:[],
+      onHomeworkList:[],
+      studyList: [],
     }
   },
   methods: {
@@ -122,6 +133,23 @@ export default {
       this.memberno=memberNum
       //console.log(this.member)
     },
+    getHomeworkList: function() {
+      
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/user/detail/${this.userno}`
+      }).then(res => {
+        console.log(res,"getHome")
+        this.onHomeworkList = res.data.onHomeworkList
+        console.log(this.onHomeworkList,"on")
+        this.doneHomeworkList = res.data.doneHomeworkList
+        console.log(this.doneHomeworkList,"done")
+        this.studyList = res.data.studyList
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+    ,
     nameCheck: function () {
       if (this.title == '') {
         alert("스터디 이름을 입력해주세요.")
@@ -193,15 +221,19 @@ export default {
   },
   created: function () {
     if (localStorage.getItem('jwt')) {
+      
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       console.log(decoded)
       this.userno = decoded.userno
+      this.getHomeworkList()
       this.getStudies()
+      
     } else {
       this.$router.push({name: 'Login'})
     }
-  }
+  },
+  
 }
 </script>
 

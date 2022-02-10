@@ -61,7 +61,7 @@ export default {
       this.items.push({
         스터디:this.homeworkList[i].studyno,
         과제: this.homeworkList[i].title,
-        제출기한: this.homeworkList[i].endDate,
+        제출기한: this.dateTime(this.homeworkList[i].endDate),
         진행상태: ''
       })
       if(!this.homeworkList[i].isActivate){

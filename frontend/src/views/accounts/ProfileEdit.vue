@@ -6,10 +6,12 @@
     개인정보수정 페이지
  */
 <template>
+<section>
   <div class="container">
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
-      <p><img src="https://cdn.imweb.me/thumbnail/20200606/09c71b2f94ea5.jpg" alt="default_image"></p>
+      <img src='./assets/logo.png' alt="default-img">
+      <img src="C:\Users\SSAFY\Desktop\lab\S06P12A107\backend\file_profiles\3bd5257db06dec7b9dcef53941b4046e.jpg" alt="">
       <p>{{ this.user.email }}</p>
       <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
     </b-card>
@@ -69,17 +71,23 @@
       </b-form-group>
     </b-card>
     <div class="d-flex mt-4">
-      <b-card bg-variant="light" class="col-6">
-        <h5 class="float-left"><strong>이미지 업로드</strong></h5>
-        <b-form-file v-model="user.image" ref="file-input" class="mb-2"></b-form-file>
-        <p class="mt-2 float-left">선택된 이미지 : <b>{{ user.image ? user.image.name : '' }}</b></p>
+      <b-card class="col-6" bg-variant="light">
+        <div class="image">
+          <h5 class="float-left"><strong>이미지 업로드</strong></h5>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+          <b-form-file ref="image" method="post" enctype="multipart/form-data">
+            <!-- <input ref="image" type="file" id="files" name="files" style="width: 120%;"> -->
+          </b-form-file>
+          <b-button @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
+        </div>
         <b-form-checkbox
           id="checkbox-1"
           name="checkbox-1"
-          class="mt-2"
+          class="mt-2 float-left"
           @click.native="clearFiles"
         >
-          취소
+          업로드 취소
         </b-form-checkbox>
       </b-card>
       <b-card bg-variant="light" class="col-6">
@@ -130,12 +138,14 @@
     </div>
     <b-button class="btn1 mt-5 float-right" @click="userEdit">저장하기</b-button>
   </div>
+</section>
 </template>
 
 <script>
 import jwt_decode from 'jwt-decode'
 import interest from "./assets/interests.json"
 import axios from 'axios'
+
 
 export default {
   name: 'ProfileEdit',
@@ -150,10 +160,10 @@ export default {
         nickname: '',
         mainCategory: '',
         interests: [],
-        image: null
       },
       interestTmp: [],
       passwordcheck: '',
+      img: null,
     }
   },
   methods: {
@@ -164,8 +174,35 @@ export default {
       }
       return config
     },
+    imageUpload: function () {
+      console.log('이미지')
+      var image = this.$refs['image'].files[0]
+      
+      const frm = new FormData()
+      for (let values of frm.values()) {
+        console.log(values,"before")
+      }
+      frm.append('image', image)
+      for (let values of frm.values()) {
+        console.log(values,"after")
+      }
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/user/upload/${this.userno}`,
+        headers: this.setToken(),
+        data: frm
+      })
+        .then(res => {
+          console.log(res)
+          window.location.reload(this.$route.params.user_no)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     clearFiles() {
-      this.$refs['file-input'].reset()
+      console.log(this.$refs['image'])
+      this.$refs['image'].reset()
     },
     userEdit: function() {
       console.log(this.user)
@@ -216,7 +253,8 @@ export default {
       this.mainCategory = decoded.mainCategory
       this.interestTmp = decoded.interests
       this.user.interests = this.interestTmp.split('#')
-      console.log(decoded)
+      this.img = decoded.image
+      console.log(this.img)
     },
     getUserInformationByAdmin: function (user_no) {
       axios({
@@ -301,5 +339,9 @@ export default {
  input {
    border: none;
    border-bottom: solid 1px;
+ }
+ .image {
+   display: flex;
+   flex-direction: row;
  }
 </style>
