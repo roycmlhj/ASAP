@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ssafy.api.request.HomeworkCreatePostReq;
 import com.ssafy.api.request.HomeworkPutReq;
+import com.ssafy.api.response.HomeworkNStudy;
 import com.ssafy.db.entity.Homework;
 
 public interface HomeworkService {
@@ -12,6 +13,6 @@ public interface HomeworkService {
 	List<Homework> getHomeworkList(int studyno);
 	boolean modifyHomework(HomeworkPutReq homeworkPutInfo);
 	boolean deletehomework(int homeworkno);
-	List<Homework> getUserHomeworkList(int userno, int flag);
+	List<HomeworkNStudy> getUserHomeworkList(int userno, int flag);
 	Homework getSHomeworkDetail(int homeworkno);
 }

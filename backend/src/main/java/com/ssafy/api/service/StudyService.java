@@ -31,4 +31,6 @@ public interface StudyService {
 	boolean modifyStudy(StudyPutReq studyPutInfo);
 	List<StudyMember> getStudyMemberListSimple(int studyno);
 	boolean addTime(AddTimeReq addTimeInfo);
+	int getStudyTime(int userno, int studyno);
+	Study getStudyByStudyno(int studyno);
 }

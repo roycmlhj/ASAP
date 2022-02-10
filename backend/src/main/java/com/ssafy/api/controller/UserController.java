@@ -19,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.api.response.HomeworkNStudy;
+import com.ssafy.api.response.StudyAnalyze;
+import com.ssafy.api.response.StudyTime;
 import com.ssafy.api.response.UserDetailInfoRes;
 import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.service.AwsS3Service;
@@ -167,12 +170,25 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<UserDetailInfoRes> detailUser(@PathVariable("userno") @ApiParam(value = "조회할 회원의 userno", required = true) int userno){
-		// 여기에 유저 analyze 추가
 		User user = userService.getUserByUserno(userno);
 		List<Study> studyList = studyService.getStudyList(userno);
-		List<Homework> onHomeworkList = homeworkService.getUserHomeworkList(userno, 0);
-		List<Homework> doneHomeworkList = homeworkService.getUserHomeworkList(userno, 1);
-		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList));
+		List<HomeworkNStudy> onHomeworkList = homeworkService.getUserHomeworkList(userno, 0);
+		List<HomeworkNStudy> doneHomeworkList = homeworkService.getUserHomeworkList(userno, 1);
+		
+		StudyAnalyze studyAnalyze = new StudyAnalyze();
+		int total_time = 0;
+		for(int i = 0; i < studyList.size(); i++) {
+			int studyTime = studyService.getStudyTime(userno, studyList.get(i).getStudyno());
+			total_time += studyTime;
+			StudyTime studyTimeAdd = new StudyTime();
+			studyTimeAdd.setStudyName(studyList.get(i).getStudyname());
+			studyTimeAdd.setStudyno(studyList.get(i).getStudyno());
+			studyTimeAdd.setTime(studyTime);
+			studyAnalyze.addStudyTime(studyTimeAdd);
+		}
+		studyAnalyze.setTotal_time(total_time);
+
+		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList, studyAnalyze));
 	}
 	
 	@PostMapping("upload/{userno}")
@@ -183,7 +199,7 @@ public class UserController {
         @ApiResponse(code = 404, message = "확장자 오류"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<? extends BaseResponseBody> uploadProfile(
+	public ResponseEntity<UserLoginPostRes> uploadProfile(
 			@PathVariable("userno") @ApiParam(value = "업로드할 회원의 userno", required = true) int userno,
 			@RequestPart("image") MultipartFile files){
 		try {
@@ -192,7 +208,7 @@ public class UserController {
 				if(!(contentType.contains("image/jpeg") || 
 						contentType.contains("image/png") || 
 							contentType.contains("image/gif"))){
-					return ResponseEntity.status(404).body(BaseResponseBody.of(404, "사용할 수 없는 확장자입니다."));
+					return ResponseEntity.ok(UserLoginPostRes.of(404, "사용할 수 없는 확장자입니다."));
                 }
 				
 				String path = awsS3Service.upload(files, "image");
@@ -203,6 +219,9 @@ public class UserController {
         } catch(Exception e) {
             e.printStackTrace();
         }
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		
+		User user = userService.getUserByUserno(userno);
+		
+		return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(user)));
 	}
 }

@@ -24,4 +24,11 @@ public class UserLoginPostRes extends BaseResponseBody{
 		res.setAccessToken(accessToken);
 		return res;
 	}
+	
+	public static UserLoginPostRes of(Integer statusCode, String message) {
+		UserLoginPostRes res = new UserLoginPostRes();
+		res.setStatusCode(statusCode);
+		res.setMessage(message);
+		return res;
+	}
 }

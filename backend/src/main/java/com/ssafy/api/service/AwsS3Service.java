@@ -58,7 +58,7 @@ public class AwsS3Service {
     }
 	
 	private Optional<File> convert(MultipartFile file) throws IOException{
-		File convertFile = new File(System.getProperty("user.dir") + "\\" + file.getOriginalFilename());
+		File convertFile = new File(System.getProperty("user.dir") + File.separator + file.getOriginalFilename());
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
             	fos.write(file.getBytes());
             }

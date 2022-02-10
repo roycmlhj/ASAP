@@ -15,23 +15,25 @@ import lombok.Setter;
 @Setter
 @ApiModel("UserDetailInfoResponse")
 public class UserDetailInfoRes {
-	// study analyze 추가 필요.
-	// 데이터 솎아내야 함
 	@ApiModelProperty(name = "유저 정보")
 	User user;
 	@ApiModelProperty(name = "참여 스터디 목록")
 	List<Study> studyList;
 	@ApiModelProperty(name = "진행 중 과제 목록")
-	List<Homework> onHomeworkList;
+	List<HomeworkNStudy> onHomeworkList;
 	@ApiModelProperty(name = "완료 과제 목록")
-	List<Homework> doneHomeworkList;
+	List<HomeworkNStudy> doneHomeworkList;
+	@ApiModelProperty(name = "스터디 시간 분석")
+	StudyAnalyze study_analyze;
+
 	
-	public static UserDetailInfoRes of(User user, List<Study> studyList, List<Homework> onHomeworkList, List<Homework> doneHomeworkList) {
+	public static UserDetailInfoRes of(User user, List<Study> studyList, List<HomeworkNStudy> onHomeworkList, List<HomeworkNStudy> doneHomeworkList, StudyAnalyze study_analyze) {
 		UserDetailInfoRes res = new UserDetailInfoRes();
 		res.user = user;
 		res.studyList = studyList;
 		res.onHomeworkList = onHomeworkList;
 		res.doneHomeworkList = doneHomeworkList;
+		res.study_analyze = study_analyze;
 		return res;
 	}
 }

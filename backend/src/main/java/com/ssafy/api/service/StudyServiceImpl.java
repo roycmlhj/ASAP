@@ -218,7 +218,7 @@ public class StudyServiceImpl implements StudyService {
 	
 	@Override
 	public boolean addTime(AddTimeReq addTimeInfo) {
-		if(userRepository.findById(addTimeInfo.getUserno()) == null || studyRepository.findById(addTimeInfo.getStudyno()) == null)
+		if(!userRepository.findById(addTimeInfo.getUserno()).isPresent() || !studyRepository.findById(addTimeInfo.getStudyno()).isPresent())
 			return false;
 		else {
 			StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(addTimeInfo.getUserno(), addTimeInfo.getStudyno());
@@ -230,6 +230,20 @@ public class StudyServiceImpl implements StudyService {
 		}
 	}
 	
+	@Override
+	public int getStudyTime(int userno, int studyno) {
+		String studyTimeStr = studyMemberRepository.findByUsernoNStudyNo(userno, studyno).getStudyTime();
+		int studyTime = TimeToSec(studyTimeStr);
+		studyTime /= 60;
+		return studyTime;
+	}
+	
+	@Override
+	public Study getStudyByStudyno(int studyno) {
+		return studyRepository.findById(studyno).get();
+	}
+
+	
 	public int TimeToSec(String time) {
 		int sec = 0;
 		String[] timeSplit = time.split(":");
@@ -237,7 +251,6 @@ public class StudyServiceImpl implements StudyService {
 		sec += Integer.parseInt(timeSplit[0]) * 3600;
 		sec += Integer.parseInt(timeSplit[1]) * 60;
 		sec += Integer.parseInt(timeSplit[2]);
-		
 		return sec;
 	}
 
@@ -251,7 +264,6 @@ public class StudyServiceImpl implements StudyService {
 		sec %= 60;
 		time += ":";
 		time += Integer.toString(sec);
-		
 		return time;
 	}
 
