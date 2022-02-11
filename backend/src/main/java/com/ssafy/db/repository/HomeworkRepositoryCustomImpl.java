@@ -25,13 +25,6 @@ public class HomeworkRepositoryCustomImpl extends QuerydslRepositorySupport impl
 	public HomeworkRepositoryCustomImpl() {
 		super(Homework.class);
 	}
-
-	@Override
-	public Optional<List<Homework>> findByStudyno(int studyno) {
-		List<Homework> homeworkList = jpaQueryFactory.selectFrom(qHomework)
-				.where(qHomework.studyno.eq(studyno)).fetch();
-		return Optional.ofNullable(homeworkList);
-	}
 	
 	@Override
 	@Transactional

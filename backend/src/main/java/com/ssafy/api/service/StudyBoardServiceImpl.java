@@ -26,26 +26,14 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 	FileService fileService;
 	
 	@Override
-	@Transactional
-	public boolean createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, MultipartFile files) {
+	public int createStudyBoard(StudyBoardCreatePostReq studyBoardInfo, MultipartFile files) {
 		StudyBoard studyBoard = new StudyBoard();
 		studyBoard.setContent(studyBoardInfo.getContent());
 		studyBoard.setStudyno(studyBoardInfo.getStudyno());
 		studyBoard.setTitle(studyBoardInfo.getTitle());
 		studyBoard.setUserno(studyBoardInfo.getUserno());
-		int boardno = -1;
-		boardno = studyBoardRepository.save(studyBoard).getBoardno();
-		if(boardno >= 0) {
-			if(!ObjectUtils.isEmpty(files)) {
-				if(boardno >= 0) {
-					FileSavePostReq file = new FileUtil(files, "boardfiles").toFile();
-					fileService.saveFile(file, boardno);
-				}
-			}
-			return true;
-		}else {
-			return false;
-		}
+		
+		return studyBoardRepository.save(studyBoard).getBoardno();
 	}
 
 	@Override
@@ -64,14 +52,9 @@ public class StudyBoardServiceImpl implements StudyBoardService {
 
 	@Override
 	@Transactional
-	public boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo, MultipartFile files) {
+	public boolean modifyStudyBoard(StudyBoardPutReq studyBoardPutInfo) {
 		if(Optional.ofNullable(studyBoardRepository.findById(studyBoardPutInfo.getBoardno())).get() != null) {
 			studyBoardRepository.modifyStudyBoard(studyBoardPutInfo);
-			fileService.deleteFileByBoardno(studyBoardPutInfo.getBoardno());
-			if(!ObjectUtils.isEmpty(files)) {
-				FileSavePostReq file = new FileUtil(files, "boardfiles").toFile();
-				fileService.saveFile(file, studyBoardPutInfo.getBoardno());
-			}
 			return true;
 		}
 		else

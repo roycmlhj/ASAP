@@ -11,7 +11,6 @@ import com.ssafy.db.entity.UserHomework;
 
 @Repository
 public interface HomeworkRepositoryCustom {
-	Optional<List<Homework>> findByStudyno(int studyno);
 	void modifyHomework(HomeworkPutReq homeworkPutInfo);
 	void deleteHomework(int homeworkno);
 }

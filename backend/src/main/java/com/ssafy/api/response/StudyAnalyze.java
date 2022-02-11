@@ -12,7 +12,6 @@ public class StudyAnalyze {
 	int total_time;
 	List<StudyTime> studyTime = new ArrayList<StudyTime>();
 	
-	
 	public void addStudyTime(StudyTime studytimeadd) {
 		studyTime.add(studytimeadd);
 	}

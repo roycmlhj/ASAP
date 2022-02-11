@@ -30,7 +30,7 @@ import lombok.Setter;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int userno;
+	Integer userno;
 	@Column
 	String email;
 	@JsonIgnore
@@ -42,7 +42,6 @@ public class User {
 	String mainCategory;
 	@Column
 	String interests;
-	/////////////////////////
 	@Column
 	String regidate;
 	@Column(name = "is_admin")
@@ -74,7 +73,6 @@ public class User {
 	@JoinColumn(name = "userno")
 	List<Board> boardList = new ArrayList<>();
 	
-	//studyBaord와의 관계 추가
 	@OneToMany
 	@JoinColumn(name = "userno")
 	List<StudyBoard> studyBoardList = new ArrayList<>();

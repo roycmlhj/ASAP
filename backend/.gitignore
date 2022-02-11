@@ -39,5 +39,6 @@ out/
 ### VS Code ###
 .vscode/
 
-### Image ###
-file_{profiles, boardfiles, homeworkfiles}/
+### Properties ###
+s3.properties
+mail.properties
