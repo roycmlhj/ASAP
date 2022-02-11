@@ -109,4 +109,10 @@ public class HomeworkServiceImpl implements HomeworkService {
 		return homework;
 	}
 
+	@Override
+	public List<UserHomework> getUploadHomework(int homeworkno) {
+		List<UserHomework> userHomeworkList = userHomeworkRepository.findByHomeworkno(homeworkno);
+		return userHomeworkList;
+	}
+
 }
