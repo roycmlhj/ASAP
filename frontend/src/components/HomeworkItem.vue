@@ -8,12 +8,22 @@
 <template>
   <div>
     <div id="container">
-      <div class="content" :style="{ height: assignment.homework.content.length + 230 + 'px'}">
+      <div class="content" :style="{ height: assignment.homework.content.length + 350 + 'px'}">
         <p><strong>작성자 : {{ assignment.nickname }}</strong></p>
         <p>{{ assignment.homework.content }}</p>
-        <b-form-file ref="file" method="post" enctype="multipart/form-data" class="mt-3"> 
-        </b-form-file>
-        <b-button class="mt-2 float-right" @click="uploadFile()" style="background-color: skyblue; border: none;">Add</b-button>
+        <p class="p">
+          <b-form-file ref="file" method="post" enctype="multipart/form-data" class="mt-3"> 
+          </b-form-file>
+          <b-button class="mt-2" @click="uploadFile()" style="background-color: skyblue; border: none;">Add</b-button>
+        </p>
+        <p class="mb-1"><strong>과제 제출 리스트</strong></p>
+        <div v-for="userHomework in userHomeworkList" :key="userHomework.id">
+          <p class="p d-flex justify-content-between">
+            {{userHomework.nickname}} - <a :href="userHomework.userHomewrok.filepath" download>{{ userHomework.userHomewrok.ogfilename }}</a> 
+            
+          </p>
+          
+        </div>
       </div>
       <div class="mt-2 mb-3">
         <b-button v-if="userno==homeworkUserno" @click="deleteHomework(assignment.homework.homeworkno)">삭제</b-button>
@@ -81,6 +91,7 @@ export default {
       },
       userno: 0,
       homeworkUserno: this.assignment.homework.userno,
+      userHomeworkList: null,
     }
   },
   props: {
@@ -154,13 +165,29 @@ export default {
         .catch(err => {
           console.log(err)
         })
-    }
+    },
+    getUserHomeworkList: function () {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/homework/uploadList/${this.homework.homeworkno}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res.data,1012310)
+          this.userHomeworkList = res.data.userHomeworkInfoList
+          console.log(this.userHomeworkList, 111333)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
   },
     created() {
     const token = localStorage.getItem('jwt')
     const decoded = jwt_decode(token)
     const userno = decoded.userno
     this.userno = userno
+    this.getUserHomeworkList()
     console.log(this.assignment)
   }
 }
@@ -179,6 +206,8 @@ export default {
     word-break: break-all;
     white-space:pre;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
   }
   .content:before {
     content: '';
@@ -198,5 +227,8 @@ export default {
   } 
   button:hover { 
     background-color: rgb(79, 138, 216); 
+  }
+  .p {
+    margin: 0px;
   }
 </style>
