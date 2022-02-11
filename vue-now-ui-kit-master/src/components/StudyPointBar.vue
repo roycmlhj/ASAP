@@ -1,0 +1,66 @@
+/*
+    작성자 : 한슬기
+    생성일 : 2022.02.09
+    마지막 업데이트 : 2022.02.09
+    
+    마이페이지 > 스터디 포인트
+ */
+<template>
+  <div>
+    <h5><strong>스터디 포인트</strong></h5>
+    <div>
+      <p v-if="this.userInfo.level == 1" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="star"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
+      </p>
+      <p v-if="userInfo.level == 2" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="bahai"/>
+      </p>
+      <p v-if="userInfo.level == 3" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="bahai"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+      </p>
+      <p v-if="userInfo.level == 4" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="trophy"/>
+      </p>
+      <p v-if="userInfo.level == 5" class="d-flex justify-content-between">
+        <font-awesome-icon class="fa-2x mb-2" icon="award"/>
+        <font-awesome-icon class="fa-2x mb-2" icon="trophy"/>
+      </p>
+    </div>
+    <b-progress :max="max" height="3rem">
+      <b-progress-bar :value="value" style="background-color: #78c0e2;">
+        <span><strong>{{ value.toFixed(2) }} / {{ max }}</strong></span>
+      </b-progress-bar>
+    </b-progress>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'StudyPointBar',
+  props: {
+    userInfo: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      value: 66.7,
+      // value: this.userInfo.exp,
+      max: 100
+    }
+  },
+}
+</script>
+
+<style scoped>
+  p {
+    margin: 0;
+  }
+  h5 {
+    text-align: start;
+  }
+</style>
