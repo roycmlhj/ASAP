@@ -16,11 +16,11 @@ import lombok.Setter;
 @ApiModel("UserHomeworkListResponse")
 public class UserHomeworkListRes {
 	@ApiModelProperty(name = "user homework 정보")
-	List<UserHomework> userHomeworkList;
+	List<UserHomeworkInfo> userHomeworkInfoList;
 	
-	public static UserHomeworkListRes of(List<UserHomework> userHomeworkList) {
+	public static UserHomeworkListRes of(List<UserHomeworkInfo> userHomeworkInfoList) {
 		UserHomeworkListRes res = new UserHomeworkListRes();
-		res.userHomeworkList = userHomeworkList;
+		res.userHomeworkInfoList = userHomeworkInfoList;
 		return res;
 	}
 }

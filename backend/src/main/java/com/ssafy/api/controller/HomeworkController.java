@@ -32,6 +32,7 @@ import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
 import com.ssafy.api.response.HomeworkRes;
+import com.ssafy.api.response.UserHomeworkInfo;
 import com.ssafy.api.response.UserHomeworkListRes;
 import com.ssafy.api.service.AwsS3Service;
 import com.ssafy.api.service.HomeworkService;
@@ -185,7 +186,7 @@ public class HomeworkController {
 	}
 	
 	@GetMapping("/uploadList/{homeworkno}")
-	@ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드한다.")
+	@ApiOperation(value = "업로드 파일들 확인", notes = "업로드 파일들을 확인한다.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공"),
 		@ApiResponse(code = 401, message = "실패"),
@@ -194,7 +195,11 @@ public class HomeworkController {
 	public ResponseEntity<UserHomeworkListRes> uploadHomeworkList(
 			@PathVariable("homeworkno") @ApiParam(value = "업로드 확인할 homeworkno", required = true) int homeworkno) throws IOException {
 		
+		List<UserHomeworkInfo> userHomeworkInfoList = new ArrayList<UserHomeworkInfo>();
 		List<UserHomework> userHomeworkList = homeworkService.getUploadHomework(homeworkno);
-		return ResponseEntity.status(200).body(UserHomeworkListRes.of(userHomeworkList));
+		for(int i = 0; i < userHomeworkList.size(); i++) {
+			userHomeworkInfoList.add(new UserHomeworkInfo(userHomeworkList.get(i), userService.getUserByUserno(userHomeworkList.get(i).getUserno()).getNickname()));
+		}
+		return ResponseEntity.status(200).body(UserHomeworkListRes.of(userHomeworkInfoList));
 	}
 }
