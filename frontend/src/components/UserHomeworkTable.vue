@@ -42,6 +42,9 @@ export default {
   props: {
     homeworkList: {
       type: Array,
+    },
+    endHomeworkList: {
+      type: Array,
     }
   },
   methods: {
@@ -51,26 +54,25 @@ export default {
   },
   computed: {
     rows() {
-      
-      return this.homeworkList.length
+      return this.homeworkList.length + this.endHomeworkList.length
     }
   },
   created() {
-    console.log(this.homeworkList,"UHT")
     for(var i = 0; i<this.homeworkList.length;i++){
       this.items.push({
         스터디:this.homeworkList[i].studyname,
         과제: this.homeworkList[i].homework.title,
-        제출기한: this.dateTime(this.homeworkList[i].endDate),
-        진행상태: '',
+        제출기한: this.dateTime(this.homeworkList[i].homework.endDate),
+        진행상태: '진행',
       })
-      console.log(456)
-      if(!this.homeworkList[i].isActivate){
-        this.items[i].진행상태="진행"
-      }else{
-        this.items[i].진행상태="완료"
-      }
-      
+    }
+    for(var j = 0; j < this.endHomeworkList.length; j++){
+      this.items.push({
+        스터디:this.endHomeworkList[j].studyname,
+        과제: this.endHomeworkList[j].homework.title,
+        제출기한: this.dateTime(this.endHomeworkList[j].homework.endDate),
+        진행상태: '완료',
+      })
     }
   }
 }

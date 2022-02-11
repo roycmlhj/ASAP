@@ -13,6 +13,7 @@ import StudyBoardUpdate from '../views/study/UpdateStudyBoard.vue'
 import StudyBoardDetail from '../views/study/StudyBoardDetail.vue'
 import fullCalendar from 'vue-fullcalendar' 
 
+
 Vue.component('full-calendar', fullCalendar)
 
 Vue.use(VueRouter)

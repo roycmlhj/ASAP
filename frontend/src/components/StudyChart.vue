@@ -22,7 +22,7 @@
       PieChart
     },
     props: {
-      StudyTime: {
+      studyTime: {
         type: Array
       }
     },
@@ -46,29 +46,30 @@
         return Math.floor(Math.random() * (50 - 5 + 1)) + 5
       },
       getStudyName: function () {
-        var array = new Array(this.StudyTime.length)
-        for (let index = 0; index < this.StudyTime.length; index++) {
-          array[index] = this.StudyTime[index].studyName
+        var array = new Array(this.studyTime.length)
+        for (let index = 0; index < this.studyTime.length; index++) {
+          array[index] = this.studyTime[index].studyName
         }
         return array
       },
       getBackgroundColor: function () {
-        var array = new Array(this.StudyTime.length)
-        for (let index = 0; index < this.StudyTime.length; index++) {
+        var array = new Array(this.studyTime.length)
+        for (let index = 0; index < this.studyTime.length; index++) {
           array[index] = this.color[index]
         }
         return array
       },
       getStudyTime: function () {
-        var array = new Array(this.StudyTime.length)
-        for (let index = 0; index < this.StudyTime.length; index++) {
-          array[index] = this.StudyTime[index].time
+        var array = new Array(this.studyTime.length)
+        for (let index = 0; index < this.studyTime.length; index++) {
+          array[index] = this.studyTime[index].time
         }
         return array
       }
     },
     created: function () {
       if (localStorage.getItem('jwt')) {
+        console.log(this.studyTime, 555)
         const token = localStorage.getItem('jwt')
         const decoded = jwt_decode(token)
         this.userName = decoded.nickname
@@ -76,6 +77,7 @@
         this.datacollection.labels = studyName
         const backgroundColor = this.getBackgroundColor()
         this.datacollection.datasets[0].backgroundColor = backgroundColor
+
         // const studyTime = this.getStudyTime()
         // this.datacollection.datasets[0].data = studyTime
       } 

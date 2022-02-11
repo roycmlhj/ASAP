@@ -1,7 +1,7 @@
 /*
     작성자 : 한슬기
     생성일 : 2022.01.30
-    마지막 업데이트 : 2022.02.05
+    마지막 업데이트 : 2022.02.10
     
     마이페이지
  */
@@ -17,9 +17,10 @@
       </p>
         <p>{{ userInfo.nickname }}</p>
         <b-button id="show-btn" @click="showModal" variant="link">개인정보수정</b-button>
+        <!-- <b-button href="/file/무직타이거.jpg" download>다운로드</b-button> -->
       </div>
       <div class="col-5 d-flex justify-content-center">
-        <study-chart :StudyTime="StudyTime"></study-chart>
+        <study-chart :studyTime="studyTime"></study-chart>
       </div>
       <div class="col-5">
         <study-point-bar :userInfo="userInfo"></study-point-bar>
@@ -31,7 +32,7 @@
       <user-info-table :studyList="studyList"></user-info-table>
     </div>
     <div class="col-6">
-      <user-homework-table :homeworkList="homeworkList"></user-homework-table>
+      <user-homework-table :homeworkList="homeworkList" :endHomeworkList="endHomeworkList"></user-homework-table>
     </div>
     <b-modal ref="my-modal"
       ok-only 
@@ -82,8 +83,9 @@ export default {
       userNo: null,
       userInfo: null,
       studyList: null,
-      homeworkList: null,
-      StudyTime: null,
+      homeworkList: [],
+      endHomeworkList: [],
+      studyTime: null,
       img: null,
     }
   },
@@ -103,16 +105,26 @@ export default {
       })
         .then(res => {
           console.log(res.data)
+          this.studyTime = res.data.study_analyze.studyTime
           this.userInfo = res.data.user
+          this.user.email = res.data.user.email
           this.img = this.userInfo.image
           this.studyList = res.data.studyList
-          this.homeworkList = res.data.onHomeworkList
-          this.user.email = res.data.user.email
-          this.StudyTime = res.data.study_analyze.studyTime
-          this.homeworkList.sort(function(a,b){
-            if(a.endDate<b.endDate) return -1;
-            if(a.endDate > b.endDate) return 1;
-            if(a.endDate == b.endDate) return 0;
+          for(var i = 0; i<res.data.onHomeworkList.length;i++){ 
+            this.homeworkList.push(res.data.onHomeworkList[i]) 
+          } 
+          for(var j = 0; j<res.data.doneHomeworkList.length;j++){ 
+            this.endHomeworkList.push(res.data.doneHomeworkList[j]) 
+          }
+          this.homeworkList.sort(function(a, b){
+            if(a.homework.endDate < b.homework.endDate) return -1;
+            if(a.homework.endDate > b.homework.endDate) return 1;
+            if(a.homework.endDate == b.homework.endDate) return 0;
+          })
+          this.endHomeworkList.sort(function(a, b){
+            if(a.homework.endDate < b.homework.endDate) return -1;
+            if(a.homework.endDate > b.homework.endDate) return 1;
+            if(a.homework.endDate == b.homework.endDate) return 0;
           })
           console.log(res.data)
         })

@@ -11,9 +11,9 @@
       <div class="content" :style="{ height: assignment.homework.content.length + 230 + 'px'}">
         <p><strong>작성자 : {{ assignment.nickname }}</strong></p>
         <p>{{ assignment.homework.content }}</p>
-        <b-form-file ref="image" method="post" enctype="multipart/form-data" class="mt-3"> 
+        <b-form-file ref="file" method="post" enctype="multipart/form-data" class="mt-3"> 
         </b-form-file>
-        <b-button class="mt-2 float-right" @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
+        <b-button class="mt-2 float-right" @click="uploadFile()" style="background-color: skyblue; border: none;">Add</b-button>
       </div>
       <div class="mt-2 mb-3">
         <b-button v-if="userno==homeworkUserno" @click="deleteHomework(assignment.homework.homeworkno)">삭제</b-button>
@@ -101,6 +101,28 @@ export default {
       this.homework.content = homework.content,
       this.homework.endDate = homework.endDate
       this.$refs['my-modal'].show()
+    },
+    uploadFile: function () {
+      console.log('파일')
+      var file = this.$refs['file'].files[0]
+      const formData = new FormData()
+      formData.append('files', file)
+      formData.append('homeworkno', this.homework.homeworkno)
+      formData.append('userno', this.userno)
+      console.log(formData)
+      axios({
+        method: 'post',
+        url: `http://localhost:8080/api/v1/homework/upload`,
+        headers: this.setToken(),
+        data: formData
+      })
+        .then(res => {
+          console.log(res)
+          window.location.reload()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     deleteHomework: function (homeworkno) {
       axios({

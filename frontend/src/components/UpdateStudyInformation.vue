@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <b-button @click="showModal">수정</b-button>
+    <b-button class="updateBtn" @click="showModal">수정</b-button>
     <b-modal ref="my-modal" title="Update Study" hide-footer>
       <b-form>
         <b-form-group
@@ -137,6 +137,18 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  button { 
+    font-size: 11px; 
+    height: 38px; 
+    background-color: rgb(130, 163, 209); 
+  } 
+  button:hover { 
+    background-color: rgb(79, 138, 216); 
+  }
+  .updateBtn {
+    position: fixed;
+    bottom: 8px;
+    right: 16px;
+  }
 </style>

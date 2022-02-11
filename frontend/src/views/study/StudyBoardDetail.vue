@@ -101,12 +101,10 @@
                   가입 거절
                 </b-button>
                 <router-link :to="`/study/board/update/${boardno}`">
-                  <b-button  class="col-8 bg-warning mb-3">
-                    
-                      글 수정
-                  </b-button>
+                  <b-button  class="col-8 mb-3">글 수정</b-button>
                 </router-link>
               </div>
+              <b-button class="col-8" @click="deleteBoard(boardno)">글 삭제</b-button>
             </div>
           </div>
           
@@ -148,6 +146,7 @@ export default {
       userno:-1,
       member: null,
       studylist: null,
+      membercnt: 0,
     }
   },
   created() {
@@ -177,7 +176,8 @@ export default {
         this.studytag.shift(0)
         this.studytopic = board.category
         this.studyno = board.studyno
-        console.log(this.members, 100)
+        this.maxmember = board.maxmember
+        console.log(this.maxmember, 100)
         //유저가 스터디 소속인지, 스터디장인지, 외부인인지 여부 판별
         //0이면 스터디장, 1이면 신청자 또는 회원 2이면 외부인
         
@@ -190,6 +190,12 @@ export default {
             }
           }
         }
+        for(i =0; i<this.members.length;i++){
+          if(this.members[i].position==0 || this.members[i].position==1){
+            this.membercnt+=1
+          }
+        }
+        console.log(this.membercnt)
         if(this.flag==0){
           for(i = 0; i<this.members.length;i++){
             if(this.members[i].position==2){
@@ -242,6 +248,11 @@ export default {
         studyno: this.studyno,
         userno: this.userno,
       }
+      // if () {
+
+      // } else {
+
+      // }
       axios({
         method: 'post',
         url: 'http://localhost:8080/api/v1/study/apply',
@@ -258,7 +269,11 @@ export default {
       })
     },
     studyAccept() {
-      console.log(this.selected)
+      console.log(this.selected,"here")
+      if(this.selected.length+this.membercnt > this.maxmember){
+        alert("멤버제한을 초과했습니다.")
+        return
+      }
       for(var i=0; i<this.selected.length;i++){
         var data = {
           flag:1,
@@ -303,6 +318,20 @@ export default {
           console.log(err)
         })
       }
+    },
+    deleteBoard: function (boardno) {
+      axios({
+        method: 'delete',
+        url: `http://localhost:8080/api/v1/board/${boardno}`,
+        headers: this.setToken(),
+      })
+        .then(res => {
+          console.log(res)
+          this.$router.push({name: 'StudyBoard'})
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }

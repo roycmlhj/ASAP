@@ -47,7 +47,6 @@ export default {
   },
   computed: {
     rows() {
-      
       return this.studyList.length
     }
   },

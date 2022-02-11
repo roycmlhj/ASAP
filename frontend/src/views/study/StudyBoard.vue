@@ -12,25 +12,15 @@
         <router-link :to="{ name: 'StudyBoardDetail', params: { boardno : study.boardno }}" style="color: black;">
           <b-card class = "mb-3 col-12">
           <div class="row d-flex justify-content-around">
-            <h3>{{study.boardname}}</h3>
-            <b-card-text v-if="study.is_recruit===0">
-              {{"모집중"}}
-            </b-card-text>
-            <b-card-text v-else>
-              {{"모집완료"}}
-            </b-card-text>
-            <b-card-text>
-              {{study.membercnt}}/{{study.maxmember}}
-            </b-card-text>
+            <h4><strong>{{ study.boardname }}</strong></h4>
+            <p>{{ study.category }}</p>
           </div>
           <div class="row d-flex justify-content-around">
-            <b-card-text>
-              <b-badge class="mx-1" v-for="topic in study.topics" v-bind:key="topic"> {{topic}}</b-badge>
-            </b-card-text>
-            <b-card-text>
-              <b-avatar :src="study.studyLeaderIconTag"></b-avatar>
-              {{study.nickname}}
-            </b-card-text>
+            <div>
+              <p class="m-0">모집 인원 : {{ study.maxmember }}</p>
+              <p class="m-0">현재 인원 : {{ study.membercnt }}</p>
+            </div>
+            <p>{{ study.nickname }}</p>
           </div>
           </b-card>
         </router-link>
@@ -44,19 +34,18 @@
 
 <script>
 import axios from 'axios'
-//import axios from 'axios'
 
   export default {
-    components: {},
+    name: 'StudyBoard',
     data() {
       return {
         selected: "boardname",
-        rows:100,
+        rows: 30,
         searchWord : null,
         studies : [],
         currentPage : 1,
         options: [
-          { value: "boardname", text: '게시판 이름'},
+          { value: "boardname", text: '스터디 이름'},
           { value: "nickname", text: '작성자'},
           { value: "category", text: '스터디 카테고리'},
           //{ value: "interests", text: '스터디 주제'},
@@ -64,6 +53,13 @@ import axios from 'axios'
       }
     },
     methods: {
+      setToken: function () {
+        const token = localStorage.getItem('jwt')
+        const config = {
+          Authorization: `JWT ${token}`
+        }
+        return config
+      },
       search(){
         //검색합니다.
         var searchword = this.searchWord
@@ -88,7 +84,7 @@ import axios from 'axios'
         })
         
       },
-      pageClick(button,pageNum) {
+      pageClick(button, pageNum) {
         
         console.log(pageNum)
         if (this.searchWord){
@@ -100,14 +96,11 @@ import axios from 'axios'
             
           })
           .then(res => {
-            console.log(res.data.content)
-            console.log(res.data)
             this.studies = res.data
             for(var i = 0; i<this.studies.length;i++){
               this.studies[i].topics = this.studies[i].interests.split('#')
               this.studies[i].topics.shift()
             }
-            
           })
           .catch(err => {
             console.log(this.title, err)
@@ -117,7 +110,7 @@ import axios from 'axios'
           axios({
             method: 'get',
             url: `http://localhost:8080/api/v1/board/list?page=${pageNum}&size=8`,
-            
+            headers: this.setToken()
           })
           .then(res => {
             console.log(res.data.content)
@@ -145,13 +138,11 @@ import axios from 'axios'
       })
       .then(res => {
         console.log(res.data.content)
-        
         this.studies = res.data.content
         for(var i = 0; i<this.studies.length;i++){
           this.studies[i].topics = this.studies[i].interests.split('#')
           this.studies[i].topics.shift()
         }
-        
       })
       .catch(err => {
         console.log(this.title, err)

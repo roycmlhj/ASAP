@@ -41,13 +41,20 @@
     <p class="icon2">
       <font-awesome-icon type="button" class="fa-2x mr-2" v-b-toggle.sidebar-left-study icon="info-circle"/>
       <b-sidebar id="sidebar-left-study" title="스터디 상세 정보" left shadow>
-        <div class="mt-3 float-left" v-for="study in studyInformation" :key="study.id">
-          <p class="studyInfo">{{ study.studyname }}</p>
-          <p class="studyInfo">{{ study.maker }}</p>
-          <p class="studyInfo">{{ study.category }}</p>
-          <b-badge class="mx-1" v-for="interest in interestList" :key="interest.id"> {{ interest }}</b-badge>
-          <p class="studyInfo">{{ study.description }}</p>
-          <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
+        <div class="d-flex justify-content-center">
+          <div class="mt-3" id="information" v-for="study in studyInformation" :key="study.id">
+            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 이름</p>
+            <p>{{ study.studyname }}</p>
+            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 장</p>
+            <p>{{ study.maker }}</p>
+            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 메인 카테고리</p>
+            <p>{{ study.category }}</p>
+            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 관심분야</p>
+            <p><b-badge class="mx-1" v-for="interest in interestList" :key="interest.id"> {{ interest }}</b-badge></p>
+            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 설명</p>
+            <p>{{ study.description }}</p>
+            <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
+          </div>
         </div>
         </b-sidebar>
       <font-awesome-icon type="button" class="fa-2x mr-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
@@ -218,7 +225,6 @@ export default {
         url: `http://localhost:8080/api/v1/study/calendar/${this.$route.params.study_no}`,
       })
       .then(res => {
-        console.log(res.data.homeworkList)
         const homeworkList = res.data.homeworkList
         for(var i = 0; i < homeworkList.length;i++){
           this.demoEvents.push ({
@@ -230,7 +236,6 @@ export default {
           })
         }
         const scheduleList = res.data.scheduleList
-        console.log(scheduleList)
         for(i = 0; i<scheduleList.length;i++){
           this.demoEvents.push({
             title: "스터디 모임",
@@ -287,7 +292,6 @@ export default {
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       this.userNumber = decoded.userno
-      console.log(this.userNumber)
     } else {
       this.$router.push({name: 'Login'})
     }
@@ -334,5 +338,16 @@ export default {
   }
   a {
     color: black;
+  }
+  #information {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 500px;
+    border: 2px solid skyblue;
+    background-color: white;
+  }
+  .studyInfo {
+    margin: 0;
   }
 </style>
