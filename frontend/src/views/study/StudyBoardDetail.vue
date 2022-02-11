@@ -146,6 +146,7 @@ export default {
       userno:-1,
       member: null,
       studylist: null,
+      membercnt: 0,
     }
   },
   created() {
@@ -175,7 +176,8 @@ export default {
         this.studytag.shift(0)
         this.studytopic = board.category
         this.studyno = board.studyno
-        console.log(this.members, 100)
+        this.maxmember = board.maxmember
+        console.log(this.maxmember, 100)
         //유저가 스터디 소속인지, 스터디장인지, 외부인인지 여부 판별
         //0이면 스터디장, 1이면 신청자 또는 회원 2이면 외부인
         
@@ -188,6 +190,12 @@ export default {
             }
           }
         }
+        for(i =0; i<this.members.length;i++){
+          if(this.members[i].position==0 || this.members[i].position==1){
+            this.membercnt+=1
+          }
+        }
+        console.log(this.membercnt)
         if(this.flag==0){
           for(i = 0; i<this.members.length;i++){
             if(this.members[i].position==2){
@@ -261,7 +269,11 @@ export default {
       })
     },
     studyAccept() {
-      console.log(this.selected)
+      console.log(this.selected,"here")
+      if(this.selected.length+this.membercnt > this.maxmember){
+        alert("멤버제한을 초과했습니다.")
+        return
+      }
       for(var i=0; i<this.selected.length;i++){
         var data = {
           flag:1,

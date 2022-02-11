@@ -32,6 +32,7 @@ import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
 import com.ssafy.api.response.HomeworkRes;
+import com.ssafy.api.response.UserHomeworkListRes;
 import com.ssafy.api.service.AwsS3Service;
 import com.ssafy.api.service.HomeworkService;
 import com.ssafy.api.service.UserHomeworkService;
@@ -181,5 +182,19 @@ public class HomeworkController {
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userHomework.getOgfilename()+ "\"")
 				.body(resource);
+	}
+	
+	@GetMapping("/uploadList/{homeworkno}")
+	@ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드한다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<UserHomeworkListRes> uploadHomeworkList(
+			@PathVariable("homeworkno") @ApiParam(value = "업로드 확인할 homeworkno", required = true) int homeworkno) throws IOException {
+		
+		List<UserHomework> userHomeworkList = homeworkService.getUploadHomework(homeworkno);
+		return ResponseEntity.status(200).body(UserHomeworkListRes.of(userHomeworkList));
 	}
 }
