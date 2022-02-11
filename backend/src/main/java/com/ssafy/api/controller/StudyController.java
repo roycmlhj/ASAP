@@ -97,8 +97,9 @@ public class StudyController {
 		List<Study> studyList = studyService.getStudyList(userno);
 		List<StudyInfo> studyInfoList = new ArrayList<StudyInfo>();
 		
-		for(int i = 0; i < studyList.size(); i++)
+		for(int i = 0; i < studyList.size(); i++) {
 			studyInfoList.add(studyService.getStudyInfo(studyList.get(i).getStudyno(), studyList.get(i).getStudyname(), studyList.get(i).getCategory()));
+		}
 
 		return ResponseEntity.status(200).body(StudyInfoListRes.of(studyInfoList));
 	};
@@ -290,8 +291,10 @@ public class StudyController {
 		List<StudyMemberInfo> studyMemberList = new ArrayList<StudyMemberInfo>();
 		
 		for(int i = 0; i < studyMemberListSimple.size(); i++) {
-			User user = userService.getUserByUserno(studyMemberListSimple.get(i).getUserno());
-			studyMemberList.add(new StudyMemberInfo(studyMemberListSimple.get(i), user.getNickname(), user.getImage()));
+			if(studyMemberListSimple.get(i).getPosition() != 2) {
+				User user = userService.getUserByUserno(studyMemberListSimple.get(i).getUserno());
+				studyMemberList.add(new StudyMemberInfo(studyMemberListSimple.get(i), user.getNickname(), user.getImage()));
+			}
 		}
 		
 		return ResponseEntity.status(200).body(StudyMemberListRes.of(studyMemberList));

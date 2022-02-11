@@ -61,7 +61,7 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 	@Override
 	public long countRecruteUser(int studyno) {
 		long count = jpaQueryFactory.select(qStudyMember).from(qStudyMember)
-				.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.isJoin.lt(2)))
+				.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.position.ne(2)))
 				.fetchCount();
 		return count;
 	}
