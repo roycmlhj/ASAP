@@ -1,6 +1,5 @@
 package com.ssafy.api.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -32,6 +32,8 @@ import com.ssafy.api.request.HomeworkPutReq;
 import com.ssafy.api.response.HomeworkListRes;
 import com.ssafy.api.response.HomeworkNNickname;
 import com.ssafy.api.response.HomeworkRes;
+import com.ssafy.api.response.UserHomeworkInfo;
+import com.ssafy.api.response.UserHomeworkListRes;
 import com.ssafy.api.service.AwsS3Service;
 import com.ssafy.api.service.HomeworkService;
 import com.ssafy.api.service.UserHomeworkService;
@@ -138,7 +140,7 @@ public class HomeworkController {
 	}
 	
 	@PostMapping("/upload")
-	@ApiOperation(value = "파일 업로드", notes = "파일을 업로드한다.")
+	@ApiOperation(value = "과제파일 업로드", notes = "과제를 업로드한다.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공"),
 		@ApiResponse(code = 401, message = "실패"),
@@ -148,9 +150,12 @@ public class HomeworkController {
 			@RequestParam @ApiParam(value="과제 no", required = true) int homeworkno,
 			@RequestParam @ApiParam(value="유저 no", required = true) int userno,
 			@RequestPart @ApiParam(value="과제파일 정보", required = true) MultipartFile files){
-		
 		try {
-			String filePath = awsS3Service.upload(files, "homework");
+			String ogname = files.getOriginalFilename();
+			String extention = FilenameUtils.getExtension(ogname);
+			String newfilename = new MD5Generator(FilenameUtils.getBaseName(ogname)).toString();
+			
+			String filePath = awsS3Service.upload(files, "homework", newfilename+"."+extention);
 			FileSavePostReq file = new FileSavePostReq();
 			file.setFilepath(filePath);
 			file.setFilename("test");
@@ -166,20 +171,53 @@ public class HomeworkController {
 	}
 	
 	@GetMapping("/download/{fileno}")
-	@ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드한다.")
+	@ApiOperation(value = "과제파일 다운로드", notes = "파일을 다운로드한다.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공"),
 		@ApiResponse(code = 401, message = "실패"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<Resource> fileDownload(
+	public ResponseEntity<byte[]> fileDownload(
 			@PathVariable("fileno") @ApiParam(value = "다운로드할 파일 no", required = true) int fileno) throws IOException {
-		
 		UserHomework userHomework = userHomeworkService.getFile(fileno);
-		Path path = Paths.get(userHomework.getFilepath());
-		Resource resource = new InputStreamResource(Files.newInputStream(path));
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userHomework.getOgfilename()+ "\"")
-				.body(resource);
+		return awsS3Service.getObject(userHomework.getFilepath(), userHomework.getOgfilename());
+	}
+	
+	@GetMapping("/uploadList/{homeworkno}")
+	@ApiOperation(value = "업로드 파일들 확인", notes = "업로드 파일들을 확인한다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<UserHomeworkListRes> uploadHomeworkList(
+			@PathVariable("homeworkno") @ApiParam(value = "업로드 확인할 homeworkno", required = true) int homeworkno) throws IOException {
+		
+		List<UserHomeworkInfo> userHomeworkInfoList = new ArrayList<UserHomeworkInfo>();
+		List<UserHomework> userHomeworkList = homeworkService.getUploadHomework(homeworkno);
+		for(int i = 0; i < userHomeworkList.size(); i++) {
+			userHomeworkInfoList.add(new UserHomeworkInfo(userHomeworkList.get(i), userService.getUserByUserno(userHomeworkList.get(i).getUserno()).getNickname()));
+		}
+		return ResponseEntity.status(200).body(UserHomeworkListRes.of(userHomeworkInfoList));
+	}
+	
+	@GetMapping("/filedelete/{fileno}")
+	@ApiOperation(value = "과제파일 삭제", notes = "파일을 삭제한다.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "성공"),
+		@ApiResponse(code = 401, message = "실패"),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> fileDelete(
+			@PathVariable("fileno") @ApiParam(value = "삭제할 파일 no", required = true) int fileno) throws IOException {
+		String filename = userHomeworkService.getFile(fileno).getFilepath();
+		try {
+			awsS3Service.deleteFile(filename);
+		}catch(Exception e) {
+			System.out.println("delete file error"+e.getMessage());
+		}
+		userHomeworkService.deleteFile(fileno);
+		
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 }

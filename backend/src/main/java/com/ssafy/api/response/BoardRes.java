@@ -15,12 +15,14 @@ import lombok.Setter;
 public class BoardRes {
 	@ApiModelProperty(name = "Board entity")
 	Board board;
+	int memberCnt;
 	List<BoardMember> list;
 	
-	public static BoardRes of(Board board, List<BoardMember> list) {
+	public static BoardRes of(Board board, List<BoardMember> list, int memberCnt) {
 		BoardRes res = new BoardRes();
 		res.board = board;
 		res.list = list;
+		res.memberCnt = memberCnt;
 		return res;
 	}
 }

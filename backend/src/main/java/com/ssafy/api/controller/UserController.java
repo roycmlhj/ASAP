@@ -3,7 +3,7 @@ package com.ssafy.api.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +30,7 @@ import com.ssafy.api.service.StudyService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.common.util.MD5Generator;
 import com.ssafy.db.entity.Homework;
 import com.ssafy.db.entity.Study;
 import com.ssafy.db.entity.User;
@@ -210,8 +211,10 @@ public class UserController {
 							contentType.contains("image/gif"))){
 					return ResponseEntity.ok(UserLoginPostRes.of(404, "사용할 수 없는 확장자입니다."));
                 }
-				
-				String path = awsS3Service.upload(files, "image");
+				String ogname = files.getOriginalFilename();
+				String extention = FilenameUtils.getExtension(ogname);
+				String newfilename = new MD5Generator(FilenameUtils.getBaseName(ogname)).toString();
+				String path = awsS3Service.upload(files, "image", newfilename+"."+extention);
 				userService.saveProfile(path, userno);
 			}else {
 				userService.saveProfile("no", userno);

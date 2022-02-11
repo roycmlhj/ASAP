@@ -5,6 +5,7 @@ import com.ssafy.db.entity.UserHomework;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -17,4 +18,5 @@ public interface UserHomeworkRepository extends JpaRepository<UserHomework, Inte
 	Optional<UserHomework> findByUsernoAndHomeworkno(int userno, int homeworkno);
 	@Transactional
 	void deleteByHomeworkno(Integer homeworkno);
+	Optional<List<UserHomework>> findByHomeworkno(int homeworkno);
 }

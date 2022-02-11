@@ -29,6 +29,8 @@ public class HomeworkServiceImpl implements HomeworkService {
 	UserHomeworkRepository userHomeworkRepository;
 	@Autowired
 	StudyService studyService;
+	@Autowired
+	AwsS3Service awsS3Service;
 
 	@Override
 	public boolean createHomework(HomeworkCreatePostReq homeworkInfo) {
@@ -71,7 +73,13 @@ public class HomeworkServiceImpl implements HomeworkService {
 	@Override
 	public boolean deletehomework(int homeworkno) {
 		if(Optional.ofNullable(homeworkRepository.findById(homeworkno)).get() != null) {
-			userHomeworkRepository.deleteUserHomework(homeworkno);
+			List<UserHomework> list = userHomeworkRepository.findByHomeworkno(homeworkno).orElse(null); 
+			if(list != null){
+				for (UserHomework userHomework : list) {
+					awsS3Service.deleteFile(userHomework.getFilepath());
+				}
+				userHomeworkRepository.deleteUserHomework(homeworkno);
+			}
 			homeworkRepository.deleteHomework(homeworkno);
 			return true;
 		}
@@ -107,6 +115,12 @@ public class HomeworkServiceImpl implements HomeworkService {
 		Homework homework = homeworkRepository.findById(homeworkno).get();
 		
 		return homework;
+	}
+	
+	@Override
+	public List<UserHomework> getUploadHomework(int homeworkno) {
+		List<UserHomework> userHomeworkList = userHomeworkRepository.findByHomeworkno(homeworkno).get();
+		return userHomeworkList;
 	}
 
 }

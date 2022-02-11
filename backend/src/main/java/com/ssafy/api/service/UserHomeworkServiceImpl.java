@@ -32,4 +32,15 @@ public class UserHomeworkServiceImpl implements UserHomeworkService {
 		UserHomework userHomework = userHomeworkRepository.findById(userhomeworkno).get();
 		return userHomework;
 	}
+
+	@Override
+	public boolean deleteFile(int userhomeworkno) {
+		UserHomework userhomework = userHomeworkRepository.findById(userhomeworkno).get();
+		userhomework.setFilename(null);
+		userhomework.setFilepath(null);
+		userhomework.setOgfilename(null);
+		userhomework.setIsDone(0);
+		userHomeworkRepository.save(userhomework);
+		return true;
+	}
 }

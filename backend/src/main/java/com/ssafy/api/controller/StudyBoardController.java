@@ -7,28 +7,25 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.cj.log.Log;
 import com.ssafy.api.request.FileSavePostReq;
 import com.ssafy.api.request.StudyBoardCreatePostReq;
 import com.ssafy.api.request.StudyBoardPutReq;
@@ -40,7 +37,6 @@ import com.ssafy.api.service.FileService;
 import com.ssafy.api.service.StudyBoardService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.common.util.FileUtil;
 import com.ssafy.common.util.MD5Generator;
 import com.ssafy.db.entity.FileData;
 import com.ssafy.db.entity.StudyBoard;
@@ -50,8 +46,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
-import retrofit2.http.Multipart;
 
 @Api(value = "StudyBoard API", tags = {"StudyBoard"})
 @RestController
@@ -78,7 +72,7 @@ public class StudyBoardController {
 			@RequestParam(value = "userno") int userno,
 			@RequestParam(value = "title") String title,
 			@RequestParam(value = "content") String content,
-			@RequestPart(value = "files", required = false) MultipartFile files){
+			@RequestPart(required = false) MultipartFile files){
 		StudyBoardCreatePostReq studyBoardInfo = new StudyBoardCreatePostReq();
 		studyBoardInfo.setStudyno(studyno);
 		studyBoardInfo.setUserno(userno);
@@ -89,11 +83,15 @@ public class StudyBoardController {
 		if(boardno >= 0) {
 			if(!ObjectUtils.isEmpty(files)) {
 				try {
-					String filePath = awsS3Service.upload(files, "board");
+					String ogname = files.getOriginalFilename();
+					String extention = FilenameUtils.getExtension(ogname);
+					String newfilename = new MD5Generator(FilenameUtils.getBaseName(ogname)).toString(); 
+					String filePath = awsS3Service.upload(files, "board", newfilename+"."+extention);
+					
 					FileSavePostReq file = new FileSavePostReq();
 					file.setFilepath(filePath);
 					file.setFilename("test");
-					file.setOgfilename(files.getOriginalFilename());
+					file.setOgfilename(ogname);
 					fileService.saveFile(file, boardno);
 				}catch (Exception e) {
 					e.printStackTrace();
@@ -118,7 +116,7 @@ public class StudyBoardController {
 		
 		for(int i = 0; i < studyBoardList.size(); i++) {
 			studyBoardNNicknameList.add(new StudyBoardNNickname(studyBoardList.get(i), 
-										userService.getUserNickname(studyBoardList.get(i).getUserno())));
+			userService.getUserNickname(studyBoardList.get(i).getUserno())));
 		}
 		
 		return ResponseEntity.status(200).body(StudyBoardListRes.of(studyBoardNNicknameList));
@@ -154,16 +152,24 @@ public class StudyBoardController {
 		studyBoardPutInfo.setTitle(title);
 		studyBoardPutInfo.setContent(content);
 		
-		String filename = fileService.getFilebyBoardno(boardno).getOgfilename();
-		fileService.deleteFileByBoardno(boardno);
-		if(!ObjectUtils.isEmpty(files)) {
+		FileData boardfile = fileService.getFilebyBoardno(boardno);
+		if(boardfile != null) { // 게시판에 파일이 있으면 기존파일 삭제
+			String filename = boardfile.getFilepath();
+			fileService.deleteFileByBoardno(boardno);
 			try {
 				awsS3Service.deleteFile(filename);
 			}catch (Exception e) {
 				System.out.println("delete file error"+e.getMessage());
 			}
+		}
+		
+		if(!ObjectUtils.isEmpty(files)) { // 파일이 입력되었을 때
 			try {
-				String filePath = awsS3Service.upload(files, "board");
+				String ogname = files.getOriginalFilename();
+				String extention = FilenameUtils.getExtension(ogname);
+				String newfilename = new MD5Generator(FilenameUtils.getBaseName(ogname)).toString(); 
+				String filePath = awsS3Service.upload(files, "board", newfilename+"."+extention);
+				
 				FileSavePostReq file = new FileSavePostReq();
 				file.setFilepath(filePath);
 				file.setFilename("test");
@@ -189,12 +195,16 @@ public class StudyBoardController {
     })
 	public ResponseEntity<? extends BaseResponseBody> deleteStudyBoard(
 			@PathVariable("boardno") @ApiParam(value = "삭제할 board pk", required = true) int boardno){
-		String filename = fileService.getFilebyBoardno(boardno).getOgfilename();
-		try {
-		    awsS3Service.deleteFile(filename);
-		  }catch(Exception e) {
-		  	System.out.println("delete file error"+e.getMessage());
-		  }
+		FileData boardfile = fileService.getFilebyBoardno(boardno);
+		if(boardfile != null) {
+			String filename = boardfile.getFilepath();
+			fileService.deleteFileByBoardno(boardno);
+			try {
+				awsS3Service.deleteFile(filename);
+			}catch(Exception e) {
+				System.out.println("delete file error"+e.getMessage());
+			}
+		}
 		if(studyBoardService.deleteStudyBoard(boardno)) {
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		}
@@ -209,13 +219,9 @@ public class StudyBoardController {
 		@ApiResponse(code = 401, message = "실패"),
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<Resource> fileDownload(
+	public ResponseEntity<byte[]> fileDownload(
 			@PathVariable("fileno") @ApiParam(value = "다운로드할 파일 no", required = true) int fileno) throws IOException {
 		FileData file = fileService.getFile(fileno);
-		Path path = Paths.get(file.getFilepath());
-		Resource resource = new InputStreamResource(Files.newInputStream(path));
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getOgfilename()+ "\"")
-				.body(resource);
+		return awsS3Service.getObject(file.getFilepath(), file.getOgfilename());
 	}
 }
