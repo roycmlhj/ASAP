@@ -16,6 +16,7 @@ import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.Study;
 import com.ssafy.db.repository.BoardRepository;
 import com.ssafy.db.repository.StudyRepository;
+import com.ssafy.db.repository.UserRepository;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService {
@@ -25,6 +26,8 @@ public class BoardServiceImpl implements BoardService {
 	StudyRepository studyRepository;
 	@Autowired
 	UserService userService;
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public Board createBoard(BoardCreatePostReq boardCreateInfo) {
@@ -84,7 +87,8 @@ public class BoardServiceImpl implements BoardService {
 						board.getMaxmember(),
 						(int)studyRepository.countRecruteUser(board.getStudyno()),
 						board.getTimestamp(),
-						board.getInterests()
+						board.getInterests(),
+						userRepository.findById(board.getUserno()).get().getImage()
 				));
 		return pagingList;
 	}
@@ -118,7 +122,8 @@ public class BoardServiceImpl implements BoardService {
 					board.getMaxmember(), 
 					(int)studyRepository.countRecruteUser(board.getStudyno()), 
 					board.getTimestamp(),
-					board.getInterests());
+					board.getInterests(),
+					userRepository.findById(board.getUserno()).get().getImage());
 			pagingList.add(bp);
 		}
 		return pagingList;
