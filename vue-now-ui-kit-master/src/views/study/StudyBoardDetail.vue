@@ -8,7 +8,7 @@
           </div>
           <div class="col-4" >
             <b-badge class="bg-primary">{{studytopic}}</b-badge><br>
-            <b-badge class="bg-dark mx-1" v-for="tag in studytag" v-bind:key="tag"> {{tag}}</b-badge>
+            <b-badge class="mx-1" v-for="tag in studytag" v-bind:key="tag"> {{tag}}</b-badge>
           </div>
         </div>
         <div class="d-flex col-12" name="detail-body"> 
@@ -333,7 +333,15 @@ export default {
           console.log(err)
         })
     }
-  }
+  },
+  created: function () {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+    } else {
+      this.$router.push({name: 'Login'})
+    }
+  },
 }
 
 </script>

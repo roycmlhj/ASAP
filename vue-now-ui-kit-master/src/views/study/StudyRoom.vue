@@ -1,10 +1,3 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.06
-    
-    스터디 방
- */
 <template>
   <div class="container d-flex justify-content-space-between" id="screen">
     <div class="d-flex align-items-stretch justify-content-between col-1">

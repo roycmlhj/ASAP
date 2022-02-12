@@ -6,9 +6,11 @@
     마이페이지 > 스터디 포인트
  */
 <template>
-  <div>
+  <div class="point">
     <h5><strong>스터디 포인트</strong></h5>
-    <div>
+    <div class="d-flex justify-content-start">현재 레벨 : {{ userInfo.level }}</div>
+    <div class="d-flex justify-content-start">다음 레벨 : {{ userInfo.level + 1 }}</div>
+    <div class="mt-3">
       <p v-if="this.userInfo.level == 1" class="d-flex justify-content-between">
         <font-awesome-icon class="fa-2x mb-2" icon="star"/>
         <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
@@ -57,10 +59,15 @@ export default {
 </script>
 
 <style scoped>
+  .point {
+    display: flex;
+    flex-direction: column;
+  }
   p {
     margin: 0;
   }
   h5 {
     text-align: start;
+    margin: 0px;
   }
 </style>

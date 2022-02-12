@@ -10,121 +10,121 @@
  */
 
 <template>
-<section class="container">
-  <h2><strong>회원가입</strong></h2>
-  <p>회원가입을 하고, ASAP을 이용해보세요!</p>
-  <div class="form">
-    <b-form-group
-      label="이메일 *"
-      label-for="email"
-      label-align-sm="left"
-    >
-      <div class="d-flex">
-        <p>
-          <b-form-input 
-            id="email" 
-            v-model="user.email"
-            :state="emailState"
-            aria-describedby="input-live-help input-live-feedback"
-          >
-          </b-form-input>
-          <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
-            아이디는 이메일 형식이어야 합니다.
-          </b-form-invalid-feedback>
-        </p>
-        <b-button class="ml-1" @click="clickConfirmation">중복확인</b-button>
-        <b-button class="ml-1" @click="emailAuth">인증번호 발송</b-button>
-      </div>
-    </b-form-group>
-    <b-form-group
-      label="인증번호 *"
-      label-for="code"
-      label-align-sm="left"
-    >
-      <div class="d-flex">
-        <b-form-input 
-          id="number" 
-          v-model="code"
-          style="width: 72%;"
+<section>
+  <div class="container col-4">
+    <p class="asap">ASAP</p>
+    <b-card>
+    <h2><strong>SIGN UP</strong></h2>
+    <div class="form">
+      <b-form-group
+        label="이메일 *"
+        label-for="email"
+        label-align-sm="left"
+      >
+        <input
+          id="email" 
+          class="form-control"
+          v-model="user.email"
+          :state="emailState"
+          placeholder="E-mail"
+          aria-describedby="input-live-help input-live-feedback"
         >
-        </b-form-input>
-        <b-button class="ml-2" @click="codeConfirm">인증번호 확인</b-button>
-      </div>
-    </b-form-group>
-    <b-form-group
-      label="비밀번호 *"
-      label-for="password"
-      label-align-sm="left"
-    >
-      <b-form-input 
-        id="password"
-        type="password" 
-        v-model="user.password"
-        :state="passwordState"
-        aria-describedby="input-live-help input-live-feedback"
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+          아이디는 이메일 형식이어야 합니다.
+        </b-form-invalid-feedback>
+        <p class="float-right mb-0">
+          <button type="button" class="btn ml-1" @click="clickConfirmation">중복확인</button>
+          <button type="button" class="btn ml-1" @click="emailAuth">인증번호 발송</button>
+        </p>
+      </b-form-group>
+      <b-form-group
+        label="인증번호 *"
+        label-for="code"
+        label-align-sm="left"
       >
-      </b-form-input>
-      <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
-        비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
-      </b-form-invalid-feedback>
-    </b-form-group>
-    <b-form-group
-      label="비밀번호 확인 *"
-      label-for="passwordcheck"
-      label-align-sm="left"
-    >
-      <b-form-input 
-        id="passwordcheck"
-        type="password" 
-        v-model="passwordcheck"
-        :state="passwordcheckState"
-        aria-describedby="input-live-help input-live-feedback"
+        <input 
+          id="number" 
+          class="form-control"
+          placeholder="Code"
+          v-model="code"
+        >
+        <button type="button" class="btn float-right" @click="codeConfirm">인증번호 확인</button>
+      </b-form-group>
+      <b-form-group
+        label="비밀번호 *"
+        label-for="password"
+        label-align-sm="left"
       >
-      </b-form-input>
-      <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
-        비밀번호가 일치하지 않습니다.
-      </b-form-invalid-feedback>
-    </b-form-group>
-    <b-form-group
-      label="닉네임 *"
-      label-for="nickname"
-      label-align-sm="left"
-    >
-    <div class="d-flex">
-      <p>
-        <b-form-input 
+        <input 
+          id="password"
+          type="password" 
+          class="form-control"
+          placeholder="Password"
+          v-model="user.password"
+          :state="passwordState"
+          aria-describedby="input-live-help input-live-feedback"
+        >
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+          비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group
+        label="비밀번호 확인 *"
+        label-for="passwordcheck"
+        label-align-sm="left"
+      >
+        <input 
+          id="passwordcheck"
+          type="password" 
+          class="form-control"
+          placeholder="Password Confirmation"
+          v-model="passwordcheck"
+          :state="passwordcheckState"
+          aria-describedby="input-live-help input-live-feedback"
+        >
+        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+          비밀번호가 일치하지 않습니다.
+        </b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group
+        label="닉네임 *"
+        label-for="nickname"
+        label-align-sm="left"
+      >
+        <input 
           id="nickname"
+          class="form-control"
           v-model="user.nickname"
+          placeholder="Nickname"
           :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
         >
-        </b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           닉네임은 두 글자 이상이어야 합니다.
         </b-form-invalid-feedback>
-      </p>
-      <b-button class="ml-2" @click="nicnameCheck">중복체크</b-button>
+        <button type="button" class="btn float-right" @click="nicnameCheck">중복체크</button>
+      </b-form-group>
+      <b-form-group
+        label="관심분야 *"
+        label-for="interests"
+        label-align-sm="left"
+        style="width: 70%;"
+      >
+        <b-form-select name="interests" id="interests" v-model="user.mainCategory">
+          <option value="" selected disabled hidden>선택해주세요</option>
+          <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
+        </b-form-select>
+      </b-form-group>
+      <b-form-tags 
+        input-id="interests" 
+        v-model="user.interests"
+        tag-variant="primary"
+        tag-pills
+        placeholder="관심분야를 입력해주세요."
+        ></b-form-tags>
+      <button type="button" class="btn mt-4" style="width: 100%;" @click="clickRegister">회원가입</button>
     </div>
-    </b-form-group>
-    <b-form-group
-      label="관심분야 *"
-      label-for="interests"
-      label-align-sm="left"
-      style="width: 50%;"
-    >
-      <b-form-select name="interests" id="interests" v-model="user.mainCategory">
-        <option value="" selected disabled hidden>선택해주세요</option>
-        <option v-for="interest in interestsList" :key="interest.id" :value="interest.iname">{{ interest.iname }}</option>
-      </b-form-select>
-    </b-form-group>
-    <b-form-tags 
-      input-id="interests" 
-      v-model="user.interests"
-      tag-variant="primary"
-      tag-pills
-      placeholder="관심분야를 입력해주세요."
-      ></b-form-tags>
-    <b-button class="mt-4" style="width: 100%;" @click="clickRegister">회원가입</b-button>
+    </b-card>
   </div>
 </section>
 </template>
@@ -133,9 +133,14 @@
 <script>
 import interest from "./assets/interests.json"
 import axios from 'axios'
+// import { Button } from '@/components/Button.vue'
+
 
 export default {
   name: 'Register',
+  // components: {
+  //   [Button.name]: Button
+  // },
   data: () => {
     return {
       interestsList : interest,
@@ -219,7 +224,8 @@ export default {
     clickRegister: function () {
       // console.log(this.user)
       if (this.emailState == false || this.passwordState == false || this.passwordcheckState == false || this.nameState == false ||
-        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null 
+        this.emailState == null || this.passwordState == null || this.passwordcheckState == null || this.nameState == null ||
+        this.nicFlag == 2 || this.ans == 2 || this.flag == 2 
       ) {
         alert("입력 정보를 확인해주세요.")
       } else {
@@ -286,22 +292,39 @@ export default {
 </script>
 
 <style scoped>
-  .container {
-    width: 35%;
-    /* border: 1px solid black; */
+  section {
+    background-color: #394E79;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .asap {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 80px;
+    background: linear-gradient(-45deg, #5E83BA, #C2D2E9, rgb(235, 160, 196), rgb(244, 089, 163));
+    text-align: center;
+  }
+  .asap {
+    background: linear-gradient(-45deg, #5E83BA, #C2D2E9, rgb(235, 160, 196), rgb(244, 089, 163));
+    color: transparent;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    text-align: center;
   }
   .form {
-    padding: 40px;
+    padding: 0px 40px;
+    display: flex;
+    flex-direction: column;
   }
   button {
     font-size: 11px;
-    height: 38px;
+    height: 35px;
     background-color: rgb(130, 163, 209);
   }
   button:hover {
     background-color: rgb(79, 138, 216);
   }
-  h2 {
-    margin-top: 1rem;
+  h1, h2 {
+    font-family: 'Black Han Sans', sans-serif;
   }
 </style>

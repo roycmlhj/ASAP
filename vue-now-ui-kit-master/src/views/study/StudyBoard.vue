@@ -1,28 +1,36 @@
 <template>
+<section>
+  <div class="page-header2">
+    <div class="d-flex justify-content-center">
+      <font-awesome-icon icon="fa-solid fa-comments" class="icon fa-5x" style="color: rgb(231, 223, 223);" />
+      <div>
+        <h5 id="massage">{{ nickname }}님 관심 분야의 스터디를 찾아보세요!</h5>
+        <h5>찾고 있는 스터디가 없다면 직접 모집해보세요.</h5>
+      </div>
+    </div>
+  </div>
   <div class="container">
-    <b-input-group class = "row">
-      <b-form-select class = "col-2" v-model="selected" :options="options"></b-form-select>
-      <b-form-input class="mb-3" @keyup.enter="search" v-model="searchWord"></b-form-input>
-      <b-input-group-append>
-        <b-button class="mb-3" @click="search">search</b-button>
-      </b-input-group-append>
-    </b-input-group>
+    <h2>스터디 모집 및 찾기</h2>
+    <div class="d-flex justify-content-center">
+      <b-form-select class = "col-2 mt-3" v-model="selected" :options="options"></b-form-select>
+      <input class="form-control col-7" style="width: 180px; height: 40px;" @keyup.enter="search" v-model="searchWord">
+      <button type="button" class="btn btn-round mt-3" @click="search">search</button>
+    </div>
     <span class="row d-flex">
-      <div class="col-6 " v-for="study in studies" v-bind:key="study.id">
+      <div class="col-12" v-for="study in studies" v-bind:key="study.id">
         <router-link :to="{ name: 'StudyBoardDetail', params: { boardno : study.boardno }}" style="color: black;">
-          <b-card class = "mb-3 col-12">
-          <div class="row d-flex justify-content-around">
-            <h4><strong>{{ study.boardname }}</strong></h4>
-            <p>{{ study.category }}</p>
-          </div>
-          <div class="row d-flex justify-content-around">
-            <div>
-              <p class="m-0">모집 인원 : {{ study.maxmember }}</p>
-              <p class="m-0">현재 인원 : {{ study.membercnt }}</p>
+          <div class="card mb-3 col-8">
+            <div class="d-flex justify-content-around col-12">
+              <div class="div col-6">
+                <h4 class="float-left"><strong>{{ study.boardname }}</strong></h4>
+                <p>모집 인원 : {{ study.maxmember }} 현재 인원 : {{ study.membercnt }}</p>
+              </div>
+              <div class="col-6">
+                <h4>{{ study.category }}</h4>
+                <badge v-for="topic in study.topics" class="ml-2" type="info" :key="topic.id">{{ topic }}</badge>
+              </div>
             </div>
-            <p>{{ study.nickname }}</p>
           </div>
-          </b-card>
         </router-link>
       </div>
     </span>
@@ -30,20 +38,29 @@
       <b-pagination :currentPage="currentPage" :total-rows="rows" @page-click="pageClick" :number-of-pages="10"></b-pagination>
     </div>
   </div>
+</section>
 </template>
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
+import {Badge} from '../../components'
+
 
   export default {
     name: 'StudyBoard',
+    components: {
+      [Badge.name]: Badge
+    },
     data() {
       return {
         selected: "boardname",
+        interestList: null,
         rows: 30,
         searchWord : null,
         studies : [],
         currentPage : 1,
+        nickname: null,
         options: [
           { value: "boardname", text: '스터디 이름'},
           { value: "nickname", text: '작성자'},
@@ -119,22 +136,19 @@ import axios from 'axios'
             for(var i = 0; i<this.studies.length;i++){
               this.studies[i].topics = this.studies[i].interests.split('#')
               this.studies[i].topics.shift()
+              console.log(this.studies)
             }
           })
           .catch(err => {
             console.log(this.title, err)
           })
         }
-        
-      }
+      },
     },
     created(){
-      //axios통신으로 게시글 목록 받아오기
-      
       axios({
         method: 'get',
         url: `http://localhost:8080/api/v1/board/list?page=${1}&size=8`,
-        
       })
       .then(res => {
         console.log(res.data.content)
@@ -147,11 +161,51 @@ import axios from 'axios'
       .catch(err => {
         console.log(this.title, err)
       })
-      
-    }
+      if (localStorage.getItem('jwt')) {
+        const token = localStorage.getItem('jwt')
+        const decoded = jwt_decode(token)
+        this.nickname = decoded.nickname
+      } else {
+        this.$router.push({name: 'Login'})
+      }
+    },
   }
 </script>
 
-<style scoped>
+<style scoped> 
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Ubuntu:wght@500&display=swap");
 
+  .page-header2 {
+    width: 100%;
+    height: 150px;
+    background-color: #394E79;
+  }
+  .div {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+  }
+  h5 {
+    color: rgb(231, 223, 223);
+    font-family: 'Ubuntu', sans-serif;
+    margin-bottom: 0px;
+  }
+  #massage{
+    margin-top: 3rem;
+  }
+  .icon {
+    margin-top: 2rem;
+    margin-right: 2rem;
+  }
+  h2 {
+    font-family: 'Black Han Sans', sans-serif;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+  input {
+    margin-top: 16px;
+  }
+  .card:hover {
+    box-shadow: 0 0 50px #C2D2E9;
+  }
 </style>

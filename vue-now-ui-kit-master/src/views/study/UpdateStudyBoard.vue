@@ -183,9 +183,25 @@ export default {
         alert(err)
       })
     }
-  }
+  },
+  created: function () {
+    if (localStorage.getItem('jwt')) {
+      const token = localStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+    } else {
+      this.$router.push({name: 'Login'})
+    }
+  },
 }
 </script>
+
 <style scoped>
-  button { font-size: 15px; height: 38px; background-color: rgb(130, 163, 209); } button:hover { background-color: rgb(79, 138, 216); }
+  button { 
+    font-size: 15px;
+     height: 38px; 
+     background-color: rgb(130, 163, 209); 
+  } 
+  button:hover { 
+    background-color: rgb(79, 138, 216); 
+  }
 </style>

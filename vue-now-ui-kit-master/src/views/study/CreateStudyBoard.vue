@@ -155,8 +155,15 @@ export default {
         console.log(err,1)
         alert(err)
       })
-      console.log(StudyRoomItem)
-    }
+    },
+    created: function () {
+      if (localStorage.getItem('jwt')) {
+        const token = localStorage.getItem('jwt')
+        const decoded = jwt_decode(token)
+      } else {
+        this.$router.push({name: 'Login'})
+      }
+    },
   }
 }
 </script>

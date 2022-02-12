@@ -6,9 +6,9 @@
     마이페이지 > 스터디 파이차트
  */
 <template>
-  <div>
-    <h5><strong>스터디 분석</strong></h5>
-    <p style="text-align : start;">{{ userName }}님의 한달 스터디 시간은 26시간입니다.</p>
+  <div id="container">
+    <h5 class="d-flex justify-content-start"><strong>스터디 분석</strong></h5>
+    <p>{{ userName }}님의 한달 스터디 시간은 26시간입니다.</p>
     <pie-chart :chart-data="datacollection" style="width: 350px;"></pie-chart>
   </div>
 </template>
@@ -89,11 +89,8 @@
 </script>
 
 <style scoped>
-  .container {
+  #container {
     display: flex;
     flex-direction: column;
-  }
-  h5 {
-    text-align: start;
   }
 </style>

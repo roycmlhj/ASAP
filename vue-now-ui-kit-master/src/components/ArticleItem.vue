@@ -1,10 +1,3 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.04
-    
-    스터디 방 > 게시글 수정, 삭제, 상세 정보
- */
 <template>
 <div id="container">
   <div class="content" :style="{ height: post.studyBoard.content.length + 150 + 'px'}">

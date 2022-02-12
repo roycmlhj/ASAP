@@ -8,30 +8,44 @@
 <template>
 <section>
   <div class="container">
-    <h2><strong>Login</strong></h2>
-    <div class="form">
-      <b-form-input 
-        type="text" 
-        id="email"
-        placeholder="E-mail"
-        v-model="user.email"
+    <p class="asap">ASAP</p>
+    <b-card class="col-lg-4">
+      <h2>LOGIN</h2>
+      <div class="form">
+        <b-form-group
+        label="이메일 *"
+        label-for="email"
+        label-align-sm="left"
       >
-      </b-form-input>
-      <b-form-input 
-        type="password" 
-        id="password"
-        placeholder="Password"
-        v-model="user.password"
-        @keyup.enter="login"
+        <input 
+          type="text" 
+          id="email"
+          class="form-control"
+          placeholder="E-mail"
+          v-model="user.email"
+        >
+        </b-form-group>
+      <b-form-group
+        label="비밀번호 *"
+        label-for="email"
+        label-align-sm="left"
       >
-      </b-form-input>
-      <b-form-checkbox class="mt-2" style="float: left;">&nbsp;자동 로그인하기</b-form-checkbox>
-      <b-button @click="login" style="background-color: #C59FDF;">Login</b-button>
-      <div class="mt-4">
-        Didn't you have ID? &nbsp;&nbsp;
-        <router-link :to="{ name: 'Register' }"><strong>Sign up</strong></router-link>
+        <input 
+          type="password" 
+          id="password"
+          class="form-control"
+          placeholder="Password"
+          v-model="user.password"
+          @keyup.enter="login"
+        >
+      </b-form-group>
+        <button type="button" class="btn" @click="login">로그인</button>
+        <div class="mt-2">
+          <p>Didn't you have ID?</p>
+          <router-link :to="{ name: 'Register' }"><p style="color: black;"><strong>Sign up</strong></p></router-link>
+        </div>
       </div>
-    </div>
+    </b-card>
   </div>
 </section>
 </template>
@@ -71,28 +85,39 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  width: 350px;
-  height: 400px;
-  border: 1px solid black;
+section {
+  background-color: #394E79;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
 }
-.form {
-  padding: 40px;
-  width: 100%;
+.asap {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 80px;
+  background: linear-gradient(-45deg, #5E83BA, #C2D2E9, rgb(235, 160, 196), rgb(244, 089, 163));
+  text-align: center;
 }
-button {
-  width: 100%;
-  margin-top: 1.5rem;
-  border: none;
-}
-input {
-  margin-bottom: 1rem;
+.asap {
+  background: linear-gradient(-45deg, #5E83BA, #C2D2E9, rgb(235, 160, 196), rgb(244, 089, 163));
+  color: transparent;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  text-align: center;
 }
 h2 {
-  margin-top: 1rem;
+  font-family: 'Black Han Sans', sans-serif;
 }
-a {
-  text-decoration: none;
-  color: rgb(95, 10, 88)
+.form {
+  padding: 0px 25px;
+  display: flex;
+  flex-direction: column;
+}
+button {
+  font-size: 11px;
+  height: 35px;
+  background-color: rgb(130, 163, 209);
+  }
+button:hover {
+  background-color: rgb(79, 138, 216);
 }
 </style>

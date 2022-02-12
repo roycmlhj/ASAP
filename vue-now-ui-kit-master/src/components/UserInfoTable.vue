@@ -6,9 +6,10 @@
     마이페이지 > 과제, 스터디 목록 테이블
  */
 <template>
-  <div>
-    <h5 class="float-left"><strong>스터디 목록</strong></h5>
-    
+  <div class="studyList">
+    <h5 class="d-flex justify-content-start mb-1"><strong>스터디 목록</strong></h5>
+    <p class="d-flex justify-content-start">진행 중인 스터디 : {{ ingStudy }}개</p>
+    <p class="d-flex justify-content-start">완료한 스터디 : {{ endStudy }}개 </p>
     <b-table
       id="my-table"
       :items="items"
@@ -43,6 +44,8 @@ export default {
       perPage: 5,
       currentPage: 1,
       items : [],
+      endStudy : 0,
+      ingStudy : 0,
     }
   },
   computed: {
@@ -66,16 +69,25 @@ export default {
       })
       if(!this.studyList[i].isActivate){
         this.items[i].진행상태="진행"
+        this.ingStudy += 1
       }else{
         this.items[i].진행상태="종료"
+        this.endStudy += 1
       }
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
   #th {
     background-color: #e2e0e6;
+  }
+  .studyList {
+    display: flex;
+    flex-direction: column;
+  }
+  p {
+    margin: 0;
   }
 </style>

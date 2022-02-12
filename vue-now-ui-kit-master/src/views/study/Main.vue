@@ -217,7 +217,6 @@ export default {
   },
   created: function () {
     if (localStorage.getItem('jwt')) {
-      
       const token = localStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       console.log(decoded)

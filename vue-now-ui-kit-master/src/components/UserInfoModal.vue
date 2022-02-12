@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <th>세부관심분야</th>
-          <td style="width: 70%;"><user-interests :interestList="getInterests(member)"></user-interests></td>
+          <td><user-interests :interestList="getInterests(member)"></user-interests></td>
         </tr>
         <tr>
           <th>Level</th>

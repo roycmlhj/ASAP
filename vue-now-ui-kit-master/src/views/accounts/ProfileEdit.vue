@@ -25,15 +25,15 @@
         label-for="password"
         label-cols-sm="1"
       >
-        <b-form-input 
+        <input 
           id="password"
           type="password" 
           v-model="user.password" 
+          class="form-control"
           :state="passwordState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
         >
-        </b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
         </b-form-invalid-feedback>
@@ -43,15 +43,15 @@
         label-for="passwordcheck"
         label-cols-sm="1"
       >
-        <b-form-input 
+        <input 
           id="passwordcheck" 
           type="password"
+          class="form-control"
           v-model="passwordcheck"
           :state="passwordcheckState"
           aria-describedby="input-live-help input-live-feedback" 
           placeholder="비밀번호를 한번 더 입력해주세요."
         >
-        </b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호가 일치하지 않습니다.
         </b-form-invalid-feedback>
@@ -61,27 +61,27 @@
         label-for="nickname"
         label-cols-sm="1"
       >
-        <b-form-input 
+        <input 
           id="nickname" 
           v-model="user.nickname" 
+          class="form-control"
           :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="닉네임은 2자 이상이어야 합니다."
         >
-        </b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           닉네임은 두 글자 이상이어야 합니다.
         </b-form-invalid-feedback>
       </b-form-group>
     </b-card>
-    <div class="d-flex mt-4">
+    <div class="d-flex">
       <b-card class="col-6" bg-variant="light">
         <div class="image">
           <h5 class="float-left"><strong>이미지 업로드</strong></h5>
         </div>
         <b-form-file ref="image" method="post" enctype="multipart/form-data"> 
         </b-form-file>
-        <b-button class="mt-2 float-right" @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
+        <b-button id="btn" class="mt-2 float-right" @click="imageUpload()">Add</b-button>
         <b-form-checkbox
           id="checkbox-1"
           name="checkbox-1"
@@ -99,45 +99,43 @@
         </b-form-select>
         <b-form-tags v-model="user.interests" no-outer-focus class="mb-2">
           <template v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }">
-            <b-input-group aria-controls="my-custom-tags-list">
+            <div class="d-flex justify-content-around">
               <input
                 v-bind="inputAttrs"
                 v-on="inputHandlers"
                 placeholder="관심 분야를 추가로 입력해주세요."
-                class="form-control">
-              <b-input-group-append>
-                <b-button @click="addTag()" style="background-color: skyblue; border: none;">Add</b-button>
-              </b-input-group-append>
-            </b-input-group>
+                class="form-control col-sm-10 mt-1">
+              <button id="btn" @click="addTag()" type="button" class="btn float-right mt-0">Add</button>
+            </div>
             <ul
               id="my-custom-tags-list"
-              class="list-unstyled d-inline-flex flex-wrap mb-3 mt-3"
+              class="list-unstyled d-inline-flex flex-wrap"
               aria-live="polite"
               aria-atomic="false"
               aria-relevant="additions removals"
             >
-              <b-card
+              <div class="card mr-1"
                 v-for="tag in tags"
                 :key="tag"
                 :id="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 tag="li"
-                class="mt-1 mr-1"
-                body-class="py-1 pr-2 text-nowrap"
+                style="width: 30%;"
               >
                 <strong>{{ tag }}</strong>
-                <b-button
+                <button
                   @click="removeTag(tag)"
                   variant="link"
-                  size="sm"
+                  type="button"
+                  class="btn btn-neutral"
                   :aria-controls="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
-                >remove</b-button>
-              </b-card>
+                >X</button>
+              </div>
             </ul>
           </template>
         </b-form-tags>
       </b-card>
     </div>
-    <b-button class="btn1 mt-5 float-right" @click="userEdit">저장하기</b-button>
+    <b-button id="btn" type="button" class="btn float-right" @click="userEdit">저장하기</b-button>
   </div>
 </section>
 </template>
@@ -322,21 +320,27 @@ export default {
 </script>
 
 <style scoped>
- img {
-   width: 100px;
-   height: 100px;
-   border-radius: 70%;
- }
- .btn1 {
-   background-color: palevioletred;
-   border: none;
- }
- input {
-   border: none;
-   border-bottom: solid 1px;
- }
- .image {
-   display: flex;
-   flex-direction: row;
- }
+  .container {
+    margin-top : 3rem;
+  }
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%;
+  }
+  .image {
+    display: flex;
+    flex-direction: row;
+  }
+  a {
+    color: black;
+  }
+  #btn {
+  font-size: 11px;
+  height: 35px;
+  background-color: rgb(130, 163, 209);
+  }
+  #btn:hover {
+    background-color: rgb(79, 138, 216);
+  }
 </style>

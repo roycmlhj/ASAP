@@ -1,10 +1,3 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.07
-    
-    스터디 방 > 게시글 제목
- */
 <template>
   <div class="container">
     <div v-for="studyBoard in studyBoardList" :key="studyBoard.id">

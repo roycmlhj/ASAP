@@ -1,33 +1,80 @@
 <template>
   <div id="app">
-    <div id="nav">
-      
-      <span v-if="isLogin">
-        <router-link :to="{ name: 'Main' }">MyStudy</router-link> |
-        <router-link :to="{ name: 'MyPage' }">MyPage</router-link> |
-        <router-link :to="{ name: 'StudyBoard'}">StudyBoard</router-link> | 
-        <router-link :to="{ name: 'Admin' }">Admin</router-link> |
-        <router-link @click.native="logout" to="#">Logout</router-link>
-      </span>
-      <span v-else>
-        <router-link :to="{ name: 'Register' }">Sign up</router-link> |
-        <router-link :to="{ name: 'Login' }">Login</router-link>
-      </span>
-    </div>
+    <nav class="navbar bg-white navbar-expand-lg navbar-relative mb-0">
+      <div class="container">
+        <div class="navbar-translate">
+          <div class="navbar-translate">
+            <p class="navbar-brand" style="color: #5E83BA">ASAP</p>
+          </div>
+        </div>
+        <span v-if="isLogin">
+          <div data-color="orange" id="navigation" class="navbar-collapse collapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="/study/main" class="nav-link">
+                  <i class="now-ui-icons objects_globe"></i>
+                  <p>My Study</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/study/studyboard" class="nav-link">
+                  <i class="now-ui-icons objects_globe"></i>
+                  <p>Study Board</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/user/detail" class="nav-link">
+                  <i class="now-ui-icons users_circle-08"></i>
+                  <p>Profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a type="button" @click="logout" href="#" class="nav-link">
+                  <i class="now-ui-icons ui-1_settings-gear-63"></i>
+                  <p>Logout</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+          </span>
+          <span v-else>
+            <div data-color="orange" id="navigation" class="navbar-collapse collapse">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a href="/user/register" class="nav-link">
+                    <i class="now-ui-icons users_circle-08"></i>
+                    <p>Sign up</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a type="button" @click="logout" href="/user/login" class="nav-link">
+                    <i class="now-ui-icons ui-1_settings-gear-63"></i>
+                    <p>Login</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </span>
+      </div>
+    </nav>
     <router-view @login="isLogin = true"/>
   </div>
 </template>
 
 
 <script>
+// import navbar from '@/components/Navbar/Navbar.vue';
+
 export default {
   name: 'App',
+  components: {
+    // navbar,
+  },
   data: function () {
     return {
       isLogin: false,
     }
   },
-  
   methods: {
     logout: function () {
       this.isLogin = false
@@ -46,9 +93,8 @@ export default {
 
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Nanum+Gothic:wght@400;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
-
 #app {
   font-family: 'Nanum Gothic', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -57,7 +103,10 @@ export default {
   color: #2c3e50;
   min-height: 100vh;
 }
-#nav {
+a {
+  color: #C2D2E9;
+}
+/* #nav {
   padding: 30px;
 }
 #nav a {
@@ -66,5 +115,5 @@ export default {
 }
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 </style>
