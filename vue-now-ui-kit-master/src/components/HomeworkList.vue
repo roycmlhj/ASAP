@@ -8,7 +8,7 @@
 <template>
   <div class="container">
     <div v-for="homework in homeworkList" :key="homework.id">
-      <a href="#" @click="getHomeworkInformation(homework.homework.homeworkno)"><strong>{{ homework.homework.homeworkno }}. {{ homework.homework.title }}</strong></a>
+      <a href="#" @click="getHomeworkInformation(homework.homework.homeworkno)"><strong> {{ homework.homework.title }}</strong></a>
       <hr>
       <p v-if="assignment && assignment.homework.homeworkno == homework.homework.homeworkno">
         <homework-item :assignment="assignment"></homework-item>

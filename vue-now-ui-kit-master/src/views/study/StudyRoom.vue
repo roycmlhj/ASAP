@@ -6,11 +6,11 @@
     스터디 방
  */
 <template>
-  <div class="container">
-    <div class="d-flex justify-content-between">
+  <div class="container d-flex justify-content-space-between" id="screen">
+    <div class="d-flex align-items-stretch justify-content-between col-1">
       <div class="icon">
-        <font-awesome-icon type="button" class="fa-2x mb-2" icon="bell"/>
-        <font-awesome-icon type="button" class="fa-2x mb-2" v-b-toggle.sidebar-right icon="edit"/>
+        
+        <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-right icon="edit"/>
           <b-sidebar id="sidebar-right" title="스터디 게시판" right shadow>
             <div class="px-3 py-2">
               <p class="article">
@@ -19,7 +19,7 @@
               </p>
             </div>
           </b-sidebar>
-        <font-awesome-icon type="button" class="clipboard fa-2x mb-2" v-b-toggle.sidebar-right-homework icon="clipboard"/>
+        <font-awesome-icon type="button" class="clipboard fa-2x my-2" v-b-toggle.sidebar-right-homework icon="clipboard"/>
         <b-sidebar id="sidebar-right-homework" title="과제 게시판" right shadow>
           <div class="px-3 py-2">
             <p class="homework">
@@ -28,62 +28,58 @@
             </p>
           </div>
         </b-sidebar>
-        <font-awesome-icon class="fa-2x mb-2" v-b-modal.modal-xl type="button" id="show-btn" @click="calendarShowModal" icon="calendar-week"/>
+        <font-awesome-icon class="fa-2x my-2" v-b-modal.modal-xl type="button" id="show-btn" @click="calendarShowModal" icon="calendar-week"/>
           <b-modal ref="calendar-modal" id="modal-xl" size="xl" hide-header hide-footer>
             <calendar :studyLeaderno="leader" :studyno="this.$route.params.study_no" :demoEvents="demoEvents"></calendar>
           </b-modal>
-        <font-awesome-icon type="button" class="fa-2x mb-2" icon="cog"/>
-      </div>
-      <div>
-        <p></p>
+        <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-left-study icon="info-circle"/>
+        <b-sidebar id="sidebar-left-study" title="스터디 상세 정보" right shadow>
+          <div class="d-flex justify-content-center">
+            <div class="mt-3" id="information" v-for="study in studyInformation" :key="study.id">
+              <!-- <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="cir"cle-notch"/>스터디 이름</p> -->
+              <h3 style="font-family: 'Nanum Pen Script', cursive;">{{ study.studyname }}</h3>
+              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 장 </p>
+              <p><badge type="warning">  {{ study.maker }}</badge></p>
+              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 메인 카테고리</p>
+              <p><badge type="success" class="mx-1">{{ study.category }}</badge></p>
+              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 관심분야</p>
+              <p><badge type="info" class="mx-1" v-for="interest in interestList" :key="interest.id"> {{ interest }}</badge></p>
+              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 설명</p>
+              <p style="font-size:15px;">{{ study.description }}</p>
+              <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
+            </div>
+          </div>
+          </b-sidebar>
+        <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
+        <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" right shadow>
+          <div class="px-5 py-2 mt-3" v-for="members in studyMemberList" :key="members.id">
+            <div class="d-flex justify-content-between" v-for="member in members" :key="member.id">
+              <div class="d-flex">
+                <p v-if="member.image">
+                  <img :src="member.image" alt="default-img">
+                </p>
+                <p v-else>
+                  <img src="./../accounts/assets/default.png">
+                </p>
+                <a id="show-btn" href="#" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
+              </div>
+              <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 28px; background-color: #FF6464;" @click="userKick(member.studyMember.userno)">강퇴</b-button>
+            </div>
+          </div>
+          <b-button class="kick" href="#" @click="userKick(userNumber)">회원탈퇴</b-button>
+        </b-sidebar>
+        <b-modal ref="my-modal" :member="member" hide-header hide-footer>
+          <div class="d-block text-center">
+            <div v-if="member">
+              <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
+            </div>
+          </div>
+        </b-modal>
       </div>
     </div>
-    <p class="icon2">
-      <font-awesome-icon type="button" class="fa-2x mr-2" v-b-toggle.sidebar-left-study icon="info-circle"/>
-      <b-sidebar id="sidebar-left-study" title="스터디 상세 정보" left shadow>
-        <div class="d-flex justify-content-center">
-          <div class="mt-3" id="information" v-for="study in studyInformation" :key="study.id">
-            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 이름</p>
-            <p>{{ study.studyname }}</p>
-            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 장</p>
-            <p>{{ study.maker }}</p>
-            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 메인 카테고리</p>
-            <p>{{ study.category }}</p>
-            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 관심분야</p>
-            <p><b-badge class="mx-1" v-for="interest in interestList" :key="interest.id"> {{ interest }}</b-badge></p>
-            <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="circle-notch"/>스터디 설명</p>
-            <p>{{ study.description }}</p>
-            <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
-          </div>
-        </div>
-        </b-sidebar>
-      <font-awesome-icon type="button" class="fa-2x mr-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
-      <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" left shadow>
-        <div class="px-5 py-2 mt-3" v-for="members in studyMemberList" :key="members.id">
-          <div class="d-flex justify-content-between" v-for="member in members" :key="member.id">
-            <div class="d-flex">
-              <p v-if="member.image">
-                <img :src="member.image" alt="default-img">
-              </p>
-              <p v-else>
-                <img src="./../accounts/assets/default.png">
-              </p>
-              <a id="show-btn" href="#" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
-            </div>
-            <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 28px; background-color: black;" @click="userKick(member.studyMember.userno)">강퇴</b-button>
-          </div>
-        </div>
-        <a class="kick" href="#" @click="userKick(userNumber)">회원탈퇴</a>
-      </b-sidebar>
-      <b-modal ref="my-modal" :member="member" hide-header hide-footer>
-        <div class="d-block text-center">
-          <div v-if="member">
-            <user-info-modal :member="member" :studylist="studylist"></user-info-modal>
-          </div>
-        </div>
-      </b-modal>
-      <font-awesome-icon type="button" class="fa-2x mr-2" icon="comment-dots"/>
-    </p>
+    <div class = "col-11" id="RTC area">
+
+    </div>
   </div>
 </template>
 
@@ -97,7 +93,7 @@ import HomeworkList from '../../components/HomeworkList.vue'
 import UpdateStudyInformation from '@/components/UpdateStudyInformation.vue'
 import UserInfoModal from '@/components/UserInfoModal.vue'
 import Calendar from '@/components/Calendar.vue'
-
+import {Badge} from '../../components'
 
 export default {
   name: 'StudyRoom',
@@ -109,6 +105,7 @@ export default {
     UpdateStudyInformation,
     UserInfoModal,
     Calendar,
+    [Badge.name]: Badge
   },
   data: function () {
     return {
@@ -300,12 +297,16 @@ export default {
 </script>
 
 <style scoped>
+  #screen{
+    height:800px;
+  }
   .icon {
     display: flex;
     flex-direction: column;
   }
   .icon2 {
-    float: right;
+    
+    align-items:flex-end
   }
   .kick {
     position: fixed;

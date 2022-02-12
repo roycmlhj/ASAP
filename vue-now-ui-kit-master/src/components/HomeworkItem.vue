@@ -20,7 +20,7 @@
         <div v-for="userHomework in userHomeworkList" :key="userHomework.id">
           <p class="p d-flex justify-content-between">
             {{userHomework.nickname}} - <a :href="userHomework.userHomewrok.filepath" download>{{ userHomework.userHomewrok.ogfilename }}</a> 
-            
+            <a v-if="userHomework.userHomewrok.filepath && userHomework.userHomewrok.userno==userno" @click="deleteFile(userHomework.userHomewrok.userhomeworkno)" style="color:red;">X</a>
           </p>
           
         </div>
@@ -135,6 +135,23 @@ export default {
           console.log(err)
         })
     },
+    deleteFile: function(fileno){
+      console.log(fileno)
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/homework/filedelete/${fileno}`,
+       
+      })
+      .then(res => {
+        console.log(res.data)
+        alert("과제 삭제 완료")
+        window.location.reload()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+    ,
     deleteHomework: function (homeworkno) {
       axios({
         method: 'delete',
@@ -230,5 +247,8 @@ export default {
   }
   .p {
     margin: 0px;
+  }
+  p{
+    font-size:15px;
   }
 </style>

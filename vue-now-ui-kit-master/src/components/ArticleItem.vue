@@ -11,6 +11,14 @@
     <p><strong>작성자 : {{ post.nickname }}</strong></p>
     <p>{{ post.studyBoard.content }}</p>
   </div>
+  
+  <div class="mt-2" v-for="file in post.studyBoard.fileList" :key="file.id">
+    <p class="p d-flex justify-content-between">
+      <a :href="file.filepath" download>{{ file.ogfilename }}</a> 
+      
+    </p> 
+    
+  </div>
   <div class="mt-2 mb-3">
     <b-button v-if="userno===articleuserno" @click="deleteArticle(post.studyBoard.boardno)">삭제</b-button>
     <b-button v-if="userno===articleuserno" id="show-btn" @click="showModal">수정</b-button>
@@ -140,9 +148,13 @@ export default {
 </script>
 
 <style scoped>
+
   #container {
     display: flex;
     flex-direction: column;
+  }
+  p{
+    font-size:15px;
   }
   .content {
     border: 1px solid #0000004d;

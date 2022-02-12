@@ -28,14 +28,13 @@
       label="Content"
       label-for="content"
     >
-      <b-form-textarea 
+      <b-form-textarea
         id="content" 
         type="text"
         v-model="homework.content"
-        rows="6"
-        max-rows="6"
-      >
-      </b-form-textarea>
+        rows="10"
+      ></b-form-textarea>
+      
     </b-form-group>
     <b-form-group
       label="Date"
@@ -118,5 +117,8 @@ export default {
   } 
   button:hover { 
     background-color: rgb(79, 138, 216); 
+  }
+  content {
+    height:100px;
   }
 </style>

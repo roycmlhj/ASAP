@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+      
       <span v-if="isLogin">
         <router-link :to="{ name: 'Main' }">MyStudy</router-link> |
         <router-link :to="{ name: 'MyPage' }">MyPage</router-link> |
@@ -26,6 +27,7 @@ export default {
       isLogin: false,
     }
   },
+  
   methods: {
     logout: function () {
       this.isLogin = false
@@ -44,6 +46,7 @@ export default {
 
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 
 #app {

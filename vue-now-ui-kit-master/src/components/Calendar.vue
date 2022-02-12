@@ -4,8 +4,10 @@
       @dayClick="dayClick"
       @eventClick="eventClick"
     ></full-calendar>
-    <b-modal
-      v-model="modalShow1"
+    <modal
+      :show.sync = "modalShow1"
+      class="modal-warning"
+      :show-close="false"
       @ok="createSchedule"
       title="Create schedule"
       ok-only
@@ -15,25 +17,38 @@
         <b-form-select class="col-2" v-model="selectedHour" :options="optionsHour"></b-form-select><p class="mt-2">&nbsp;시&nbsp;&nbsp;&nbsp;</p>
         <b-form-select class="col-2" v-model="selectedMinute" :options="optionsMinute"></b-form-select><p class="mt-2">&nbsp;분</p>
       </div>
-    </b-modal>
-    <b-modal
-      v-model="modalShow2"
+      <div class = "d-flex justify-content-end">
+        <button type="button" class = "btn mx-1" @click="createSchedule" link>Create</button>
+        <button type="button" class = "btn mx-1" link @click="modalShow1 = false">Close</button>
+      </div>
+    </modal>
+    <modal
+      class="modal-warning"
+      :show.sync = "modalShow2"
+      :show-close="false"
       @ok="deleteSchedule"
       title="Delete schedule"
       ok-only
     >
       <h5>스터디 일정을 삭제하시겠습니까?</h5>
-    </b-modal>
+      <div class = "d-flex justify-content-end">
+        <button type="button" class = "btn mx-1" @click="deleteSchedule" link> Delete </button>
+        <button type="button" class = "btn mx-1" link @click="modalShow2 = false">Close</button>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import {Modal} from './'
 export default {
   name: 'calendar',
+  
   components: {
-   'full-calendar': require('vue-fullcalendar')
+   'full-calendar': require('vue-fullcalendar'),
+   Modal
   },
   props: {
     demoEvents: {

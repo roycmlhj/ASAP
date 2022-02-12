@@ -31,7 +31,7 @@
         required
       >
       </b-form-textarea>
-      <b-form-file class="mt-5" multiple="multiple" ref="file" method="post" enctype="multipart/form-data">
+      <b-form-file class="mt-5" ref="file" method="post" enctype="multipart/form-data">
       </b-form-file>
       <b-button class="mt-5" style="float: right; background-color: rgb(130, 163, 209);" @click="createArticle()">확인</b-button>
     </b-form-group>

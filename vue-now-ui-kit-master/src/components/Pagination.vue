@@ -27,6 +27,7 @@
   </ul>
 </template>
 <script>
+
 export default {
   name: 'n-pagination',
   props: {
