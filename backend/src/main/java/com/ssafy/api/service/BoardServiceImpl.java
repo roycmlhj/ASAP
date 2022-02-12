@@ -134,4 +134,10 @@ public class BoardServiceImpl implements BoardService {
 		List<Integer> list = boardRepository.findBoardnoByUserno(userno);
 		return list;
 	}
+
+	@Override
+	@Transactional
+	public int updateHit(int boardno) {
+		return boardRepository.updateHit(boardno);
+	}
 }
