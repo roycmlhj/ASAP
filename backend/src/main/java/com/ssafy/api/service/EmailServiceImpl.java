@@ -1,27 +1,34 @@
 package com.ssafy.api.service;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@Service
+import com.ssafy.db.entity.EmailConfirm;
+import com.ssafy.db.repository.EmailConfirmRepository;
+
+@Service("emailService")
 public class EmailServiceImpl implements EmailService {
-	
 	@Autowired
 	JavaMailSender emailSender;
+	@Autowired
+	EmailConfirmRepository emailConfirmRepository;
 	
-	public static final String ePw = createKey();
-	
-	private MimeMessage createMessage(String to) throws Exception{
+	private MimeMessage createMessage(String to, String key) throws Exception{
         System.out.println("보내는 대상 : "+ to);
-        System.out.println("인증 번호 : "+ePw);
+        System.out.println("인증 번호 : "+ key);
         MimeMessage  message = emailSender.createMimeMessage();
  
         message.addRecipients(RecipientType.TO, to);//보내는 대상
@@ -39,7 +46,7 @@ public class EmailServiceImpl implements EmailService {
         msgg+= "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
-        msgg+= ePw+"</strong><div><br/> ";
+        msgg+= key+"</strong><div><br/> ";
         msgg+= "</div>";
         message.setText(msgg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress("kwwoo516@gmail.com","ASAP"));//보내는 사람
@@ -53,7 +60,6 @@ public class EmailServiceImpl implements EmailService {
  
         for (int i = 0; i < 8; i++) { // 인증코드 8자리
             int index = rnd.nextInt(3); // 0~2 까지 랜덤
- 
             switch (index) {
                 case 0:
                     key.append((char) ((int) (rnd.nextInt(26)) + 97));
@@ -73,16 +79,29 @@ public class EmailServiceImpl implements EmailService {
     }
 
 	@Override
+	@Transactional
 	public String sendSimpleMessage(String to) throws Exception {
-		MimeMessage message = createMessage(to);
+		String key = createKey();
+		MimeMessage message = createMessage(to, key);
 		//예외처리
         try{
             emailSender.send(message);
+            EmailConfirm emailConfirm = emailConfirmRepository.findbyEmail(to).orElse(null);
+            if(emailConfirm == null) {
+            	emailConfirm = new EmailConfirm();
+            	emailConfirm.setEmail(to);
+            }
+        	emailConfirm.setCode(key);
+        	emailConfirmRepository.save(emailConfirm);
         }catch(MailException es){
             es.printStackTrace();
             throw new IllegalArgumentException();
         }
-        return ePw;
+        return key;
 	}
 
+	@Override
+	public EmailConfirm getByEmail(String email) {
+		return emailConfirmRepository.findbyEmail(email).orElse(null);
+	}
 }

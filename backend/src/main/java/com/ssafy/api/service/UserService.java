@@ -19,4 +19,5 @@ public interface UserService {
 	String getNicknameByUserno(int userno);
 	User saveProfile(String image, int userno);
 	User getUserByNickname(String nickname);
+	boolean countUpHomework(int userno);
 }

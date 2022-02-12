@@ -134,7 +134,6 @@ public class UserServiceImpl implements UserService {
 		if(studyMember.getPosition() == 0) {
 			StudyMember studyMemberMandate = studyMemberRepository.findByStudynoMandate(studyno);
 			if(studyMemberMandate == null) {
-				//System.out.println("스터디 폭파 시키자");
 				//스터디 신청 인원 studymember에서 삭제
 				List<StudyMember> studyMemberList = studyMemberRepository.findByStudyno(studyno);
 				for(int i = 0; i < studyMemberList.size(); i++)
@@ -196,7 +195,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserByNickname(String nickname) {
 		User user = userRepository.findByNickname(nickname).get();
-		
 		return user;
+	}
+
+	@Override
+	public boolean countUpHomework(int userno) {
+		User user = userRepository.findById(userno).get();
+		user.setHomeworkCnt(user.getHomeworkCnt()+1);
+		userRepository.save(user);
+		return true;
 	}
 }

@@ -163,6 +163,7 @@ public class HomeworkController {
             files.getOriginalFilename();
 
             userHomeworkService.saveFile(file, userno, homeworkno);
+            userService.countUpHomework(userno);
         } catch(Exception e) {
             e.printStackTrace();
         }

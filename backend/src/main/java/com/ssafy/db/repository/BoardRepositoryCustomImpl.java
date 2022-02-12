@@ -26,6 +26,4 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 				.fetch();
 		return list;
 	}
-
-
 }
