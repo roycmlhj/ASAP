@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="mt-2 mb-3">
-        <b-button v-if="userno==homeworkUserno" @click="deleteHomework(assignment.homework.homeworkno)">삭제</b-button>
+        <b-button v-if="userno==homeworkUserno" @click="deleteHomework(assignment.homework.homeworkno)">{{assignment.homework.homeworkno}}</b-button>
         <b-button v-if="userno==homeworkUserno" id="show-btn" @click="showModal(assignment.homework)">수정</b-button>
       </div>
       <b-modal ref="my-modal"
@@ -155,7 +155,6 @@ export default {
           console.log(res.data)
           alert("게시글이 삭제되었습니다.")
           window.location.reload()
-          this.$emit('getHomeworkList')
         })
         .catch(err => {
           console.log(err)

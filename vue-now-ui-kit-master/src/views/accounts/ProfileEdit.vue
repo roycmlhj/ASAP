@@ -74,7 +74,7 @@
         </b-form-invalid-feedback>
       </b-form-group>
     </b-card>
-    <div class="d-flex">
+    <div class="d-flex mr-3">
       <b-card class="col-6" bg-variant="light">
         <div class="image">
           <h5 class="float-left"><strong>이미지 업로드</strong></h5>
@@ -91,7 +91,7 @@
           업로드 취소
         </b-form-checkbox>
       </b-card>
-      <b-card bg-variant="light" class="col-6">
+      <b-card bg-variant="light" class="col-6 ml-3">
         <h5 class="float-left"><strong>관심 분야</strong></h5>
         <b-form-select name="mainCategory" id="mainCategory" v-model="user.mainCategory" class="mb-3">
           <option value="" selected disabled hidden>선택해주세요</option>
@@ -114,22 +114,24 @@
               aria-atomic="false"
               aria-relevant="additions removals"
             >
-              <div class="card mr-1"
+              <badge class="mr-1"
                 v-for="tag in tags"
+                type="success"
                 :key="tag"
                 :id="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 tag="li"
-                style="width: 30%;"
+                style=" width: 32%;"
               >
                 <strong>{{ tag }}</strong>
                 <button
                   @click="removeTag(tag)"
                   variant="link"
                   type="button"
-                  class="btn btn-neutral"
+                  class="btn-danger float-right"
+                  style="font-color:red"
                   :aria-controls="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 >X</button>
-              </div>
+              </badge>
             </ul>
           </template>
         </b-form-tags>
@@ -144,10 +146,13 @@
 import jwt_decode from 'jwt-decode'
 import interest from "./assets/interests.json"
 import axios from 'axios'
-
+import {Badge} from '../../components'
 
 export default {
   name: 'ProfileEdit',
+  components: {
+    [Badge.name]: Badge
+  },
   data: () => {
     return {
       interestList : interest,

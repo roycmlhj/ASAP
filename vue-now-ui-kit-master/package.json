@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^6.0.0",
     "axios": "^0.25.0",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.5.0",
@@ -20,6 +21,7 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "nouislider": "^14.6.0",
+    "swiper": "^5.3.7",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-chartjs": "^3.5.1",

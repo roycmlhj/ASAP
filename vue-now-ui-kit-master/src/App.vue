@@ -4,7 +4,7 @@
       <div class="container">
         <div class="navbar-translate">
           <div class="navbar-translate">
-            <p class="navbar-brand" style="color: #5E83BA">ASAP</p>
+            <p id="asap" class="navbar-brand" style="color: #5E83BA">ASAP</p>
           </div>
         </div>
         <span v-if="isLogin">
@@ -12,13 +12,13 @@
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                 <a href="/study/main" class="nav-link">
-                  <i class="now-ui-icons objects_globe"></i>
+                  <i class="now-ui-icons design-2_ruler-pencil"></i>
                   <p>My Study</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/study/studyboard" class="nav-link">
-                  <i class="now-ui-icons objects_globe"></i>
+                  <i class="now-ui-icons business_badge"></i>
                   <p>Study Board</p>
                 </a>
               </li>
@@ -30,7 +30,7 @@
               </li>
               <li class="nav-item">
                 <a type="button" @click="logout" href="#" class="nav-link">
-                  <i class="now-ui-icons ui-1_settings-gear-63"></i>
+                  <i class="now-ui-icons ui-1_simple-remove"></i>
                   <p>Logout</p>
                 </a>
               </li>
@@ -42,13 +42,13 @@
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                   <a href="/user/register" class="nav-link">
-                    <i class="now-ui-icons users_circle-08"></i>
+                    <i class="now-ui-icons business_bulb-63"></i>
                     <p>Sign up</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a type="button" @click="logout" href="/user/login" class="nav-link">
-                    <i class="now-ui-icons ui-1_settings-gear-63"></i>
+                    <i class="now-ui-icons media-1_button-power"></i>
                     <p>Login</p>
                   </a>
                 </li>
@@ -106,14 +106,8 @@ export default {
 a {
   color: #C2D2E9;
 }
-/* #nav {
-  padding: 30px;
+#asap {
+  font-size: 30px;
+  font-family: 'Black Han Sans', sans-serif;
 }
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-#nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>

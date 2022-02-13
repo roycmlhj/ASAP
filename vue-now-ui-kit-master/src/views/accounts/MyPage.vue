@@ -189,10 +189,9 @@ export default {
 </script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Ubuntu:wght@500&display=swap");
-
   .container{
     z-index: 2;
-    padding-top: 12vh;
+    padding-top: 10vh;
     padding-bottom: 40px;
   }
   .content{

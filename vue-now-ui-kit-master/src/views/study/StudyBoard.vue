@@ -20,14 +20,28 @@
       <div class="col-12" v-for="study in studies" v-bind:key="study.id">
         <router-link :to="{ name: 'StudyBoardDetail', params: { boardno : study.boardno }}" style="color: black;">
           <div class="card mb-3 col-8">
-            <div class="d-flex justify-content-around col-12">
+            <div class="d-flex col-12">
               <div class="div col-6">
-                <h4 class="float-left"><strong>{{ study.boardname }}</strong></h4>
-                <p>모집 인원 : {{ study.maxmember }} 현재 인원 : {{ study.membercnt }}</p>
+                <h4 class="mt-3 mb-3"><strong>{{ study.boardname }}</strong></h4>
+                <p class="category mb-3" :style="{ width: study.category.length + 150 + 'px'}">{{ study.category }}</p>
+                <div>
+                  <badge v-for="topic in study.topics" class="mr-2" type="info" :key="topic.id">{{ topic }}</badge>
+                </div>
               </div>
-              <div class="col-6">
-                <h4>{{ study.category }}</h4>
-                <badge v-for="topic in study.topics" class="ml-2" type="info" :key="topic.id">{{ topic }}</badge>
+              <div class="col-6 d-flex justify-content-center">
+                <div>
+                  <div class="d-flex">
+                    <p v-if="study.userImage" class="mt-2">
+                      작성자 :  <img :src="study.userImage" alt="default-img">
+                    </p>
+                    <p v-else class="mt-2">
+                      작성자 : <img src="./../accounts/assets/default.png">
+                    </p>
+                    <p class="name">{{ study.nickname }}</p>
+                  </div>
+                  <p class="mt-1 mb-2">스터디 모집 인원 : {{ study.maxmember }}명</p> 
+                  <p>스터디 현재 인원 : {{ study.membercnt }}명</p>`
+                </div>
               </div>
             </div>
           </div>
@@ -207,5 +221,22 @@ import {Badge} from '../../components'
   }
   .card:hover {
     box-shadow: 0 0 50px #C2D2E9;
+  }
+  .category {
+    text-align: center;
+    background-color: rgb(248, 239, 228);
+  }
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 75%;
+  }
+  p {
+    margin: 0px;
+    text-align: start;
+  }
+  .name {
+    margin-top: 20px;
+    margin-left: 7px;
   }
 </style>

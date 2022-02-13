@@ -7,6 +7,7 @@ import NowUiKit from './plugins/now-ui-kit';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -21,6 +22,7 @@ Vue.use(IconsPlugin)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 library.add(
+  far,
   fas,
 )
 
