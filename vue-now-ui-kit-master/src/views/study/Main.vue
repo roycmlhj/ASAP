@@ -67,15 +67,12 @@
                         v-model="title"
                         type="text"
                         style="width: 75%"
-                        class=""
                         required
                       ></b-form-input>
                       <b-button
                         @click="nameCheck"
-                        style="
-                          background-color: rgb(130, 163, 209);
-                          font-size: 13px;
-                        "
+                        class="mt-0"
+                        style="background-color: rgb(130, 163, 209); font-size: 13px;"
                         >중복체크</b-button
                       >
                     </div>

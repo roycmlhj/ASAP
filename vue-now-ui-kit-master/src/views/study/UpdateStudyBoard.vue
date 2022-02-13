@@ -16,15 +16,6 @@
       </div>
       <b-form>
         <b-form-group
-        >
-          <label
-            class="float-left"
-          for="study">스터디</label>
-          <study-dropdown
-          v-on:studyEvent="updateStudy"
-          ></study-dropdown>
-        </b-form-group>
-        <b-form-group
           id="input-title-group"
           lebel-for="input-title"
           class="mt-4"
@@ -36,7 +27,7 @@
             id="input-title"
             v-model="title"
             type = "text"
-            required
+            disabled
           >{{title}}
           </b-form-input>
         </b-form-group>
@@ -101,15 +92,11 @@
 </template>
 
 <script>
-import StudyDropdown from '@/components/StudyDropdown.vue'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'UpdateStudyBoard',
-  components: {
-    StudyDropdown
-  },
   data() {
     return {
       title:null,
@@ -148,6 +135,7 @@ export default {
         }
       }
       this.title=res.data.board.boardname
+      console.log(this.title, 456)
       this.description = res.data.board.boarddescription
       this.git = res.data.board.link
       this.call = res.data.board.contactlink
@@ -197,14 +185,6 @@ export default {
         console.log(err,1)
         alert(err)
       })
-    }
-  },
-  created: function () {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
-      const decoded = jwt_decode(token)
-    } else {
-      this.$router.push({name: 'Login'})
     }
   },
 }

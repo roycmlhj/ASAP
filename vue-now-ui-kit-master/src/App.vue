@@ -28,6 +28,12 @@
                   <p>Profile</p>
                 </a>
               </li>
+              <li v-if="isAdmin == 1" class="nav-item">
+                <a type="/admin/userlist" @click="logout" href="#" class="nav-link">
+                  <i class="now-ui-icons loader_gear"></i>
+                  <p>Admin</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a type="button" @click="logout" href="#" class="nav-link">
                   <i class="now-ui-icons ui-1_simple-remove"></i>
@@ -63,16 +69,14 @@
 
 
 <script>
-// import navbar from '@/components/Navbar/Navbar.vue';
+import jwt_decode from "jwt-decode";
 
 export default {
   name: 'App',
-  components: {
-    // navbar,
-  },
   data: function () {
     return {
       isLogin: false,
+      isAdmin: null,
     }
   },
   methods: {
@@ -86,6 +90,8 @@ export default {
     const token = localStorage.getItem('jwt')
     if (token) {
       this.isLogin = true
+      const decoded = jwt_decode(token);
+      this.isAdmin = decoded.isAdmin
     }
   }
 }

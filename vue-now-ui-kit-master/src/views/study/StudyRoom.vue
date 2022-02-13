@@ -1,8 +1,8 @@
 <template>
+<section>
   <div class="container d-flex justify-content-space-between" id="screen">
     <div class="d-flex align-items-stretch justify-content-between col-1">
       <div class="icon">
-        
         <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-right icon="edit"/>
           <b-sidebar id="sidebar-right" title="스터디 게시판" right shadow>
             <div class="px-3 py-2">
@@ -29,7 +29,7 @@
         <b-sidebar id="sidebar-left-study" title="스터디 상세 정보" right shadow>
           <div class="d-flex justify-content-center">
             <div class="mt-3" id="information" v-for="study in studyInformation" :key="study.id">
-              <!-- <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="cir"cle-notch"/>스터디 이름</p> -->
+              <p class="studyInfo">스터디 이름</p>
               <h3 style="font-family: 'Nanum Pen Script', cursive;">{{ study.studyname }}</h3>
               <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 장 </p>
               <p><badge type="warning">  {{ study.maker }}</badge></p>
@@ -42,7 +42,7 @@
               <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
             </div>
           </div>
-          </b-sidebar>
+        </b-sidebar>
         <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
         <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" right shadow>
           <div class="px-5 py-2 mt-3" v-for="members in studyMemberList" :key="members.id">
@@ -70,10 +70,8 @@
         </b-modal>
       </div>
     </div>
-    <div class = "col-11" id="RTC area">
-
-    </div>
   </div>
+</section>
 </template>
 
 <script>
@@ -290,15 +288,26 @@ export default {
 </script>
 
 <style scoped>
-  #screen{
-    height:800px;
+  section {
+    background-image: url("./assets/board.jpg");
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
   }
+  /* #screen{
+    height:800px;
+  } */
   .icon {
     display: flex;
     flex-direction: column;
   }
   .icon2 {
-    
     align-items:flex-end
   }
   .kick {

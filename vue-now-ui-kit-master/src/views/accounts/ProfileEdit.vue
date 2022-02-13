@@ -8,6 +8,7 @@
 <template>
 <section>
   <div class="container">
+    <h2>개인 정보 수정</h2>
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
       <p v-if="img">
@@ -116,21 +117,18 @@
             >
               <badge class="mr-1"
                 v-for="tag in tags"
-                type="success"
                 :key="tag"
                 :id="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 tag="li"
                 style=" width: 32%;"
               >
                 <strong>{{ tag }}</strong>
-                <button
+                <a
                   @click="removeTag(tag)"
-                  variant="link"
                   type="button"
-                  class="btn-danger float-right"
-                  style="font-color:red"
+                  class="float-right"
                   :aria-controls="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
-                >X</button>
+                >X</a>
               </badge>
             </ul>
           </template>
@@ -327,6 +325,11 @@ export default {
 <style scoped>
   .container {
     margin-top : 3rem;
+  }
+  h2 {
+    float: left;
+    margin-bottom: 1rem;
+    font-family: 'Black Han Sans', sans-serif;
   }
   img {
     width: 100px;

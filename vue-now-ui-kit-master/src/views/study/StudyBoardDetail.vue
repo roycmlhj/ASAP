@@ -1,4 +1,14 @@
 <template>
+<section>
+  <div class="page-header2">
+    <div class="d-flex justify-content-center">
+      <font-awesome-icon icon="fa-solid fa-child" class="icon fa-5x" style="color: rgb(231, 223, 223);" />
+      <div>
+        <h5 id="massage">{{ nickname }}님 해당 스터디에 가입하고 싶다면 신청하기 버튼을 눌러주세요!</h5>
+        <h5>스터디에 대한 설명과 참여한 사람들의 정보를 확인할 수 있습니다.</h5>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <div>
       <div class="row">
@@ -99,6 +109,7 @@
                       <img :src="member.image" /><a
                         id="show-btn"
                         href="#"
+                        class="mt-0"
                         @click="showModal(member)"
                         >{{ member.nickname }}</a
                       >
@@ -170,29 +181,24 @@
             <br />
             <div name="buttons" class="buttons">
               <div v-if="flag === 2">
-                <b-button @click="studyApply" class="col-8 bg-primary">
-                  스터디 신청하기
-                </b-button>
+                <button type="button" class="btn" @click="studyApply"><strong>
+                  <font-awesome-icon icon="fa-solid fa-hand-pointer" />
+                  신청하기</strong>
+                </button>
               </div>
               <div v-if="flag === 1" disabled="”disabled”">
-                <b-button class="col-8 bg-secondary">
-                  이미 신청하셨습니다.
-                </b-button>
+                <button type="button" id="btn" class="btn">
+                  이미 신청한 스터디입니다.
+                </button>
               </div>
-              <div v-if="flag === 0">
-                <b-button @click="studyAccept" class="col-8 bg-primary mb-3">
-                  가입 수락
-                </b-button>
-
-                <b-button @click="studyRefuse" class="col-8 bg-danger mb-3">
-                  가입 거절
-                </b-button>
+              <div class="button1" v-if="flag === 0">
+                
+                <button type="button" class="btn col-5" @click="studyAccept"><font-awesome-icon icon="fa-solid fa-check" /> 가입 수락</button>
+                <button type="button" class="btn col-5" @click="studyRefuse">X 가입 거절</button>
                 <router-link :to="`/study/board/update/${boardno}`">
-                  <b-button class="col-8 mb-3">글 수정</b-button>
+                  <button type="button" class="btn col-5"><font-awesome-icon icon="fa-solid fa-pen" /> 수정하기</button>
                 </router-link>
-                <b-button class="col-8" @click="deleteBoard(boardno)"
-                  >글 삭제</b-button
-                >
+                <button type="button" class="btn col-5" @click="deleteBoard(boardno)"><font-awesome-icon icon="fa-solid fa-trash" /> 삭제하기</button>
               </div>
             </div>
           </div>
@@ -200,6 +206,7 @@
       </div>
     </div>
   </div>
+</section>
 </template>
 
 <script>
@@ -426,6 +433,23 @@ export default {
 };
 </script>
 <style scoped>
+.page-header2 {
+  width: 100%;
+  height: 150px;
+  background-color: #394E79;
+}
+h5 {
+  color: rgb(231, 223, 223);
+  font-family: 'Ubuntu', sans-serif;
+  margin-bottom: 0px;
+}
+#massage{
+  margin-top: 3rem;
+}
+.icon {
+  margin-top: 2rem;
+  margin-right: 2rem;
+}
 button {
   font-size: 15px;
   height: 38px;
@@ -504,5 +528,11 @@ a {
 }
 .buttons {
   align-content: center;
+}
+a {
+  font-size: 20px;
+}
+#btn {
+  background-color: rgb(193, 201, 207);
 }
 </style>
