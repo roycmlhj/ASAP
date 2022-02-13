@@ -299,6 +299,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-top: 5rem;
+    color: white;
   }
   .icon2 {
     align-items:flex-end

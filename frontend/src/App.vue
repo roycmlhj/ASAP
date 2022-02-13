@@ -1,14 +1,9 @@
-	
-오전 12:45
-
-
-
 <template>
   <div id="app">
     <nav class="navbar bg-white navbar-expand-lg navbar-relative mb-0">
       <div class="container">
-        <div class="navbar-translate">
-          <div class="navbar-translate">
+        <div>
+          <div>
             <p id="asap" class="navbar-brand" style="color: #5e83ba">ASAP</p>
           </div>
         </div>
@@ -16,7 +11,6 @@
           <div
             data-color="orange"
             id="navigation"
-            class="navbar-collapse collapse"
           >
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -60,8 +54,6 @@
         <span v-else>
           <div
             data-color="orange"
-            id="navigation"
-            class="navbar-collapse collapse"
           >
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -113,9 +105,9 @@
           </ul>
         </nav>
         <div class="copyright" style="font-weight: 900; font-size: 13px">
-          © {{ year }}, Designed by SSAFY6기 공통 서울1반 6팀,<br />
+          © {{ year }}, Designed by SSAFY6기 공통 서울1반 7팀,<br />
                     Coded by
-          SSAFY6기 공통 서울1반 6팀
+          SSAFY6기 공통 서울1반 7팀
         </div>
       </div>
     </footer>
