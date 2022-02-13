@@ -67,7 +67,7 @@
                         v-model="title"
                         type="text"
                         style="width: 75%"
-                        class="mt-2"
+                        class=""
                         required
                       ></b-form-input>
                       <b-button
@@ -109,7 +109,7 @@
                     id="input-description-group"
                     label="Description"
                     lebel-for="input-description"
-                    class="mt-4"
+                    class="mt-3"
                   >
                     <b-form-textarea
                       id="input-description"
