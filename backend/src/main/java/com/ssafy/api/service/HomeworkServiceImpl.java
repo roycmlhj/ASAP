@@ -1,6 +1,8 @@
 package com.ssafy.api.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.ssafy.api.request.HomeworkCreatePostReq;
 import com.ssafy.api.request.HomeworkPutReq;
@@ -71,19 +74,22 @@ public class HomeworkServiceImpl implements HomeworkService {
 	}
 
 	@Override
+	@Transactional
 	public boolean deletehomework(int homeworkno) {
-		if(Optional.ofNullable(homeworkRepository.findById(homeworkno)).get() != null) {
-			List<UserHomework> list = userHomeworkRepository.findByHomeworkno(homeworkno).orElse(null); 
-			if(list != null){
-				for (UserHomework userHomework : list) {
-					awsS3Service.deleteFile(userHomework.getFilepath());
+		List<UserHomework> list = userHomeworkRepository.findByHomeworkno(homeworkno).orElse(null);
+		if(list != null) {
+			for (UserHomework userHomework : list) {
+				if(!ObjectUtils.isEmpty(userHomework)) {
+					String filepath = userHomework.getFilepath();
+					if(filepath != null) {
+						awsS3Service.deleteFile(filepath);
+					}					
 				}
-				userHomeworkRepository.deleteUserHomework(homeworkno);
 			}
+			userHomeworkRepository.deleteUserHomework(homeworkno);
 			homeworkRepository.deleteHomework(homeworkno);
-			return true;
 		}
-		return false;
+		return true;
 	}
 	
 	// flag 0 = 진행중 과제 / 1 = 완료 과제 / 2 = 전체 과제 
