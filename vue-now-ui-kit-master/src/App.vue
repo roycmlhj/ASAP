@@ -4,11 +4,15 @@
       <div class="container">
         <div class="navbar-translate">
           <div class="navbar-translate">
-            <p id="asap" class="navbar-brand" style="color: #5E83BA">ASAP</p>
+            <p id="asap" class="navbar-brand" style="color: #5e83ba">ASAP</p>
           </div>
         </div>
         <span v-if="isLogin">
-          <div data-color="orange" id="navigation" class="navbar-collapse collapse">
+          <div
+            data-color="orange"
+            id="navigation"
+            class="navbar-collapse collapse"
+          >
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                 <a href="/study/main" class="nav-link">
@@ -36,67 +40,74 @@
               </li>
             </ul>
           </div>
-          </span>
-          <span v-else>
-            <div data-color="orange" id="navigation" class="navbar-collapse collapse">
-              <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                  <a href="/user/register" class="nav-link">
-                    <i class="now-ui-icons business_bulb-63"></i>
-                    <p>Sign up</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a type="button" @click="logout" href="/user/login" class="nav-link">
-                    <i class="now-ui-icons media-1_button-power"></i>
-                    <p>Login</p>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </span>
+        </span>
+        <span v-else>
+          <div
+            data-color="orange"
+            id="navigation"
+            class="navbar-collapse collapse"
+          >
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="/user/register" class="nav-link">
+                  <i class="now-ui-icons business_bulb-63"></i>
+                  <p>Sign up</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  type="button"
+                  @click="logout"
+                  href="/user/login"
+                  class="nav-link"
+                >
+                  <i class="now-ui-icons media-1_button-power"></i>
+                  <p>Login</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </span>
       </div>
     </nav>
-    <router-view @login="isLogin = true"/>
+    <router-view @login="isLogin = true" />
   </div>
 </template>
-
 
 <script>
 // import navbar from '@/components/Navbar/Navbar.vue';
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     // navbar,
   },
   data: function () {
     return {
       isLogin: false,
-    }
+    };
   },
   methods: {
     logout: function () {
-      this.isLogin = false
-      localStorage.removeItem('jwt')    // 토큰 값 삭제
-      this.$router.push({name: 'Login'})
+      this.isLogin = false;
+      localStorage.removeItem("jwt"); // 토큰 값 삭제
+      this.$router.push({ name: "Login" });
     },
   },
   created: function () {
-    const token = localStorage.getItem('jwt')
+    const token = localStorage.getItem("jwt");
     if (token) {
-      this.isLogin = true
+      this.isLogin = true;
     }
-  }
-}
+  },
+};
 </script>
 
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Nanum+Gothic:wght@400;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Nanum+Gothic:wght@400;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
 #app {
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: "Nanum Gothic", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -104,10 +115,10 @@ export default {
   min-height: 100vh;
 }
 a {
-  color: #C2D2E9;
+  color: #c2d2e9;
 }
 #asap {
   font-size: 30px;
-  font-family: 'Black Han Sans', sans-serif;
+  font-family: "Black Han Sans", sans-serif;
 }
 </style>

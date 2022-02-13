@@ -1,89 +1,94 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-import Login from './views/accounts/Login.vue'
-import Register from './views/accounts/Register.vue'
-import ProfileEdit from './views/accounts/ProfileEdit.vue'
-import StudyBoard from './views/study/StudyBoard.vue'
-import Main from './views/study/Main.vue'
-import CreateStudyBoard from './views/study/CreateStudyBoard.vue'
-import MyPage from './views/accounts/MyPage.vue'
-import Admin from './views/admins/Admin.vue'
-import StudyRoom from './views/study/StudyRoom.vue'
-import StudyBoardUpdate from './views/study/UpdateStudyBoard.vue'
-import StudyBoardDetail from './views/study/StudyBoardDetail.vue'
-import fullCalendar from 'vue-fullcalendar' 
+import Login from "./views/accounts/Login.vue";
+import Register from "./views/accounts/Register.vue";
+import ProfileEdit from "./views/accounts/ProfileEdit.vue";
+import StudyBoard from "./views/study/StudyBoard.vue";
+import Main from "./views/study/Main.vue";
+import CreateStudyBoard from "./views/study/CreateStudyBoard.vue";
+import MyPage from "./views/accounts/MyPage.vue";
+import Admin from "./views/admins/Admin.vue";
+import StudyRoom from "./views/study/StudyRoom.vue";
+import StudyBoardUpdate from "./views/study/UpdateStudyBoard.vue";
+import StudyBoardDetail from "./views/study/StudyBoardDetail.vue";
+import fullCalendar from "vue-fullcalendar";
+import Begin from "./views/accounts/Begin.vue";
 
+Vue.component("full-calendar", fullCalendar);
 
-Vue.component('full-calendar', fullCalendar)
-
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/user/login',
-    name: 'Login',
-    component: Login
+    path: "/",
+    name: "Begin",
+    component: Begin,
   },
   {
-    path: '/user/register',
-    name: 'Register',
-    component: Register
+    path: "/user/login",
+    name: "Login",
+    component: Login,
   },
   {
-    path: '/user/modify/:user_no',
-    name: 'ProfileEdit',
-    component: ProfileEdit
+    path: "/user/register",
+    name: "Register",
+    component: Register,
   },
   {
-    path: '/study/studyboard',
-    name: 'StudyBoard',
-    component: StudyBoard
+    path: "/user/modify/:user_no",
+    name: "ProfileEdit",
+    component: ProfileEdit,
   },
   {
-    path: '/study/main',
-    name: 'Main',
-    component: Main
+    path: "/study/studyboard",
+    name: "StudyBoard",
+    component: StudyBoard,
   },
   {
-    path: '/study/studyroom/:study_no',
-    name: 'StudyRoom',
-    component: StudyRoom
+    path: "/study/main",
+    name: "Main",
+    component: Main,
   },
   {
-    path:'/board/create/',
-    name: 'CreateStudyBoard',
-    component: CreateStudyBoard
+    path: "/study/studyroom/:study_no",
+    name: "StudyRoom",
+    component: StudyRoom,
   },
   {
-    path:'/user/detail/',
-    name: 'MyPage',
-    component: MyPage
+    path: "/board/create/",
+    name: "CreateStudyBoard",
+    component: CreateStudyBoard,
   },
   {
-    path: '/admin/userlist/',
-    name: 'Admin',
-    component: Admin
+    path: "/user/detail/",
+    name: "MyPage",
+    component: MyPage,
+  },
+  {
+    path: "/admin/userlist/",
+    name: "Admin",
+    component: Admin,
   },
   {
     path: `/study/board/detail/:boardno`,
-    name: 'StudyBoardDetail',
+    name: "StudyBoardDetail",
     component: StudyBoardDetail,
   },
   {
     path: `/study/board/update/:boardno`,
-    name: 'StudyBoardUpdate',
+    name: "StudyBoardUpdate",
     component: StudyBoardUpdate,
   },
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
 
 // import Index from './pages/Index.vue';
 // import Landing from './pages/Landing.vue';
