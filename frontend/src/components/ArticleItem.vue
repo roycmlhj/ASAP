@@ -7,7 +7,7 @@
     <h5 class="mb-1"><strong>첨부파일</strong></h5>
     <div v-for="file in post.studyBoard.fileList" :key="file.id">
       <div class="overflow" style="width: 100%; white-space: normal">
-        <a href="#" @click="downloadFile(file)"><p class="mb-0">{{ file.ogfilename }}</p></a>
+        <a type="button" @click="downloadFile(file)"><p class="mb-0">{{ file.ogfilename }}</p></a>  <!--수정-->
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')  // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -151,7 +151,7 @@ export default {
     }
   },
   created() {
-    const token = localStorage.getItem('jwt')
+    const token = sessionStorage.getItem('jwt')  // 수정
     const decoded = jwt_decode(token)
     const userno = decoded.userno
     this.userno = userno

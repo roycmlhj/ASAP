@@ -13,7 +13,7 @@
         <div v-for="userHomework in userHomeworkList" :key="userHomework.id">
           <div v-if="userHomework.userHomewrok.filepath" class="p d-flex">
            <div class="overflow" style="width: 100%; white-space: normal"> {{userHomework.nickname}}  
-             <a href="#" @click="downloadFile(userHomework.userHomewrok)">{{ userHomework.userHomewrok.ogfilename }}</a> 
+             <a type="button" @click="downloadFile(userHomework.userHomewrok)">{{ userHomework.userHomewrok.ogfilename }}</a>  <!--수정-->
               <a type="button" v-if="userHomework.userHomewrok.filepath && userHomework.userHomewrok.userno==userno" @click="deleteFile(userHomework.userHomewrok.userhomeworkno)" class="ml-3" style="color:red;">X</a>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')              // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -216,7 +216,7 @@ export default {
     },
   },
     created() {
-    const token = localStorage.getItem('jwt')
+    const token = sessionStorage.getItem('jwt')            // 수정
     const decoded = jwt_decode(token)
     const userno = decoded.userno
     this.userno = userno

@@ -17,9 +17,10 @@ public class BoardPaging {
 	String timestamp;
 	String interests;
 	String userImage;
+	int hit;
 	
 	public BoardPaging(int boardno, String boardname, int userno, String nickname, String category, int is_recruit,
-			int maxmember, int membercnt, String timestamp, String interests, String userImage) {
+			int maxmember, int membercnt, String timestamp, String interests, String userImage, int hit) {
 		this.boardno = boardno;
 		this.boardname = boardname;
 		this.userno = userno;
@@ -31,5 +32,6 @@ public class BoardPaging {
 		this.timestamp = timestamp;
 		this.interests = interests;
 		this.userImage = userImage;
+		this.hit = hit;
 	}
 }

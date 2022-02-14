@@ -139,7 +139,7 @@
 export default {
   name: "Begin",
   created: function () {
-    if (localStorage.getItem("jwt")) {
+    if (sessionStorage.getItem("jwt")) {                  // 수정
       this.$router.push({ name: "Main" });
     }
   },

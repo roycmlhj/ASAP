@@ -1,4 +1,5 @@
 <template>
+<section>
   <div class="container mt-5">
     <div style="width: auto; text-align: center; background: #394e79">
       <study-room-list :studies="studies"></study-room-list>
@@ -48,8 +49,7 @@
               <br />
               <br />
               <br />
-              <a
-                href="#"
+<!--수정-->   <a type="button"
                 @click="modalTurn"
                 style="color: black; font-size: x-large"
                 >+ 스터디방 만들기</a
@@ -135,7 +135,7 @@
               <br />
               <br />
               <router-link :to="{ name: 'CreateStudyBoard' }">
-                <a href="#" style="color: black; font-size: x-large"
+  <!--수정-->   <a type="button" style="color: black; font-size: x-large" 
                   >+ 스터디원 모집하기</a
                 >
               </router-link>
@@ -145,6 +145,7 @@
       </b-col>
     </b-row>
   </div>
+</section>
 </template>
 
 <script>
@@ -199,7 +200,7 @@ export default {
       this.modalShow = !this.modalShow;
     },
     setToken: function () {
-      const token = localStorage.getItem("jwt");
+      const token = sessionStorage.getItem("jwt");            // 수정
       const config = {
         Authorization: `JWT ${token}`,
       };
@@ -259,7 +260,7 @@ export default {
         });
     },
     createStudyRoom: function () {
-      const token = localStorage.getItem("jwt");
+      const token = sessionStorage.getItem("jwt");             // 수정
       const decoded = jwt_decode(token);
 
       const StudyRoomItem = {
@@ -298,8 +299,8 @@ export default {
     },
   },
   created: function () {
-    if (localStorage.getItem("jwt")) {
-      const token = localStorage.getItem("jwt");
+    if (sessionStorage.getItem("jwt")) {                 // 수정
+      const token = sessionStorage.getItem("jwt");           // 수정
       const decoded = jwt_decode(token);
       console.log(decoded);
       this.userno = decoded.userno;
@@ -316,6 +317,9 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Gaegu&family=Gamja+Flower&family=Hi+Melody&display=swap");
 form {
   padding: 0px 20px;
+} 
+section {
+  margin-top: 5rem;                /* 수정 */
 }
 /* button {
     width: 100%;

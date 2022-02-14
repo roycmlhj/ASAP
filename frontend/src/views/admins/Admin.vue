@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -122,8 +122,8 @@ export default {
     }
   },
   created: function () {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {
+      const token = sessionStorage.getItem('jwt')
       const decoded = jwt_decode(token)
       this.getUserList()
       // console.log(decoded.isAdmin)

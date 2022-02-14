@@ -54,12 +54,12 @@
                 <p v-else>
                   <img src="./../accounts/assets/default.png">
                 </p>
-                <a id="show-btn" href="#" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
+                <a id="show-btn" type="button" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>    <!--수정-->
               </div>
               <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 32px; background-color: rgb(235, 124, 124);" @click="userKick(member.studyMember.userno)">강퇴</b-button>
             </div>
           </div>
-          <a class="kick" href="#" @click="userKick(userNumber)">회원탈퇴</a>
+          <a class="kick" type="button" @click="userKick(userNumber)">회원탈퇴</a>      <!--수정-->
         </b-sidebar>
         <b-modal ref="my-modal" :member="member" hide-header hide-footer>
           <div class="d-block text-center">
@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')           // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -277,8 +277,8 @@ export default {
     this.getHomeworkList()
     this.getStudyInformation()
     this.getCalendar()
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                  // 수정
+      const token = sessionStorage.getItem('jwt')                   // 수정
       const decoded = jwt_decode(token)
       this.userNumber = decoded.userno
     } else {
@@ -294,6 +294,7 @@ export default {
     background-size: contain;
     height: 100vh;
     background-repeat: repeat-x;
+    margin-top: 4rem;                 /* 수정 */
   }
   .icon {
     display: flex;

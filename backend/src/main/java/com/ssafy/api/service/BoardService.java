@@ -17,4 +17,5 @@ public interface BoardService {
 	Page<BoardPaging> boardList(Pageable pageRequest);
 	List<BoardPaging> boardSearch(String type, String keyword, Pageable pageRequest);
 	List<Integer> getBoardnoByUserno(int userno);
+	int updateHit(int boardno);
 }

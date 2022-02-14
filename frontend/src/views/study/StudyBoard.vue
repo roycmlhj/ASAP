@@ -27,6 +27,7 @@
                 <div>
                   <badge v-for="topic in study.topics" class="mr-2" type="info" :key="topic.id">{{ topic }}</badge>
                 </div>
+                <p class="mt-2">{{ study.timestamp }}</p>
               </div>
               <div class="col-6 d-flex justify-content-center">
                 <div>
@@ -40,7 +41,8 @@
                     <p class="name">{{ study.nickname }}</p>
                   </div>
                   <p class="mt-1 mb-2">스터디 모집 인원 : {{ study.maxmember }}명</p> 
-                  <p>스터디 현재 인원 : {{ study.membercnt }}명</p>`
+                  <p class="mb-2">스터디 현재 인원 : {{ study.membercnt }}명</p>`
+                  <p style="margin-top:-20px;"> <i class="fas fa-eye" /> {{ study.hit }} </p>
                 </div>
               </div>
             </div>
@@ -85,7 +87,7 @@ import {Badge} from '../../components'
     },
     methods: {
       setToken: function () {
-        const token = localStorage.getItem('jwt')
+        const token = sessionStorage.getItem('jwt')            // 수정
         const config = {
           Authorization: `JWT ${token}`
         }
@@ -175,8 +177,8 @@ import {Badge} from '../../components'
       .catch(err => {
         console.log(this.title, err)
       })
-      if (localStorage.getItem('jwt')) {
-        const token = localStorage.getItem('jwt')
+      if (sessionStorage.getItem('jwt')) {                 // 수정
+        const token = sessionStorage.getItem('jwt')              // 수정
         const decoded = jwt_decode(token)
         this.nickname = decoded.nickname
       } else {
@@ -188,7 +190,9 @@ import {Badge} from '../../components'
 
 <style scoped> 
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Ubuntu:wght@500&display=swap");
-
+  section {
+    margin-top: 4rem;              /* 수정 */
+  }
   .page-header2 {
     width: 100%;
     height: 150px;

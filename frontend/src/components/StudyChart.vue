@@ -61,9 +61,9 @@
       }
     },
     created: function () {
-      if (localStorage.getItem('jwt')) {
+      if (sessionStorage.getItem('jwt')) {                         // 수정
         console.log(this.studyTime, 555)
-        const token = localStorage.getItem('jwt')
+        const token = sessionStorage.getItem('jwt')                    // 수정
         const decoded = jwt_decode(token)
         this.userName = decoded.nickname
         const studyName = this.getStudyName()

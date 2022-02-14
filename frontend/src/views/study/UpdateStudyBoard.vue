@@ -1,4 +1,5 @@
 <template>
+<section>
   <div class="container">
     <div class="col-3">
       <h1 class="mb-0">모집글</h1>
@@ -89,6 +90,7 @@
       </b-form>
     </div>
   </div>
+</section>
 </template>
 
 <script>
@@ -110,8 +112,8 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                  // 수정
+      const token = sessionStorage.getItem('jwt')                // 수정
       const decoded = jwt_decode(token)
       console.log(decoded)
       this.userno = decoded.userno
@@ -191,6 +193,9 @@ export default {
 </script>
 
 <style scoped>
+  section {
+    margin-top: 5rem;            /* 수정 */
+  }
   .container {
     min-height: 100vh;
     display: flex;

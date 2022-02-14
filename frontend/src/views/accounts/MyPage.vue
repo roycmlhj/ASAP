@@ -26,7 +26,7 @@
             <p>Posts</p>
           </div>
         </div>
-        <button type="button" id="show-btn" @click="showModal" class="btn mt-5 btn-round btn-primary btn-lg" href="#button">Edit</button>
+        <button type="button" id="show-btn" @click="showModal" class="btn mt-5 btn-round btn-primary btn-lg" href="#button">Edit</button>    <!--수정-->
       </div>
     </div>
     <div class="section">
@@ -68,7 +68,7 @@
         type="password"
       >
       </b-form-input>
-      <b-button class="mt-5" variant="dark" style="float: right;" @click="passwordConfirmation">확인</b-button>
+      <button id="btn" type="button" class="btn mt-5" style="float: right;" @click="passwordConfirmation">확인</button>
     </b-form-group>
     </b-modal>
   </div>
@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                        // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -180,7 +180,7 @@ export default {
     },
   },
   created: function () {
-    const token = localStorage.getItem('jwt')
+    const token = sessionStorage.getItem('jwt')                     // 수정
     const decoded = jwt_decode(token)
     this.userNo = decoded.userno
     this.getUser()
@@ -193,6 +193,7 @@ export default {
     z-index: 2;
     padding-top: 10vh;
     padding-bottom: 40px;
+    margin-top: 5rem;                    /* 수정 */
   }
   .content{
     max-width: 450px;
@@ -243,5 +244,13 @@ export default {
   }
   .table {
     margin-top: 9rem;
+  }
+  #btn {                              /* 수정 */
+  font-size: 11px;
+  height: 35px;
+  background-color: rgb(130, 163, 209);
+  }
+  #btn:hover {     /* 수정 */
+    background-color: rgb(79, 138, 216);
   }
 </style>

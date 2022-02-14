@@ -72,6 +72,7 @@ public class BoardController {
 			@PathVariable("boardno") @ApiParam(value = "조회할 게시판의 no", required = true) int boardno){
 		Board board = boardService.getBoardByBoardno(boardno);
 		List<BoardMember> list = userService.getBoardMember(board.getStudyno());
+		boardService.updateHit(boardno);
 		int memberCnt = 0;
 		for(int i = 0; i < list.size(); i++) {
 			if(list.get(i).getPosition() != 2)

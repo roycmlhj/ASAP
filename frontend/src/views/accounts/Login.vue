@@ -64,7 +64,7 @@ export default {
         data: this.user,
       })
         .then(res => {
-          localStorage.setItem('jwt', res.data.accessToken)
+          sessionStorage.setItem('jwt', res.data.accessToken)              // 수정
           this.$emit('login')
           this.$router.push({ name: 'Main'})
         })
@@ -83,6 +83,7 @@ section {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  margin-top: 3rem;         /* 수정 */
 }
 .asap {
   font-family: 'Black Han Sans', sans-serif;

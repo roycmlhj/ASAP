@@ -11,7 +11,7 @@
         <img src="./assets/default.png">
       </p>
       <p>{{ this.user.email }}</p>
-      <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
+      <a type="button" class="float-right" @click="userDelete">회원탈퇴</a>      <!--수정-->
     </b-card>
     <b-card bg-variant="light" class="input">
       <b-form-group
@@ -19,53 +19,50 @@
         label-for="password"
         label-cols-sm="1"
       >
-        <input 
+        <b-form-input 
           id="password"
           type="password" 
           v-model="user.password" 
-          class="form-control"
           :state="passwordState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
-        >
-        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        ></b-form-input>
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">   // 수정
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
       <b-form-group
         label="비밀번호"
         label-for="passwordcheck"
         label-cols-sm="1"
       >
-        <input 
+        <b-form-input 
           id="passwordcheck" 
           type="password"
-          class="form-control"
           v-model="passwordcheck"
           :state="passwordcheckState"
           aria-describedby="input-live-help input-live-feedback" 
           placeholder="비밀번호를 한번 더 입력해주세요."
-        >
-        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        ></b-form-input>
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">     // 수정
           비밀번호가 일치하지 않습니다.
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
       <b-form-group
         label="닉네임"
         label-for="nickname"
         label-cols-sm="1"
       >
-        <input 
+        <b-form-input 
           id="nickname" 
           v-model="user.nickname" 
-          class="form-control"
           :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="닉네임은 2자 이상이어야 합니다."
-        >
-        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        ></b-form-input>
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">    // 수정
           닉네임은 두 글자 이상이어야 합니다.
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
     </b-card>
     <div class="d-flex mr-3">
@@ -113,13 +110,12 @@
                 :key="tag"
                 :id="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 tag="li"
-                style=" width: 32%;"
               >
                 <strong>{{ tag }}</strong>
                 <a
                   @click="removeTag(tag)"
                   type="button"
-                  class="float-right"
+                  class="ml-3"
                   :aria-controls="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 >X</a>
               </badge>
@@ -163,7 +159,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                 // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -182,7 +178,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          localStorage.setItem('jwt', res.data.accessToken)
+          sessionStorage.setItem('jwt', res.data.accessToken)               // 수정
           window.location.reload(this.$route.params.user_no)
         })
         .catch(err => {
@@ -204,7 +200,7 @@ export default {
         .then(res => {
           console.log(res)
           if (this.admin == 0) {
-            localStorage.setItem('jwt', res.data.accessToken)
+            sessionStorage.setItem('jwt', res.data.accessToken)               // 수정
             alert("회원 정보 수정이 완료되었습니다.")
             window.location.reload(this.$route.params.user_no)
           }
@@ -233,7 +229,7 @@ export default {
         })
     },
     getUserInformation: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')              // 수정
       const decoded = jwt_decode(token)
       this.user.nickname = decoded.nickname
       this.user.mainCategory = decoded.mainCategory
@@ -266,40 +262,40 @@ export default {
     },
   },
   computed: {
-    nameState() {
-      if (this.user.nickname.length == 0) {
-        return null
-      } else {
-        return this.user.nickname.length > 1 ? true : false
-      }
-    },
-    passwordState() {
-      var pattern1 = /[0-9]/;
-      var pattern2 = /[a-zA-Z]/;
-      var pattern3 = /[~!@#$%<>^&*]/;
-      if (this.user.password == 0) {
-        return null
-      }
-      else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
-        return false
-      } else {
-        return true
-      }
-    },
-    passwordcheckState() {
-      if (this.passwordcheck.length == 0) {
-        return null
-      }
-      else if (this.passwordcheck == this.user.password) {
-        return true
-      } else {
-        return false
-      }
-    }
+    // nameState() {                                // 수정
+    //   if (this.user.nickname.length == 0) {
+    //     return null
+    //   } else {
+    //     return this.user.nickname.length > 1 ? true : false    
+    //   }
+    // },
+    // passwordState() {
+    //   var pattern1 = /[0-9]/;
+    //   var pattern2 = /[a-zA-Z]/;
+    //   var pattern3 = /[~!@#$%<>^&*]/;
+    //   if (this.user.password == 0) {
+    //     return null
+    //   }
+    //   else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // },
+    // passwordcheckState() {
+    //   if (this.passwordcheck.length == 0) {
+    //     return null
+    //   }
+    //   else if (this.passwordcheck == this.user.password) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // }
   },
   created: function () {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                       // 수정
+      const token = sessionStorage.getItem('jwt')                      // 수정
       const decoded = jwt_decode(token)
       if (decoded.isAdmin == 1) {
         this.admin = 1
@@ -317,7 +313,8 @@ export default {
 
 <style scoped>
   .container {
-    margin-top : 3rem;
+    margin-top : 5rem;               /* 수정 */
+    margin-bottom: 5rem;
   }
   h2 {
     float: left;
@@ -337,9 +334,9 @@ export default {
     color: black;
   }
   #btn {
-  font-size: 11px;
-  height: 35px;
-  background-color: rgb(130, 163, 209);
+    font-size: 11px;
+    height: 35px;
+    background-color: rgb(130, 163, 209);
   }
   #btn:hover {
     background-color: rgb(79, 138, 216);

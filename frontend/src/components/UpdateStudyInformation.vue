@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')            // 수정
       const config = {
         Authorization: `JWT ${token}`
       }

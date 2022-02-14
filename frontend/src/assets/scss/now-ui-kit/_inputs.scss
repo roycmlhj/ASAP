@@ -16,14 +16,14 @@
     }
 
     &:focus{
-        border: 1px solid $primary-color;
+        border: 1px solid $default-color;     // 수정
         @include box-shadow(none);
         outline: 0 !important;
         color: $black-color;
 
         & + .input-group-text,
         & ~ .input-group-text{
-            border: 1px solid $primary-color;
+            border: 1px solid $default-color;       // 수정
             border-left: none;
             background-color: $transparent-bg;
         }

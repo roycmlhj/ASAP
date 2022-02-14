@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar bg-white navbar-expand-lg navbar-relative mb-0">
+    <nav class="navbar fixed-top bg-white navbar-expand-lg navbar-relative">      <!--수정-->
       <div class="container">
         <div>
           <div>
@@ -133,13 +133,13 @@ export default {
   },
   methods: {
     logout: function () {
-      this.isLogin = false;
-      localStorage.removeItem("jwt"); // 토큰 값 삭제
+      this.isLogin = false; 
+      sessionStorage.removeItem("jwt"); // 토큰 값 삭제              // 수정
       this.$router.push({ name: "Login" });
     },
   },
   created: function () {
-    const token = localStorage.getItem("jwt");
+    const token = sessionStorage.getItem("jwt");                // 수정
     if (token) {
       this.isLogin = true;
       const decoded = jwt_decode(token);

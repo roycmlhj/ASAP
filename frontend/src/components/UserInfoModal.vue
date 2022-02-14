@@ -43,10 +43,10 @@
         </tr>
         <tr>
           <th :rowspan="studylist.length + 1">스터디</th>
-          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(studylist[0].studyno, member.userno)">퇴출</a></td>
+          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1" type="button" @click="userKick(studylist[0].studyno, member.userno)">퇴출</a></td>    <!--수정-->
         </tr>
         <tr v-for="(study, index) in studylist" :key="index.id">
-          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(study.studyno, member.userno)">퇴출</a></td>
+          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" type="button" @click="userKick(study.studyno, member.userno)">퇴출</a></td>      <!--수정-->
         </tr>
       </tbody>
     </table>
@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                 // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -116,8 +116,8 @@ export default {
     },
   },
   created: function () {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                        // 수정
+      const token = sessionStorage.getItem('jwt')                    // 수정
       const decoded = jwt_decode(token)
       this.isAdmin = decoded.isAdmin
       this.userNumber = decoded.userno

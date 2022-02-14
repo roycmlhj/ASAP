@@ -9,15 +9,15 @@
         label="이메일 *"
         label-for="email"
         label-align-sm="left"
-      >
-        <input
+      >                                      <!--input을 b-form-input으로 수정하고, class 삭제-->
+        <b-form-input
           id="email" 
-          class="form-control"
           v-model="user.email"
           :state="emailState"
           placeholder="E-mail"
           aria-describedby="input-live-help input-live-feedback"
         >
+        </b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           아이디는 이메일 형식이어야 합니다.
         </b-form-invalid-feedback>
@@ -31,12 +31,11 @@
         label-for="code"
         label-align-sm="left"
       >
-        <input 
+        <b-form-input 
           id="number" 
-          class="form-control"
           placeholder="Code"
           v-model="code"
-        >
+        ></b-form-input>
         <button type="button" class="btn float-right" @click="codeConfirm">인증번호 확인</button>
       </b-form-group>
       <b-form-group
@@ -44,15 +43,14 @@
         label-for="password"
         label-align-sm="left"
       >
-        <input 
+        <b-form-input 
           id="password"
           type="password" 
-          class="form-control"
           placeholder="Password"
           v-model="user.password"
           :state="passwordState"
           aria-describedby="input-live-help input-live-feedback"
-        >
+        ></b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
         </b-form-invalid-feedback>
@@ -62,15 +60,14 @@
         label-for="passwordcheck"
         label-align-sm="left"
       >
-        <input 
+        <b-form-input 
           id="passwordcheck"
           type="password" 
-          class="form-control"
           placeholder="Password Confirmation"
           v-model="passwordcheck"
           :state="passwordcheckState"
           aria-describedby="input-live-help input-live-feedback"
-        >
+        ></b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호가 일치하지 않습니다.
         </b-form-invalid-feedback>
@@ -80,14 +77,13 @@
         label-for="nickname"
         label-align-sm="left"
       >
-        <input 
+        <b-form-input 
           id="nickname"
-          class="form-control"
           v-model="user.nickname"
           placeholder="Nickname"
           :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
-        >
+        ></b-form-input>
         <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           닉네임은 두 글자 이상이어야 합니다.
         </b-form-invalid-feedback>
@@ -286,6 +282,7 @@ export default {
     min-height: 100vh;
     display: flex;
     align-items: center;
+    margin-top: 4rem;          /* 수정 */
   }
   .asap {
     font-family: 'Black Han Sans', sans-serif;

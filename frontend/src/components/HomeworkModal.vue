@@ -1,7 +1,7 @@
 <template>
 <div class="container">
   <font-awesome-icon v-if="homework.userno==user" class="fa-1x mt-1 mr-1 float-left" icon="edit"/>
-    <a v-if="homework.userno==user" href="#" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>과제 추가하기</strong></a>
+    <a v-if="homework.userno==user" type="button" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>과제 추가하기</strong></a>  <!--수정-->
   <b-modal ref="my-modal"
     ok-only 
     title="Create Homework"   
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     setToken: function () {
-        const token = localStorage.getItem('jwt')
+        const token = sessionStorage.getItem('jwt')               // 수정
         const config = {
           Authorization: `JWT ${token}`
         }
@@ -101,7 +101,7 @@ export default {
     }
   },
     created: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                  // 수정
       const decoded = jwt_decode(token)
       this.homework.userno = decoded.userno
       console.log(decoded, 123)

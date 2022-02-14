@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-for="homework in homeworkList" :key="homework.id">
-      <a href="#" @click="getHomeworkInformation(homework.homework.homeworkno)"><strong> {{ homework.homework.title }}</strong></a>
+      <a type="button" @click="getHomeworkInformation(homework.homework.homeworkno)"><strong> {{ homework.homework.title }}</strong></a>  <!--수정-->
       <hr>
       <p v-if="assignment && assignment.homework.homeworkno == homework.homework.homeworkno">
         <homework-item :assignment="assignment"></homework-item>
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                  // 수정
       const config = {
         Authorization: `JWT ${token}`
       }

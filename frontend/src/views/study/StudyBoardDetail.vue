@@ -67,9 +67,8 @@
                     <img src="../../views/accounts/assets/default.png" />
                   </p>
                   <p class="mt-2">
-                    <a
-                      id="show-btn"
-                      href="#"
+    <!--수정-->     <a id="show-btn"
+                      type="button"
                       class="mt-2"
                       @click="showModal(member)"
                     >
@@ -106,18 +105,20 @@
                     :value="member.userno"
                   >
                     <p v-if="member.image">
-                      <img :src="member.image" /><a
+                      <img :src="member.image" />
+    <!--수정-->        <a
                         id="show-btn"
-                        href="#"
+                        type="button"
                         class="mt-0"
                         @click="showModal(member)"
                         >{{ member.nickname }}</a
                       >
                     </p>
                     <p v-else>
-                      <img src="../../views/accounts/assets/default.png" /><a
+                      <img src="../../views/accounts/assets/default.png" />
+  <!--수정-->         <a
                         id="show-btn"
-                        href="#"
+                        type="button"
                         @click="showModal(member)"
                         >{{ member.nickname }}</a
                       >
@@ -151,9 +152,9 @@
                     <img src="../../views/accounts/assets/default.png" />
                   </p>
                   <p class="mt-2">
-                    <a
+   <!--수정-->      <a
                       id="show-btn"
-                      href="#"
+                      type="button"
                       class="mt-2"
                       @click="showModal(member)"
                     >
@@ -245,7 +246,7 @@ export default {
     };
   },
   created() {
-    const token = localStorage.getItem("jwt");
+    const token = sessionStorage.getItem("jwt");             // 수정
     const decoded = jwt_decode(token);
     const userno = decoded.userno;
     this.userno = userno;
@@ -314,7 +315,7 @@ export default {
 
   methods: {
     setToken: function () {
-      const token = localStorage.getItem("jwt");
+      const token = sessionStorage.getItem("jwt");            // 수정
       const config = {
         Authorization: `JWT ${token}`,
       };
@@ -433,6 +434,9 @@ export default {
 };
 </script>
 <style scoped>
+section {
+  margin-top: 4rem;               /* 수정 */
+}
 .page-header2 {
   width: 100%;
   height: 150px;

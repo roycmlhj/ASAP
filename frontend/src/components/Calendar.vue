@@ -84,7 +84,7 @@ export default {
   },
   methods:{
     eventClick(event,jsEvent,pos){
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')            // 수정
       const decoded = jwt_decode(token)
       const userno = decoded.userno
       this.userno = userno
@@ -126,7 +126,7 @@ export default {
       console.log("delete")
     },
     dayClick(day,jsEvent){
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')            // 수정
       const decoded = jwt_decode(token)
       const userno = decoded.userno
       this.userno = userno
