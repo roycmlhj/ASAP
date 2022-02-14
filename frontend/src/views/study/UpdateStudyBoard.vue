@@ -200,12 +200,11 @@ export default {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    margin-top: 4rem;
+    margin-top: 10rem;
   }
   button { 
     margin-top: 2rem;
     font-size: 15px;
-    height: 38px; 
     background-color: rgb(130, 163, 209); 
   } 
   button:hover { 

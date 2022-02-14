@@ -6,7 +6,7 @@
     <p v-else>
       <img src="../views/accounts/assets/default.png">
     </p>
-    <p>{{ member.email }}</p>
+    <h5><strong>{{ member.email }}</strong></h5>
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -139,5 +139,8 @@ export default {
     color: red;
     margin-left: 1rem;
     font-size: 13px;
+  }
+  h5 {
+    font-size: 17px;
   }
 </style>

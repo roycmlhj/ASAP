@@ -1,7 +1,7 @@
 <template>
 <div class="container">
-  <font-awesome-icon v-if="homework.userno==user" class="fa-1x mt-1 mr-1 float-left" icon="edit"/>
-    <a v-if="homework.userno==user" type="button" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>과제 추가하기</strong></a>  <!--수정-->
+  <font-awesome-icon v-if="homework.userno==user" class="fa-2x mt-1 mr-1 float-left" icon="edit"/>
+    <a v-if="homework.userno==user" type="button" id="show-btn" class="float-left mt-2" style="font-size: 20px; color: #394E79;" @click="showModal"><strong>과제 추가하기</strong></a>  <!--수정-->
   <b-modal ref="my-modal"
     ok-only 
     title="Create Homework"   

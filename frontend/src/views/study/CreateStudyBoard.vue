@@ -193,7 +193,7 @@ export default {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    margin-top: 4rem;
+    margin-top: 10rem;
   }
   p {
     font-family: 'Do Hyeon', sans-serif;

@@ -1,7 +1,7 @@
 <template>
 <div id="container">
   <div class="content" :style="{ height: post.studyBoard.content.length + 300 + 'px'}">
-    <h5><strong><font-awesome-icon icon="fa-solid fa-file-signature" class="fa-xl" /> 작성자 : {{ post.nickname }}</strong></h5>
+    <h5><strong>작성자 : {{ post.nickname }}</strong></h5>
     <div class="overflow" style="width: 100%; white-space: pre-line;">{{ post.studyBoard.content }}</div>
     <hr>
     <h5 class="mb-1"><strong><font-awesome-icon icon="fa-solid fa-download" class="fa-xl" /> 첨부파일</strong></h5>
@@ -187,7 +187,7 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    border-top: 15px solid palevioletred;
+    border-top: 15px solid rgb(216, 116, 112);
     border-left: 15px solid rgba(0, 0, 0, 0);
     width: 0;
   }

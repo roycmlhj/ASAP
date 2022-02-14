@@ -1,7 +1,7 @@
 <template>
   <div>
     <br>
-    <h4><strong>이번 주 과제 목록</strong></h4>
+    <h4 style="font-family: 'Do Hyeon', sans-serif;"><strong>이번 주 과제 목록</strong></h4>
     <div v-for="homework in getHomeworkList" :key="homework.id" >
       <p>{{homework.homework.title}}</p>
       </div>
@@ -68,3 +68,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>

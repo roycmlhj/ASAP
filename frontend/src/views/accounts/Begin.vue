@@ -151,7 +151,7 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic+Coding:wght@400;700&display=swap");
 #asap {
-  font-size: 200px;
+  font-size: 180px;
   text-align: center;
 }
 #description {
@@ -160,7 +160,7 @@ export default {
 #description2 {
   font-family: "Nanum Gothic Coding", monospace;
   font-weight: bold;
-  font-size: 23px;
+  font-size: 20px;
 }
 #description3 {
   font-family: "Black Han Sans", sans-serif;

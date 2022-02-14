@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div v-for="studyBoard in studyBoardList" :key="studyBoard.id">
-      <a type="button" @click="getArticleInformation(studyBoard.studyBoard.boardno)"><strong>  {{ studyBoard.studyBoard.title }}</strong></a>   <!--수정-->
+      <a type="button" @click="getArticleInformation(studyBoard.studyBoard.boardno)">
+        <font-awesome-icon icon="fa-solid fa-tag" /> 
+        <strong>  {{ studyBoard.studyBoard.title }}</strong></a>   <!--수정-->
       <hr>
       <p v-if="post && post.studyBoard.boardno == studyBoard.studyBoard.boardno">
         <article-item :post="post"></article-item>

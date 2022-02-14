@@ -309,6 +309,9 @@ export default {
 </script>
 
 <style scoped>
+  section {
+    margin-bottom: 10rem;
+  }
   .container {
     margin-top : 5rem;               /* 수정 */
     margin-bottom: 5rem;

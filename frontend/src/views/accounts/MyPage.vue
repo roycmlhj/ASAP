@@ -1,4 +1,5 @@
 <template>
+<section>
   <div v-if="userInfo">
     <div class="page-header clear-filter" filter-color="blue">
       <div class="container">
@@ -72,6 +73,7 @@
     </b-form-group>
     </b-modal>
   </div>
+</section>
 </template>
 <script>
 import { Tabs, TabPane } from '@/components';
@@ -192,9 +194,12 @@ export default {
 </script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Ubuntu:wght@500&display=swap");
+  section {
+    margin-bottom: 10rem;
+  }
   .container{
     z-index: 2;
-    padding-top: 10vh;
+    padding-top: 0;                    /* 수정 */
     padding-bottom: 40px;
     margin-top: 5rem;                    /* 수정 */
   }

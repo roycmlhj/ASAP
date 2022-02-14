@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <font-awesome-icon class="fa-1x mt-1 mr-1 float-left" icon="edit"/><a type="button" id="show-btn" class="float-left" style="color: rgb(130, 163, 209);" @click="showModal"><strong>글 작성하기</strong></a>  <!--수정-->
+  <font-awesome-icon class="fa-2x mt-1 mr-1 float-left" icon="edit"/><a type="button" id="show-btn" class="float-left mt-2" style="font-size: 20px; color: #394E79;" @click="showModal"><strong>글 작성하기</strong></a>  <!--수정-->
   <b-modal ref="my-modal"
     ok-only 
     title="Create Ariticle"   

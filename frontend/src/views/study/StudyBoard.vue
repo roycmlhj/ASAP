@@ -193,6 +193,9 @@ import {Badge} from '../../components'
   section {
     margin-top: 4rem;              /* 수정 */
   }
+  .container {
+    margin-bottom: 10rem;
+  }
   .page-header2 {
     width: 100%;
     height: 150px;

@@ -217,7 +217,9 @@
                 <router-link :to="`/study/board/update/${boardno}`">
                   <button type="button" class="btn col-5"><font-awesome-icon icon="fa-solid fa-pen" /> 수정하기</button>
                 </router-link>
+                <router-link :to="{}">
                 <button type="button" class="btn col-5" @click="deleteBoard(boardno)"><font-awesome-icon icon="fa-solid fa-trash" /> 삭제하기</button>
+                </router-link>
               </div>
             </div>
           </div>
@@ -479,7 +481,6 @@ h5 {
 }
 button {
   font-size: 15px;
-  height: 38px;
   background-color: rgb(130, 163, 209);
 }
 button:hover {
@@ -497,6 +498,7 @@ a {
 .container {
   margin-top: 80px;
   margin-bottom: 80px;
+  margin-bottom: 10rem;
 }
 .header {
   border-bottom: 1px solid rgb(230, 230, 230);
@@ -539,8 +541,6 @@ a {
   height: 400px;
   border: 1px solid rgb(230, 230, 230);
   padding-top: 20px;
-}
-.side {
 }
 .contact {
   background-color: rgb(245, 245, 245);

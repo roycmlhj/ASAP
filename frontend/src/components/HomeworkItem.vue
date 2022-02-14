@@ -2,7 +2,7 @@
   <div>
     <div id="container">
       <div class="content" :style="{ height: assignment.homework.content.length + 500 + 'px'}">
-        <h5><strong><font-awesome-icon icon="fa-solid fa-file-signature" class="fa-xl" /> 작성자 : {{ assignment.nickname }}</strong></h5>
+        <h5><strong>작성자 : {{ assignment.nickname }}</strong></h5>
         <div class="overflow" style="width: 100%; white-space: pre-line;">{{ assignment.homework.content }}</div>
         <p class="p">
           <b-form-file ref="file" method="post" enctype="multipart/form-data" class="mt-3"> 

@@ -83,8 +83,7 @@
       class="footer"
       :class="{ [`footer-${type}`]: type }"
       style="
-        background-color: gray;
-        color: white;
+        background-color: rgba(245, 244, 244, 0.932);
         text-shadow: -0.3px 0 #000, 0 0.3px #000, 0.3px 0 #000, 0 -0.3px #000;
         padding: 15px 0em 0px 0em;
         box-shadow: 5px 5px 5px 5px gray;
@@ -93,21 +92,17 @@
       <div class="container">
         <nav>
           <ul>
-            <p style="font-weight: 900; font-size: 25px">
-              ASAP |
-              <a
-                href="https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A107"
-                style="color: white"
-              >
-                GitLab
-              </a>
-            </p>
+            <p style="font-size: 20px">ASAP | 
+            <a
+              href="https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A107"
+              style="color: rgba(143, 140, 140, 0.932)"
+            >GitLab</a></p>
           </ul>
         </nav>
-        <div class="copyright" style="font-weight: 900; font-size: 13px">
-          © {{ year }}, Designed by SSAFY6기 공통 서울1반 7팀,<br />
+        <div class="copyright" style="font-size: 13px">
+          © {{ year }}, Designed by SSAFY 6기 공통 서울 1반 7팀,<br />
                     Coded by
-          SSAFY6기 공통 서울1반 7팀
+          SSAFY6기 공통 서울 1반 7팀
         </div>
       </div>
     </footer>
@@ -153,6 +148,7 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Nanum+Gothic:wght@400;700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
+
 #app {
   font-family: "Nanum Gothic", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -167,6 +163,10 @@ a {
 #asap {
   font-size: 30px;
   font-family: "Black Han Sans", sans-serif;
+  background-color: rgb(rgba(143, 140, 140, 0.932), green, blue);
+}
+footer {
+  min-height: 15vh;
 }
 </style>
 

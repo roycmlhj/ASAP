@@ -4,8 +4,7 @@
     <div class="d-flex justify-content-center">
       <font-awesome-icon icon="fa-solid fa-desktop" class="icon fa-5x" style="color: rgb(231, 223, 223);"/>
       <div>
-        <h5 id="massage">{{ nickname }}님의 스터디 공간</h5>
-        <h5>오늘의 스터디와 과제를 확인해주세요.</h5>
+        <h2 id="massage">{{ nickname }}님의 스터디 공간</h2>
       </div>
     </div>
   </div>
@@ -17,11 +16,6 @@
     <b-row class="mt-5 mb-3">
       <b-col>
         <b-row
-          style="
-            font-family: 'Gaegu', cursive;
-            font-family: 'Gamja Flower', cursive;
-            font-family: 'Hi Melody', cursive;
-          "
         >
           <b-col cols="6">
             <main-homework
@@ -41,9 +35,6 @@
         </b-row>
         <b-row
           style="
-            font-family: 'Gaegu', cursive;
-            font-family: 'Gamja Flower', cursive;
-            font-family: 'Hi Melody', cursive;
           "
         >
           <b-col cols="6">
@@ -54,14 +45,14 @@
             ></main-today-study>
           </b-col>
           <b-col cols="6">
-            <div class="sticker1" style="float: right">
+            <div id="sticker" class="sticker1" style="float: right">
               <br />
               <br />
               <br />
               <br />
 <!--수정-->   <a type="button"
                 @click="modalTurn"
-                style="color: black; font-size: x-large"
+                style="color: black; font-size: x-large; font-family: 'Do Hyeon', sans-serif;"
                 >+ 스터디방 만들기</a
               >
               <b-modal v-model="modalShow" title="Create Study" hide-footer>
@@ -145,7 +136,7 @@
               <br />
               <br />
               <router-link :to="{ name: 'CreateStudyBoard' }">
-  <!--수정-->   <a type="button" style="color: black; font-size: x-large" 
+  <!--수정-->   <a type="button" style="color: black; font-size: x-large; font-family: 'Do Hyeon', sans-serif;" 
                   >+ 스터디원 모집하기</a
                 >
               </router-link>
@@ -327,6 +318,8 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Gaegu&family=Gamja+Flower&family=Hi+Melody&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Nanum+Gothic&family=Ubuntu:wght@500&display=swap');
+
 form {
   padding: 0px 20px;
 } 
@@ -337,6 +330,7 @@ form {
 }
 section {
   margin-top: 4rem;                /* 수정 */
+  min-height: 100vh;
 }
 /* button {
     width: 100%;
@@ -348,15 +342,18 @@ section {
   background-size: 270px;
 }
 #massage{
-  margin-top: 3rem;
+  margin-top: 3.5rem;
 }
 .icon {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   margin-right: 2rem;
 }
-h5 {
+h2 {
   color: rgb(231, 223, 223);
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Black Han Sans', sans-serif;
   margin-bottom: 0px;
+}
+#sticker {
+  margin-bottom: 15rem;
 }
 </style>
