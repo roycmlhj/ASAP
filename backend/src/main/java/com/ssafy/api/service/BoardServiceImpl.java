@@ -88,7 +88,8 @@ public class BoardServiceImpl implements BoardService {
 						(int)studyRepository.countRecruteUser(board.getStudyno()),
 						board.getTimestamp(),
 						board.getInterests(),
-						userRepository.findById(board.getUserno()).get().getImage()
+						userRepository.findById(board.getUserno()).get().getImage(),
+						board.getHit()
 				));
 		return pagingList;
 	}
@@ -123,7 +124,8 @@ public class BoardServiceImpl implements BoardService {
 					(int)studyRepository.countRecruteUser(board.getStudyno()), 
 					board.getTimestamp(),
 					board.getInterests(),
-					userRepository.findById(board.getUserno()).get().getImage());
+					userRepository.findById(board.getUserno()).get().getImage(),
+					board.getHit());
 			pagingList.add(bp);
 		}
 		return pagingList;
