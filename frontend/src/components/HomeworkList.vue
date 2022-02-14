@@ -48,6 +48,8 @@ export default {
         })
           .then(res => {
             this.assignment = res.data
+            this.assignment.homework.content.replace(/\n/g,"<br>")
+            console.log(this.assignment.homework.content, 789)
           })
           .catch(err => {
             console.log(err)

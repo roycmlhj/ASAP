@@ -27,7 +27,7 @@
     </div>
     <b-progress :max="max" height="3rem">
       <b-progress-bar :value="value" style="background-color: #78c0e2;">
-        <span><strong>{{ value.toFixed(0) }} / {{ max }}</strong></span>   <!--수정-->
+        <span><strong>{{ value.toFixed(0) }}</strong></span>   <!--수정-->
       </b-progress-bar>
     </b-progress>
   </div>

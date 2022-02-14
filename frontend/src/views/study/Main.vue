@@ -1,11 +1,21 @@
 <template>
 <section>
+  <div class="page-header2">
+    <div class="d-flex justify-content-center">
+      <font-awesome-icon icon="fa-solid fa-desktop" class="icon fa-5x" style="color: rgb(231, 223, 223);"/>
+      <div>
+        <h5 id="massage">{{ nickname }}님의 스터디 공간</h5>
+        <h5>오늘의 스터디와 과제를 확인해주세요.</h5>
+      </div>
+    </div>
+  </div>
   <div class="container mt-5">
-    <div style="width: auto; text-align: center; background: #394e79">
+    <div style="width: auto; text-align: center;">
       <study-room-list :studies="studies"></study-room-list>
     </div>
+    <hr class="mt-5">
     <b-row class="mt-5 mb-3">
-      <b-col style="background-color: #e6c17b">
+      <b-col>
         <b-row
           style="
             font-family: 'Gaegu', cursive;
@@ -185,6 +195,7 @@ export default {
       doneHomeworkList: [],
       onHomeworkList: [],
       studyList: [],
+      nickname: null,
     };
   },
   methods: {
@@ -304,6 +315,7 @@ export default {
       const decoded = jwt_decode(token);
       console.log(decoded);
       this.userno = decoded.userno;
+      this.nickname = decoded.nickname
       this.getHomeworkList();
       this.getStudies();
     } else {
@@ -318,8 +330,13 @@ export default {
 form {
   padding: 0px 20px;
 } 
+.page-header2 {
+  width: 100%;
+  height: 150px;
+  background-color: #394E79;
+}
 section {
-  margin-top: 5rem;                /* 수정 */
+  margin-top: 4rem;                /* 수정 */
 }
 /* button {
     width: 100%;
@@ -329,5 +346,17 @@ section {
   width: 270px;
   height: 317px;
   background-size: 270px;
+}
+#massage{
+  margin-top: 3rem;
+}
+.icon {
+  margin-top: 2rem;
+  margin-right: 2rem;
+}
+h5 {
+  color: rgb(231, 223, 223);
+  font-family: 'Ubuntu', sans-serif;
+  margin-bottom: 0px;
 }
 </style>

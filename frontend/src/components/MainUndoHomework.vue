@@ -1,7 +1,7 @@
 <template>
   <div>
     <br />
-    <h4>미완료 과제 목록</h4>
+    <h4><strong>미완료 과제 목록</strong></h4>
     <div v-for="homework in onHomeworkList" :key="homework.id">
       <p>{{ homework.homework.title }}</p>
     </div>

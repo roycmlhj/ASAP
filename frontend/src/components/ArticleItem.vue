@@ -1,10 +1,10 @@
 <template>
 <div id="container">
-  <div class="content" :style="{ height: post.studyBoard.content.length + 350 + 'px'}">
-    <h5><strong>작성자 : {{ post.nickname }}</strong></h5>
-    <div class="overflow" style="width: 100%; white-space: normal">{{ post.studyBoard.content }}</div>
+  <div class="content" :style="{ height: post.studyBoard.content.length + 300 + 'px'}">
+    <h5><strong><font-awesome-icon icon="fa-solid fa-file-signature" class="fa-xl" /> 작성자 : {{ post.nickname }}</strong></h5>
+    <div class="overflow" style="width: 100%; white-space: pre-line;">{{ post.studyBoard.content }}</div>
     <hr>
-    <h5 class="mb-1"><strong>첨부파일</strong></h5>
+    <h5 class="mb-1"><strong><font-awesome-icon icon="fa-solid fa-download" class="fa-xl" /> 첨부파일</strong></h5>
     <div v-for="file in post.studyBoard.fileList" :key="file.id">
       <div class="overflow" style="width: 100%; white-space: normal">
         <a type="button" @click="downloadFile(file)"><p class="mb-0">{{ file.ogfilename }}</p></a>  <!--수정-->
@@ -192,7 +192,6 @@ export default {
     width: 0;
   }
   .overflow {
-    overflow-y: auto;
     font-size: 15px;
   }
   button { 

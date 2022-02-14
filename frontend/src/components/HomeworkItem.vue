@@ -1,9 +1,9 @@
 <template>
   <div>
     <div id="container">
-      <div class="content" :style="{ height: assignment.homework.content.length + 400 + 'px'}">
-        <h5><strong>작성자 : {{ assignment.nickname }}</strong></h5>
-        <div class="overflow" style="width: 100%; white-space: normal">{{ assignment.homework.content }}</div>
+      <div class="content" :style="{ height: assignment.homework.content.length + 500 + 'px'}">
+        <h5><strong><font-awesome-icon icon="fa-solid fa-file-signature" class="fa-xl" /> 작성자 : {{ assignment.nickname }}</strong></h5>
+        <div class="overflow" style="width: 100%; white-space: pre-line;">{{ assignment.homework.content }}</div>
         <p class="p">
           <b-form-file ref="file" method="post" enctype="multipart/form-data" class="mt-3"> 
           </b-form-file>
@@ -12,11 +12,11 @@
         <h5><strong>과제 제출 리스트</strong></h5>
         <p><font-awesome-icon icon="fa-solid fa-clock" class="fa-xl"/> 제출 기한 : {{assignment.homework.endDate.split(" ")[0]}}</p>
         <div v-for="userHomework in userHomeworkList" :key="userHomework.id">
-          <div v-if="userHomework.userHomewrok.filepath" class="p d-flex">
-            <div class="overflow" style="width: 100%; white-space: normal"> {{userHomework.nickname}} -
-              <a type="button" @click="downloadFile(userHomework.userHomewrok)">{{ userHomework.userHomewrok.ogfilename }}</a>  <!--수정-->
-              <a type="button" v-if="userHomework.userHomewrok.filepath && userHomework.userHomewrok.userno==userno" @click="deleteFile(userHomework.userHomewrok.userhomeworkno)" class="ml-3" style="color:red;">X</a>
-            </div>
+          <div v-if="userHomework.userHomewrok.filepath">
+            <a style="width: 100%; white-space: normal" type="button" @click="downloadFile(userHomework.userHomewrok)">
+              <p>{{ userHomework.nickname }} - {{ userHomework.userHomewrok.ogfilename }}</p>
+            </a>  <!--수정-->
+            <a type="button" v-if="userHomework.userHomewrok.filepath && userHomework.userHomewrok.userno==userno" @click="deleteFile(userHomework.userHomewrok.userhomeworkno)" style="color:red;">X</a>
           </div>
         </div>
       </div>
@@ -261,8 +261,9 @@ export default {
     background-color: rgb(130, 163, 209); 
   } 
   .overflow {
-    overflow-y: auto;
     font-size: 15px;
+    white-space: pre;
+    white-space: normal
   }
   button:hover { 
     background-color: rgb(79, 138, 216); 

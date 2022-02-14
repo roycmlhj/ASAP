@@ -2,10 +2,10 @@
   <div style="width: 1050px; display: inline-block" class="mt-4 mb-4">
     <swiper ref="swiper" :options="swiperOption">
       <swiper-slide v-for="study in studies" :key="study.id"
-        ><div class="studyRoom" style="background-color: #ffffff">
-          <h5 class="d-flex justify-content-center">
+        ><div class="studyRoom">
+          <h4 class="d-flex justify-content-center">
             <strong>{{ study.studyName }}</strong>
-          </h5>
+          </h4>
           <div class="d-flex justify-content-center">
             <p
               class="category d-flex justify-content-center"
@@ -29,8 +29,6 @@
         </div></swiper-slide
       >
       <div class="swiper-pagination" slot="pagination"></div>
-      <!-- <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div> -->
     </swiper>
   </div>
 </template>
@@ -53,14 +51,16 @@ export default {
   data() {
     return {
       swiperOption: {
-        slidesPerView: 3,
-        spaceBetween: 10,
-        loop: false,
+        slidesPerView: 4,
+        // spaceBetween: 10,
+        loop: true,
         pagination: { el: ".swiper-pagination", clickable: true },
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         },
+        autoplay: { delay: 2000 },
+
         // slidesPerView: "1",
         // spaceBetween: 1, // swiper-slide 사이의 간격 지정
         // slidesOffsetBefore: 0, // slidesOffsetBefore는 첫번째 슬라이드의 시작점에 대한 변경할 때 사용
@@ -81,7 +81,7 @@ export default {
 
 <style scoped>
 .studyRoom {
-  width: 340px;
+  width: 250px;
   height: 300px;
   display: flex;
   flex-direction: column;
@@ -102,9 +102,6 @@ button {
 }
 button:hover {
   background-color: rgb(79, 138, 216);
-}
-h5 {
-  color: rgb(130, 163, 209);
 }
 .category {
   background-color: rgb(245, 240, 235);

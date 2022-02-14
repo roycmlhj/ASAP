@@ -69,7 +69,7 @@
           </div>
         </b-modal>
         <router-link :to="{ name: 'Main'}">       <!--수정-->
-        <h4 style="color: white;"><font-awesome-icon icon="fa-solid fa-door-closed" />나가기</h4></router-link><!--수정-->
+        <h4 class="exit" style="color: white;"><font-awesome-icon icon="fa-solid fa-door-closed" /> 나가기</h4></router-link><!--수정-->
       </div>
     </div>
 
@@ -376,5 +376,7 @@ export default {
     margin: 0;
     font-size: 25px;
   }
-
+  .exit {
+    margin-top: 15rem;
+  }
 </style>

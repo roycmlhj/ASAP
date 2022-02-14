@@ -66,10 +66,10 @@
                   <p v-else>
                     <img src="../../views/accounts/assets/default.png" />
                   </p>
-                  <p class="mt-2">
+                  <p>
     <!--수정-->     <a id="show-btn"
                       type="button"
-                      class="mt-2"
+                      class="mt-1"
                       @click="showModal(member)"
                     >
                       {{ member.nickname }}
@@ -106,7 +106,6 @@
    <!--수정-->      <a
                       id="show-btn"
                       type="button"
-                      class="mt-2"
                       @click="showModal(member)"
                     >
                       {{ member.nickname }}</a
@@ -129,7 +128,7 @@
     <!--수정-->        <a
                         id="show-btn"
                         type="button"
-                        class="mt-0"
+                        style="margin-left: -10px;"
                         @click="showModal(member)"
                         >{{ member.nickname }}</a
                       >
@@ -175,7 +174,6 @@
    <!--수정-->      <a
                       id="show-btn"
                       type="button"
-                      class="mt-2"
                       @click="showModal(member)"
                     >
                       {{ member.nickname }}</a
