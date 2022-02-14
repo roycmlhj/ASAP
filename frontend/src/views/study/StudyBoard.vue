@@ -27,7 +27,7 @@
                 <div>
                   <badge v-for="topic in study.topics" class="mr-2" type="info" :key="topic.id">{{ topic }}</badge>
                 </div>
-                <p class="mt-2">{{ study.timestamp }}</p>
+                <p class="mt-2">작성일 : {{ study.timestamp }}</p>       <!--수정-->
               </div>
               <div class="col-6 d-flex justify-content-center">
                 <div>
@@ -42,7 +42,7 @@
                   </div>
                   <p class="mt-1 mb-2">스터디 모집 인원 : {{ study.maxmember }}명</p> 
                   <p class="mb-2">스터디 현재 인원 : {{ study.membercnt }}명</p>`
-                  <p style="margin-top:-20px;"> <i class="fas fa-eye" /> {{ study.hit }} </p>
+                  <p style="margin-top:-20px;"> <i class="fas fa-eye" /> 조회수 : {{ study.hit }} </p>     <!--수정-->
                 </div>
               </div>
             </div>

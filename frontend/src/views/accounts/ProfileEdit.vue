@@ -1,5 +1,5 @@
 <template>
-<section>
+<section>      <!--수정!! state 관련된거 지움-->
   <div class="container">
     <h2>개인 정보 수정</h2>
     <b-card bg-variant="light" class="card mb-4">
@@ -23,7 +23,6 @@
           id="password"
           type="password" 
           v-model="user.password" 
-          :state="passwordState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
         ></b-form-input>
@@ -40,7 +39,6 @@
           id="passwordcheck" 
           type="password"
           v-model="passwordcheck"
-          :state="passwordcheckState"
           aria-describedby="input-live-help input-live-feedback" 
           placeholder="비밀번호를 한번 더 입력해주세요."
         ></b-form-input>
@@ -56,7 +54,6 @@
         <b-form-input 
           id="nickname" 
           v-model="user.nickname" 
-          :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="닉네임은 2자 이상이어야 합니다."
         ></b-form-input>
@@ -144,7 +141,7 @@ export default {
     return {
       interestList : interest,
       userno: null,
-      admin: null,
+      admin: 0,                 // 수정
       user:{
         email: null,
         password: '',
