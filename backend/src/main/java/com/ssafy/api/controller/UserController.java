@@ -190,7 +190,7 @@ public class UserController {
 		studyAnalyze.setTotal_time(total_time);
 		int homeworkCnt = homeworkService.getDoHomeworkCnt(userno);
 		
-		int total_Exp = ((total_time % 60) + homeworkCnt) * 5;
+		int total_Exp = ((total_time / 60) + homeworkCnt) * 5;
 		user.setLevel(total_Exp / 100 + 1);
 		user.setExp(total_Exp % 100);
 		System.out.println(total_time + ", " + total_Exp + ", " + user.getLevel() + ", " + user.getExp());
