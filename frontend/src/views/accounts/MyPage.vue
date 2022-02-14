@@ -34,7 +34,7 @@
         <h2 class="title" id="title">About me</h2>
         <div class="d-flex col-12 mt-5">
           <div class="col-6 d-flex justify-content-center">
-            <study-chart :studyTime="studyTime"></study-chart>
+            <study-chart :studyTime="studyTime" :totalTime="totalTime"></study-chart>
           </div>
           <div class="col-6">
             <study-point-bar :userInfo="userInfo"></study-point-bar>
@@ -108,7 +108,8 @@ export default {
       endHomeworkList: [],
       studyTime: null,
       img: null,
-      count: 0
+      count: 0,
+      totalTime: 0
     }
   },
   methods: {
@@ -127,6 +128,8 @@ export default {
       })
         .then(res => {
           this.studyTime = res.data.study_analyze.studyTime
+          console.log(res.data.study_analyze, 888)
+          this.totalTime = res.data.study_analyze.total_time
           this.userInfo = res.data.user
           this.count = this.userInfo.boardList.length + this.userInfo.studyBoardList.length
           this.user.email = res.data.user.email
