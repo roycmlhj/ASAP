@@ -84,7 +84,7 @@
         <div id="join" class="animate join">
           <form v-on:submit.prevent accept-charset="UTF-8">
             <p class="submit">
-            <button @click="register" value="Join!" >화상회의 시작!</button>
+            <button @click="register" value="Join!" style="width:100px">화상회의 시작!</button>
             </p>
           </form>
         </div>
@@ -158,11 +158,12 @@ export default {
         studyno: this.$route.params.study_no
       },
       userNumber: null,
+      nickname:null,
       sidebarHomework: false,   // 수정
       sidebarArticle: false,  // 수정
       sidebarDetail: false, // 수정 
       sidebarMember: false, // 수정
-      nickname: null,
+      nickname: null, // webRTC socket에 보낼 name
       chatcontent:null,
     }
   },
@@ -380,6 +381,7 @@ export default {
       const token = sessionStorage.getItem('jwt')                   // 수정
       const decoded = jwt_decode(token)
       this.userNumber = decoded.userno
+      this.nickname = decoded.nickname // webRTC socket에 보낼 name
     } else {
       this.$router.push({name: 'Login'})
     }
@@ -1063,6 +1065,7 @@ var displayMediaOptions = {
 
   #wrapper{
     height : 50%;
+    margin-left : 100px;
   }
 
   #join{
