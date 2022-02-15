@@ -163,7 +163,6 @@ export default {
       sidebarArticle: false,  // 수정
       sidebarDetail: false, // 수정 
       sidebarMember: false, // 수정
-      nickname: null, // webRTC socket에 보낼 name
       chatcontent:null,
     }
   },
