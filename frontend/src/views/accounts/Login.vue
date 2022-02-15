@@ -1,5 +1,5 @@
 <template>
-<section>
+<section>    <!--전체적으로 수정-->
   <div class="container">
     <p class="asap">ASAP</p>
     <b-card class="col-lg-4">
@@ -45,6 +45,7 @@
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'Login',
@@ -66,6 +67,11 @@ export default {
         .then(res => {
           sessionStorage.setItem('jwt', res.data.accessToken)              // 수정
           this.$emit('login')
+          const token = sessionStorage.getItem('jwt')     
+          const decoded = jwt_decode(token)
+          if (decoded.isAdmin == 1) {
+            this.$emit('isAdmin')
+          }
           this.$router.push({ name: 'Main'})
         })
         .catch(err => {

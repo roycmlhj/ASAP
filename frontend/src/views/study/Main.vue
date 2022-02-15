@@ -1,4 +1,4 @@
-<template>
+<template>   <!--전체적으로 수정-->
 <section>
   <div class="page-header2">
     <div class="d-flex justify-content-center">
@@ -73,7 +73,7 @@
                       <b-button
                         @click="nameCheck"
                         class="mt-0"
-                        style="background-color: rgb(130, 163, 209); font-size: 13px;"
+                        style="background-color: rgb(130, 163, 209); font-size: 11px;"
                         >중복체크</b-button
                       >
                     </div>
@@ -128,7 +128,7 @@
                   </b-form-group>
                   <b-button
                     @click="createStudyRoom"
-                    style="background-color: #a5a6f6; width: 100%"
+                    style="background-color: rgb(130, 163, 209);  width: 100%"
                     >완료</b-button
                   >
                 </b-form>

@@ -87,8 +87,10 @@ public class StudyServiceImpl implements StudyService {
 		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
 		List<String> memberImage = new ArrayList<String>();
 		for(int i = 0; i < members.size(); i++) {
-			memberImage.add(userRepository.findById(members.get(i).getUserno()).get().getImage());
-		}
+			if(members.get(i).getPosition() < 2) { 
+				memberImage.add(userRepository.findById(members.get(i).getUserno()).get().getImage()); 
+				}		
+			}
 		
 		StudyInfo studyInfo = new StudyInfo();
 		studyInfo.setHomeworkList(homeworkList);

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app">   <!--전체적으로 수정-->
     <nav class="navbar fixed-top bg-white navbar-expand-lg navbar-relative">      <!--수정-->
       <div class="container">
         <div>
@@ -31,11 +31,10 @@
                   <p>Profile</p>
                 </a>
               </li>
-              <li v-if="isAdmin == 1" class="nav-item">
+              <li v-if="isAdmin" class="nav-item">
                 <a
-                  type="/admin/userlist"
-                  @click="logout"
-                  href="#"
+                  type="button"
+                  href="/admin/userlist"
                   class="nav-link"
                 >
                   <i class="now-ui-icons loader_gear"></i>
@@ -78,7 +77,7 @@
         </span>
       </div>
     </nav>
-    <router-view @login="isLogin = true" />
+    <router-view @login="isLogin = true" @isAdmin="isAdmin = true"/>
     <footer
       class="footer"
       :class="{ [`footer-${type}`]: type }"
@@ -122,7 +121,7 @@ export default {
   data: function () {
     return {
       isLogin: false,
-      isAdmin: null,
+      isAdmin: false,
       year: new Date().getFullYear(),
     };
   },
@@ -138,7 +137,12 @@ export default {
     if (token) {
       this.isLogin = true;
       const decoded = jwt_decode(token);
-      this.isAdmin = decoded.isAdmin;
+      console.log(decoded, 123)
+      if (decoded.isAdmin == 1) {
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
+      }
     }
   },
 };

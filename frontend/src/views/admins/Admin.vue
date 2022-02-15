@@ -1,6 +1,7 @@
-<template>
+<template>   <!--전체적으로 수정-->
+<section>
   <div class="container">
-    <h3 class="float-left"><strong>회원리스트</strong></h3>
+    <h2 class="float-left" style="font-family: 'Black Han Sans', sans-serif;"><strong>회원 리스트</strong></h2>
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
@@ -39,6 +40,7 @@
     </div>
     </b-modal>
   </div>
+</section>
 </template>
 
 <script>
@@ -125,14 +127,12 @@ export default {
     if (sessionStorage.getItem('jwt')) {
       const token = sessionStorage.getItem('jwt')
       const decoded = jwt_decode(token)
-      this.getUserList()
-      // console.log(decoded.isAdmin)
-      // if (decoded.isAdmin == 1)
-      //   {
-      //     this.getUserList()
-      //   } else {
-      //     this.$router.push({name: 'Login'})
-      //   }
+      if (decoded.isAdmin == 1)
+        {
+          this.getUserList()
+        } else {
+          this.$router.push({name: 'Login'})
+        }
     } else {
       this.$router.push({name: 'Login'})
     }
@@ -149,5 +149,9 @@ export default {
   }
   td {
     margin-top: 1rem;
+  }
+  section {
+    margin-top : 5rem;
+    margin-bottom: 10rem;
   }
 </style>
