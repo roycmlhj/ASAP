@@ -129,7 +129,7 @@ public class StudyController {
 	};
 	
 	@GetMapping("/detail/{studyno}")
-	@ApiOperation(value = "스터디 간략 정보", notes = "스터디번호에 따른 간략 정보를 반환해 준다.")
+	@ApiOperation(value = "스터디 정보", notes = "스터디번호에 따른 스터디 정보를 반환해 준다.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공"),
 		@ApiResponse(code = 401, message = "실패"),
