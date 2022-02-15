@@ -99,7 +99,7 @@ import {Badge} from '../../components'
         console.log(searchword)
         axios({
           method: 'get',
-          url: `http://localhost:8080/api/v1/board/list/search?keyword=${searchword}&type=${this.selected}`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list/search?keyword=${searchword}&type=${this.selected}`,
           
         })
         .then(res => {
@@ -125,7 +125,7 @@ import {Badge} from '../../components'
           console.log(searchword)
           axios({
             method: 'get',
-            url: `http://localhost:8080/api/v1/board/list/search?keyword=${searchword}&page=${pageNum}&type=${this.selected}`,
+            url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list/search?keyword=${searchword}&page=${pageNum}&type=${this.selected}`,
             
           })
           .then(res => {
@@ -142,7 +142,7 @@ import {Badge} from '../../components'
         else{
           axios({
             method: 'get',
-            url: `http://localhost:8080/api/v1/board/list?page=${pageNum}&size=8`,
+            url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list?page=${pageNum}&size=8`,
             headers: this.setToken()
           })
           .then(res => {
@@ -164,7 +164,7 @@ import {Badge} from '../../components'
     created(){
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/board/list?page=${1}&size=8`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list?page=${1}&size=8`,
       })
       .then(res => {
         console.log(res.data.content)

@@ -169,7 +169,7 @@ export default {
       formData.append('image', image)
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/user/upload/${this.userno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/upload/${this.userno}`,
         headers: this.setToken(),
         data: formData
       })
@@ -190,7 +190,7 @@ export default {
       console.log(this.user)
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/${this.userno}/`,
         headers: this.setToken(),
         data: this.user
       })
@@ -213,7 +213,7 @@ export default {
     userDelete: function () {
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/${this.userno}/`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -241,7 +241,7 @@ export default {
     getUserInformationByAdmin: function (user_no) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/admin/${user_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/${user_no}`,
       })
         .then(res => {
           console.log(res)

@@ -147,7 +147,7 @@ export default {
     clickConfirmation: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/user/${this.user.email}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/${this.user.email}/`,
         data: this.user.email,
       })
         .then(res => {
@@ -164,7 +164,7 @@ export default {
     emailAuth: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/email/${this.user.email}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/email/${this.user.email}/`,
       })
         .then(res => {
           console.log(res)
@@ -176,7 +176,7 @@ export default {
     nicnameCheck: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/user/nickname/${this.user.nickname}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/nickname/${this.user.nickname}/`,
       })
         .then(res => {
           this.nicFlag = 1
@@ -192,7 +192,7 @@ export default {
     codeConfirm: function () {
       axios({
         method: 'get',    // 수정
-        url: `http://localhost:8080/api/v1/email/email-confirm/${this.user.email}?code=${this.code}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/email/email-confirm/${this.user.email}?code=${this.code}`,
       })
         .then(res => {
           console.log(res, this.code)
@@ -215,7 +215,7 @@ export default {
       } else {
       axios({
         method: 'post',
-        url: 'http://localhost:8080/api/v1/user/signup/',
+        url: 'https://i6a107.p.ssafy.io:8443/api/v1/user/signup/',
         data: this.user,
       })
         .then(res => {

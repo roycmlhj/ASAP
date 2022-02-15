@@ -274,7 +274,7 @@ export default {
     this.boardno = this.$route.params.boardno;
     axios({
       method: "get",
-      url: `http://localhost:8080/api/v1/board/${this.boardno}`,
+      url: `https://i6a107.p.ssafy.io:8443/api/v1/board/${this.boardno}`,
     })
       .then((res) => {
         console.log(res.data);
@@ -353,7 +353,7 @@ export default {
     getUserInformation: function (user) {
       axios({
         method: "get",
-        url: `http://localhost:8080/api/v1/admin/${user.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/${user.userno}/`,
         headers: this.setToken(),
       })
         .then((res) => {
@@ -377,7 +377,7 @@ export default {
       // }
       axios({
         method: "post",
-        url: "http://localhost:8080/api/v1/study/apply",
+        url: "https://i6a107.p.ssafy.io:8443/api/v1/study/apply",
         headers: this.setToken(),
         data: data,
       })
@@ -404,7 +404,7 @@ export default {
         };
         axios({
           method: "put",
-          url: "http://localhost:8080/api/v1/study/accept",
+          url: "https://i6a107.p.ssafy.io:8443/api/v1/study/accept",
           headers: this.setToken(),
           data: data,
         })
@@ -427,7 +427,7 @@ export default {
         };
         axios({
           method: "put",
-          url: "http://localhost:8080/api/v1/study/accept",
+          url: "https://i6a107.p.ssafy.io:8443/api/v1/study/accept",
           headers: this.setToken(),
           data: data,
         })
@@ -444,7 +444,7 @@ export default {
     deleteBoard: function (boardno) {
       axios({
         method: "delete",
-        url: `http://localhost:8080/api/v1/board/${boardno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/board/${boardno}`,
         headers: this.setToken(),
       })
         .then((res) => {

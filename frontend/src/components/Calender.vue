@@ -29,7 +29,7 @@ export default {
   created() {
     axios({
       method: 'get',
-      url: `http://localhost:8080/api/v1/study/calendar/18`,
+      url: `https://i6a107.p.ssafy.io:8443/api/v1/study/calendar/18`,
     })
     .then(res => {
       console.log(res)

@@ -125,7 +125,7 @@ export default {
     getUser: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/user/detail/${this.userNo}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/detail/${this.userNo}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -161,7 +161,7 @@ export default {
     passwordConfirmation: function () {
       axios({
         method: 'post',
-        url: 'http://localhost:8080/api/v1/user/login/',
+        url: 'https://i6a107.p.ssafy.io:8443/api/v1/user/login/',
         data: this.user,
       })
         .then(res => {

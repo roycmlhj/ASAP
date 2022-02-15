@@ -12,139 +12,132 @@
     <div style="width: auto; text-align: center;">
       <study-room-list :studies="studies"></study-room-list>
     </div>
-    <hr class="mt-5">
-    <b-row class="mt-5 mb-3">
-      <b-col>
-        <b-row
+    <hr style="margin-top: 3rem;">
+    <div class="d-flex" style="margin-top: 5rem;">
+      <card class="col-9 mr-3">
+      <tabs type="primary" vertical class="row" > 
+        <tab-pane label="이번 주 과제 목록">
+          <main-homework
+            :onHomeworkList="onHomeworkList"
+            :doneHomeworkList="doneHomeworkList"
+            
+            style="float: left"
+          ></main-homework>
+        </tab-pane>
+        <tab-pane label="미완료 과제 목록">
+          <main-undo-homework
+            :onHomeworkList="onHomeworkList"
+            
+            style="float: left"
+          ></main-undo-homework>
+        </tab-pane>
+        <tab-pane label="오늘 진행되는 스터디">
+          <main-today-study
+            :studyList="studyList"
+          ></main-today-study>
+        </tab-pane> 
+      </tabs>
+      </card>
+      <card class="col-3">
+      <br>
+      <br>
+      
+      <div class="row">
+        <a
+          class="align-middle" 
+          type="button"
+        
+          @click="modalTurn"
+          style="color: black; font-size: x-large; font-family: 'Do Hyeon', sans-serif;"
+          >+ 스터디방 만들기</a
         >
-          <b-col cols="6">
-            <main-homework
-              :onHomeworkList="onHomeworkList"
-              :doneHomeworkList="doneHomeworkList"
-              class="sticker1"
-              style="float: left"
-            ></main-homework>
-          </b-col>
-          <b-col cols="6">
-            <main-undo-homework
-              :onHomeworkList="onHomeworkList"
-              class="sticker1"
-              style="float: left"
-            ></main-undo-homework>
-          </b-col>
-        </b-row>
-        <b-row
-          style="
-          "
+        
+        <router-link class="align-middle"  :to="{ name: 'CreateStudyBoard' }">
+          <a type="button" style="color: black; font-size: x-large; font-family: 'Do Hyeon', sans-serif;" 
+            >+ 스터디원 모집하기</a
+          >
+        </router-link>
+      </div>
+      </card>
+    </div>
+    <b-modal v-model="modalShow" title="Create Study" hide-footer>
+      <b-form>
+        <b-form-group
+          id="input-title-group"
+          label="Name"
+          lebel-for="input-title"
         >
-          <b-col cols="6">
-            <main-today-study
-              :studyList="studyList"
-              class="sticker1"
-              style="float: right"
-            ></main-today-study>
-          </b-col>
-          <b-col cols="6">
-            <div id="sticker" class="sticker1" style="float: right">
-              <br />
-              <br />
-              <br />
-              <br />
-<!--수정-->   <a type="button"
-                @click="modalTurn"
-                style="color: black; font-size: x-large; font-family: 'Do Hyeon', sans-serif;"
-                >+ 스터디방 만들기</a
-              >
-              <b-modal v-model="modalShow" title="Create Study" hide-footer>
-                <b-form>
-                  <b-form-group
-                    id="input-title-group"
-                    label="Name"
-                    lebel-for="input-title"
-                  >
-                    <div class="d-flex justify-content-between">
-                      <b-form-input
-                        id="input-title"
-                        v-model="title"
-                        type="text"
-                        style="width: 75%"
-                        required
-                      ></b-form-input>
-                      <b-button
-                        @click="nameCheck"
-                        class="mt-0"
-                        style="background-color: rgb(130, 163, 209); font-size: 11px;"
-                        >중복체크</b-button
-                      >
-                    </div>
-                  </b-form-group>
-                  <b-form-group label="Subject" label-for="interests">
-                    <b-form-select
-                      name="interests"
-                      id="interests"
-                      v-model="mainCategory"
-                    >
-                      <option value="" selected disabled hidden>
-                        주제를 선택해주세요
-                      </option>
-                      <option
-                        v-for="interest in interestsList"
-                        :key="interest.id"
-                        :value="interest.iname"
-                      >
-                        {{ interest.iname }}
-                      </option>
-                    </b-form-select>
-                  </b-form-group>
-                  <b-form-tags
-                    input-id="interests"
-                    v-model="interests"
-                    tag-variant="primary"
-                    tag-pills
-                    placeholder="세부 주제를 입력해주세요."
-                  ></b-form-tags>
-                  <b-form-group
-                    id="input-description-group"
-                    label="Description"
-                    lebel-for="input-description"
-                    class="mt-3"
-                  >
-                    <b-form-textarea
-                      id="input-description"
-                      v-model="description"
-                      type="text"
-                      rows="6"
-                      max-rows="6"
-                      required
-                    ></b-form-textarea>
-                  </b-form-group>
-                  <b-form-group
-                    id="input-member-group"
-                    label="The number of people"
-                    label-for="input-member"
-                  >
-                    <study-member-count-bar v-on:memberEvent="updateMember">
-                    </study-member-count-bar>
-                  </b-form-group>
-                  <b-button
-                    @click="createStudyRoom"
-                    style="background-color: rgb(130, 163, 209);  width: 100%"
-                    >완료</b-button
-                  >
-                </b-form>
-              </b-modal>
-              <br />
-              <br />
-              <router-link :to="{ name: 'CreateStudyBoard' }">
-  <!--수정-->   <a type="button" style="color: black; font-size: x-large; font-family: 'Do Hyeon', sans-serif;" 
-                  >+ 스터디원 모집하기</a
-                >
-              </router-link>
-            </div>
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
+          <div class="d-flex justify-content-between">
+            <b-form-input
+              id="input-title"
+              v-model="title"
+              type="text"
+              style="width: 75%"
+              required
+            ></b-form-input>
+            <b-button
+              @click="nameCheck"
+              class="mt-0"
+              style="background-color: rgb(130, 163, 209); font-size: 13px;"
+              >중복체크</b-button
+            >
+          </div>
+        </b-form-group>
+        <b-form-group label="Subject" label-for="interests">
+          <b-form-select
+            name="interests"
+            id="interests"
+            v-model="mainCategory"
+          >
+            <option value="" selected disabled hidden>
+              주제를 선택해주세요
+            </option>
+            <option
+              v-for="interest in interestsList"
+              :key="interest.id"
+              :value="interest.iname"
+            >
+              {{ interest.iname }}
+            </option>
+          </b-form-select>
+        </b-form-group>
+        <b-form-tags
+          input-id="interests"
+          v-model="interests"
+          tag-variant="primary"
+          tag-pills
+          placeholder="세부 주제를 입력해주세요."
+        ></b-form-tags>
+        <b-form-group
+          id="input-description-group"
+          label="Description"
+          lebel-for="input-description"
+          class="mt-3"
+        >
+          <b-form-textarea
+            id="input-description"
+            v-model="description"
+            type="text"
+            rows="6"
+            max-rows="6"
+            required
+          ></b-form-textarea>
+        </b-form-group>
+        <b-form-group
+          id="input-member-group"
+          label="The number of people"
+          label-for="input-member"
+        >
+          <study-member-count-bar v-on:memberEvent="updateMember">
+          </study-member-count-bar>
+        </b-form-group>
+        <b-button
+          @click="createStudyRoom"
+          style="background-color: #a5a6f6; width: 100%"
+          >완료</b-button
+        >
+      </b-form>
+    </b-modal>
   </div>
 </section>
 </template>
@@ -159,6 +152,8 @@ import MainHomework from "@/components/MainHomework.vue";
 import MainUndoHomework from "@/components/MainUndoHomework.vue";
 import MainTodayStudy from "@/components/MainTodayStudy.vue";
 import { Button } from "@/components";
+import {Tabs, TabPane} from '@/components'
+import {Card} from '@/components'
 
 export default {
   name: "Main",
@@ -169,6 +164,9 @@ export default {
     MainUndoHomework,
     MainTodayStudy,
     [Button.name]: Button,
+    Tabs,
+    TabPane,
+    Card
   },
   data() {
     return {
@@ -215,7 +213,7 @@ export default {
     getHomeworkList: function () {
       axios({
         method: "get",
-        url: `http://localhost:8080/api/v1/user/detail/${this.userno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/detail/${this.userno}`,
       })
         .then((res) => {
           this.onHomeworkList = res.data.onHomeworkList;
@@ -232,7 +230,7 @@ export default {
       } else {
         axios({
           method: "get",
-          url: `http://localhost:8080/api/v1/study/name_check/${this.title}`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/study/name_check/${this.title}`,
           data: this.title,
         })
           .then((res) => {
@@ -250,7 +248,7 @@ export default {
     getStudies: function () {
       axios({
         method: "get",
-        url: `http://localhost:8080/api/v1/study/${this.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study/${this.userno}/`,
         headers: this.setToken(),
       })
         .then((res) => {
@@ -286,7 +284,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: `http://localhost:8080/api/v1/study/create`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/study/create`,
           data: StudyRoomItem,
         })
           .then((res) => {
@@ -330,6 +328,7 @@ form {
 }
 section {
   margin-top: 4rem;                /* 수정 */
+  margin-bottom: 10rem;
   min-height: 100vh;
 }
 /* button {

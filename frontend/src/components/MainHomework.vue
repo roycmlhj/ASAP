@@ -1,10 +1,9 @@
 <template>
   <div>
     <br>
-    <h4 style="font-family: 'Do Hyeon', sans-serif;"><strong>이번 주 과제 목록</strong></h4>
-    <div v-for="(homework, index) in getHomeworkList" :key="index.id" >    <!--수정-->
-      <p v-if="index < 5">{{homework.homework.title}}</p>
-    </div>
+    <div v-for="homework in getHomeworkList" :key="homework.id" >
+      <p>{{homework.homework.title}}</p>
+      </div>
   </div>
 </template>
 
@@ -68,6 +67,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

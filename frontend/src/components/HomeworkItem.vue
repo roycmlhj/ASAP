@@ -119,7 +119,7 @@ export default {
       console.log(formData)
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/homework/upload`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/upload`,
         headers: this.setToken(),
         data: formData,
       })
@@ -134,7 +134,7 @@ export default {
     downloadFile: function (file) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/download/${file.userhomeworkno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/download/${file.userhomeworkno}`,
         headers: this.setToken(),
         responseType: "blob",
       })
@@ -156,7 +156,7 @@ export default {
     deleteFile: function(fileno){
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/filedelete/${fileno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/filedelete/${fileno}`,
        
       })
       .then(res => {
@@ -172,7 +172,7 @@ export default {
     deleteHomework: function (homeworkno) {
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/v1/homework/delete/${homeworkno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/delete/${homeworkno}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -187,7 +187,7 @@ export default {
     updateHomework: function () {
       axios({
         method: 'put',
-        url: `http://localhost:8080/api/v1/homework/modify`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/modify`,
         data: this.homework,
         headers: this.setToken(),
       })
@@ -202,7 +202,7 @@ export default {
     getUserHomeworkList: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/uploadList/${this.homework.homeworkno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/uploadList/${this.homework.homeworkno}`,
         headers: this.setToken(),
       })
         .then(res => {

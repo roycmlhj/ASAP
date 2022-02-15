@@ -1,9 +1,8 @@
 <template>
   <div>
     <br>
-    <h4 style="font-family: 'Do Hyeon', sans-serif;"><strong>오늘 진행되는 스터디</strong></h4>
-    <div v-for="(study, index) in getStudyList" :key="index.id" >    <!--수정-->
-      <p v-if="index < 5">{{study.studyname}}</p>
+    <div v-for="study in getStudyList" :key="study.id" >
+      <p>{{study.studyname}}</p>
     </div>
   </div>
 </template>

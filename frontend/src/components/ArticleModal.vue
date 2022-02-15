@@ -82,7 +82,7 @@ export default {
       formData.append('userno', this.article.userno)
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/study_board/create`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study_board/create`,
         headers: this.setToken(),
         data: formData
       })

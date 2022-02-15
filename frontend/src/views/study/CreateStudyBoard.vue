@@ -140,7 +140,7 @@ export default {
       this.studyno=studyinfo.studyno
       axios({
         method:'get',
-        url:`http://localhost:8080/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
+        url:`https://i6a107.p.ssafy.io:8443/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
         data:this.study
       }).then(res=> {
         console.log(res)
@@ -164,7 +164,7 @@ export default {
       console.log(StudyRoomItem)
       axios({
         method:'post',
-        url:`http://localhost:8080/api/v1/board/create/`,
+        url:`https://i6a107.p.ssafy.io:8443/api/v1/board/create/`,
         data: StudyRoomItem,
       }).then(res => {
         console.log(res)

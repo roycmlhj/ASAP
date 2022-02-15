@@ -41,6 +41,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     		registry.addResourceHandler("/webjars/**")
     				.addResourceLocations("classpath:/META-INF/resources/webjars/");
+        
+        registry.addResourceHandler("kurento-utils.js")
+            .addResourceLocations("classpath:/META-INF/resources/js/");
     		
     		/*
     		 * 

@@ -79,7 +79,7 @@ export default {
     getUserList: function () {
       axios({
         method: 'get',
-        url: 'http://localhost:8080/api/v1/admin/userlist',
+        url: 'https://i6a107.p.ssafy.io:8443/api/v1/admin/userlist',
         headers: this.setToken(),
       })
         .then(res => {
@@ -93,7 +93,7 @@ export default {
     getUserInformation: function (user) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/admin/${user.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/${user.userno}/`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -108,7 +108,7 @@ export default {
     userDelete: function (userNo) {
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/v1/user/${userNo}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/${userNo}/`,
         headers: this.setToken(),
       })
         .then(res => {

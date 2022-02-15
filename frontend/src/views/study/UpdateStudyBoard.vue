@@ -125,7 +125,7 @@ export default {
     console.log(this.boardno)
     axios({
       method:'get',
-      url:`http://localhost:8080/api/v1/board/${this.boardno}`,
+      url:`https://i6a107.p.ssafy.io:8443/api/v1/board/${this.boardno}`,
     }).then(res=> {
       console.log(res)
       const list = res.data.list
@@ -154,7 +154,7 @@ export default {
       this.studyno=studyinfo.studyno
       axios({
         method:'get',
-        url:`http://localhost:8080/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
+        url:`https://i6a107.p.ssafy.io:8443/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
         data:this.study
       }).then(res=> {
         console.log(res)
@@ -178,7 +178,7 @@ export default {
       
       axios({
         method:'post',
-        url:`http://localhost:8080/api/v1/board/${this.boardno}`,
+        url:`https://i6a107.p.ssafy.io:8443/api/v1/board/${this.boardno}`,
         data: StudyRoomItem,
       }).then(res => {
         console.log(res)
