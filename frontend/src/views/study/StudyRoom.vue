@@ -236,6 +236,17 @@ export default {
         .then(res => {
           console.log(res.data, 888)
           this.studyInformation = res.data
+          const memList= res.data.study.studyMemberList
+          var flag = false
+          for(var i = 0; i<memList.length;i++){
+            if(memList[i].userno==this.userNumber){
+              flag = true
+              break
+            }
+          }
+          if(!flag){
+            this.$router.push({name:'Main'})
+          }
           this.interestList = this.studyInformation.study.interests.split("#")
           this.interestList.shift(0)
           console.log(this.interestList)
@@ -365,19 +376,19 @@ export default {
     }
   },
   created: function () {
+    if (sessionStorage.getItem('jwt')) {                  // 수정
+      const token = sessionStorage.getItem('jwt')                   // 수정
+      const decoded = jwt_decode(token)
+      this.userNumber = decoded.userno
+    } else {
+      this.$router.push({name: 'Login'})
+    }
     this.getStudyMemberList()
     this.getArticleList()
     this.getHomeworkList()
     this.getStudyInformation()
     this.getCalendar()
-    if (sessionStorage.getItem('jwt')) {                  // 수정
-      const token = sessionStorage.getItem('jwt')                   // 수정
-      const decoded = jwt_decode(token)
-      this.userNumber = decoded.userno
-      this.nickname = decoded.nickname
-    } else {
-      this.$router.push({name: 'Login'})
-    }
+    
   }
 }
 //variables
