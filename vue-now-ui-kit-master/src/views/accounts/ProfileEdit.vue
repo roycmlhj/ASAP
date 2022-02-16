@@ -1,13 +1,7 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.01.30
-    마지막 업데이트 : 2022.01.30
-    
-    개인정보수정 페이지
- */
 <template>
-<section>
+<section>      <!--수정!! state 관련된거 지움-->
   <div class="container">
+    <h2>개인 정보 수정</h2>
     <b-card bg-variant="light" class="card mb-4">
       <h5><strong>프로필</strong></h5>
       <p v-if="img">
@@ -17,7 +11,7 @@
         <img src="./assets/default.png">
       </p>
       <p>{{ this.user.email }}</p>
-      <a href="#" class="float-right" @click="userDelete">회원탈퇴</a>
+      <a type="button" class="float-right" @click="userDelete">회원탈퇴</a>      <!--수정-->
     </b-card>
     <b-card bg-variant="light" class="input">
       <b-form-group
@@ -29,14 +23,12 @@
           id="password"
           type="password" 
           v-model="user.password" 
-          :state="passwordState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
-        >
-        </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        ></b-form-input>
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">   // 수정
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
       <b-form-group
         label="비밀번호"
@@ -47,14 +39,12 @@
           id="passwordcheck" 
           type="password"
           v-model="passwordcheck"
-          :state="passwordcheckState"
           aria-describedby="input-live-help input-live-feedback" 
           placeholder="비밀번호를 한번 더 입력해주세요."
-        >
-        </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        ></b-form-input>
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">     // 수정
           비밀번호가 일치하지 않습니다.
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
       <b-form-group
         label="닉네임"
@@ -64,24 +54,22 @@
         <b-form-input 
           id="nickname" 
           v-model="user.nickname" 
-          :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="닉네임은 2자 이상이어야 합니다."
-        >
-        </b-form-input>
-        <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
+        ></b-form-input>
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">    // 수정
           닉네임은 두 글자 이상이어야 합니다.
-        </b-form-invalid-feedback>
+        </b-form-invalid-feedback> -->
       </b-form-group>
     </b-card>
-    <div class="d-flex mt-4">
+    <div class="d-flex mr-3">
       <b-card class="col-6" bg-variant="light">
         <div class="image">
           <h5 class="float-left"><strong>이미지 업로드</strong></h5>
         </div>
         <b-form-file ref="image" method="post" enctype="multipart/form-data"> 
         </b-form-file>
-        <b-button class="mt-2 float-right" @click="imageUpload()" style="background-color: skyblue; border: none;">Add</b-button>
+        <b-button id="btn" class="mt-2 float-right" @click="imageUpload()">Add</b-button>
         <b-form-checkbox
           id="checkbox-1"
           name="checkbox-1"
@@ -91,7 +79,7 @@
           업로드 취소
         </b-form-checkbox>
       </b-card>
-      <b-card bg-variant="light" class="col-6">
+      <b-card bg-variant="light" class="col-6 ml-3">
         <h5 class="float-left"><strong>관심 분야</strong></h5>
         <b-form-select name="mainCategory" id="mainCategory" v-model="user.mainCategory" class="mb-3">
           <option value="" selected disabled hidden>선택해주세요</option>
@@ -99,45 +87,41 @@
         </b-form-select>
         <b-form-tags v-model="user.interests" no-outer-focus class="mb-2">
           <template v-slot="{ tags, inputAttrs, inputHandlers, addTag, removeTag }">
-            <b-input-group aria-controls="my-custom-tags-list">
+            <div class="d-flex justify-content-around">
               <input
                 v-bind="inputAttrs"
                 v-on="inputHandlers"
                 placeholder="관심 분야를 추가로 입력해주세요."
-                class="form-control">
-              <b-input-group-append>
-                <b-button @click="addTag()" style="background-color: skyblue; border: none;">Add</b-button>
-              </b-input-group-append>
-            </b-input-group>
+                class="form-control col-sm-10 mt-1">
+              <button id="btn" @click="addTag()" type="button" class="btn float-right mt-0">Add</button>
+            </div>
             <ul
               id="my-custom-tags-list"
-              class="list-unstyled d-inline-flex flex-wrap mb-3 mt-3"
+              class="list-unstyled d-inline-flex flex-wrap"
               aria-live="polite"
               aria-atomic="false"
               aria-relevant="additions removals"
             >
-              <b-card
+              <badge class="mr-1"
                 v-for="tag in tags"
                 :key="tag"
                 :id="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
                 tag="li"
-                class="mt-1 mr-1"
-                body-class="py-1 pr-2 text-nowrap"
               >
                 <strong>{{ tag }}</strong>
-                <b-button
+                <a
                   @click="removeTag(tag)"
-                  variant="link"
-                  size="sm"
+                  type="button"
+                  class="ml-3"
                   :aria-controls="`my-custom-tags-tag_${tag.replace(/\s/g, '_')}_`"
-                >remove</b-button>
-              </b-card>
+                >X</a>
+              </badge>
             </ul>
           </template>
         </b-form-tags>
       </b-card>
     </div>
-    <b-button class="btn1 mt-5 float-right" @click="userEdit">저장하기</b-button>
+    <b-button id="btn" type="button" class="btn float-right" @click="userEdit">저장하기</b-button>
   </div>
 </section>
 </template>
@@ -146,15 +130,18 @@
 import jwt_decode from 'jwt-decode'
 import interest from "./assets/interests.json"
 import axios from 'axios'
-
+import {Badge} from '../../components'
 
 export default {
   name: 'ProfileEdit',
+  components: {
+    [Badge.name]: Badge
+  },
   data: () => {
     return {
       interestList : interest,
       userno: null,
-      admin: null,
+      admin: 0,                 // 수정
       user:{
         email: null,
         password: '',
@@ -169,7 +156,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                 // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -188,7 +175,7 @@ export default {
       })
         .then(res => {
           console.log(res)
-          localStorage.setItem('jwt', res.data.accessToken)
+          sessionStorage.setItem('jwt', res.data.accessToken)               // 수정
           window.location.reload(this.$route.params.user_no)
         })
         .catch(err => {
@@ -210,7 +197,7 @@ export default {
         .then(res => {
           console.log(res)
           if (this.admin == 0) {
-            localStorage.setItem('jwt', res.data.accessToken)
+            sessionStorage.setItem('jwt', res.data.accessToken)               // 수정
             alert("회원 정보 수정이 완료되었습니다.")
             window.location.reload(this.$route.params.user_no)
           }
@@ -239,7 +226,7 @@ export default {
         })
     },
     getUserInformation: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')              // 수정
       const decoded = jwt_decode(token)
       this.user.nickname = decoded.nickname
       this.user.mainCategory = decoded.mainCategory
@@ -272,40 +259,40 @@ export default {
     },
   },
   computed: {
-    nameState() {
-      if (this.user.nickname.length == 0) {
-        return null
-      } else {
-        return this.user.nickname.length > 1 ? true : false
-      }
-    },
-    passwordState() {
-      var pattern1 = /[0-9]/;
-      var pattern2 = /[a-zA-Z]/;
-      var pattern3 = /[~!@#$%<>^&*]/;
-      if (this.user.password == 0) {
-        return null
-      }
-      else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
-        return false
-      } else {
-        return true
-      }
-    },
-    passwordcheckState() {
-      if (this.passwordcheck.length == 0) {
-        return null
-      }
-      else if (this.passwordcheck == this.user.password) {
-        return true
-      } else {
-        return false
-      }
-    }
+    // nameState() {                                // 수정
+    //   if (this.user.nickname.length == 0) {
+    //     return null
+    //   } else {
+    //     return this.user.nickname.length > 1 ? true : false    
+    //   }
+    // },
+    // passwordState() {
+    //   var pattern1 = /[0-9]/;
+    //   var pattern2 = /[a-zA-Z]/;
+    //   var pattern3 = /[~!@#$%<>^&*]/;
+    //   if (this.user.password == 0) {
+    //     return null
+    //   }
+    //   else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // },
+    // passwordcheckState() {
+    //   if (this.passwordcheck.length == 0) {
+    //     return null
+    //   }
+    //   else if (this.passwordcheck == this.user.password) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // }
   },
   created: function () {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                       // 수정
+      const token = sessionStorage.getItem('jwt')                      // 수정
       const decoded = jwt_decode(token)
       if (decoded.isAdmin == 1) {
         this.admin = 1
@@ -322,21 +309,36 @@ export default {
 </script>
 
 <style scoped>
- img {
-   width: 100px;
-   height: 100px;
-   border-radius: 70%;
- }
- .btn1 {
-   background-color: palevioletred;
-   border: none;
- }
- input {
-   border: none;
-   border-bottom: solid 1px;
- }
- .image {
-   display: flex;
-   flex-direction: row;
- }
+  section {
+    margin-bottom: 10rem;
+  }
+  .container {
+    margin-top : 5rem;               /* 수정 */
+    margin-bottom: 5rem;
+  }
+  h2 {
+    float: left;
+    margin-bottom: 1rem;
+    font-family: 'Black Han Sans', sans-serif;
+  }
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%;
+  }
+  .image {
+    display: flex;
+    flex-direction: row;
+  }
+  a {
+    color: black;
+  }
+  #btn {
+    font-size: 11px;
+    height: 35px;
+    background-color: rgb(130, 163, 209);
+  }
+  #btn:hover {
+    background-color: rgb(79, 138, 216);
+  }
 </style>

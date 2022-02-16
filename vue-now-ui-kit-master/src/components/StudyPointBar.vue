@@ -1,14 +1,9 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.09
-    마지막 업데이트 : 2022.02.09
-    
-    마이페이지 > 스터디 포인트
- */
 <template>
-  <div>
+  <div class="point">
     <h5><strong>스터디 포인트</strong></h5>
-    <div>
+    <div class="d-flex justify-content-start">현재 레벨 : {{ userInfo.level }}</div>
+    <div class="d-flex justify-content-start">다음 레벨 : {{ userInfo.level + 1 }}</div>
+    <div class="mt-3">
       <p v-if="this.userInfo.level == 1" class="d-flex justify-content-between">
         <font-awesome-icon class="fa-2x mb-2" icon="star"/>
         <font-awesome-icon class="fa-2x mb-2" icon="medal"/>
@@ -32,7 +27,7 @@
     </div>
     <b-progress :max="max" height="3rem">
       <b-progress-bar :value="value" style="background-color: #78c0e2;">
-        <span><strong>{{ value.toFixed(2) }} / {{ max }}</strong></span>
+        <span><strong>{{ value.toFixed(0) }}</strong></span>   <!--수정-->
       </b-progress-bar>
     </b-progress>
   </div>
@@ -48,8 +43,8 @@ export default {
   },
   data() {
     return {
-      value: 66.7,
-      // value: this.userInfo.exp,
+      // value: 66.7,
+      value: this.userInfo.exp,
       max: 100
     }
   },
@@ -57,10 +52,15 @@ export default {
 </script>
 
 <style scoped>
+  .point {
+    display: flex;
+    flex-direction: column;
+  }
   p {
     margin: 0;
   }
   h5 {
     text-align: start;
+    margin: 0px;
   }
 </style>

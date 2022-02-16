@@ -1,28 +1,23 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.05
-    마지막 업데이트 : 2022.02.05
-    
-    스터디 방 > 과제 상세보기, 수정, 삭제
- */
 <template>
   <div>
     <div id="container">
-      <div class="content" :style="{ height: assignment.homework.content.length + 350 + 'px'}">
-        <p><strong>작성자 : {{ assignment.nickname }}</strong></p>
-        <p>{{ assignment.homework.content }}</p>
+      <div class="content" :style="{ height: assignment.homework.content.length + 500 + 'px'}">
+        <h5><strong>작성자 : {{ assignment.nickname }}</strong></h5>
+        <div class="overflow" style="width: 100%; white-space: pre-line;">{{ assignment.homework.content }}</div>
         <p class="p">
           <b-form-file ref="file" method="post" enctype="multipart/form-data" class="mt-3"> 
           </b-form-file>
-          <b-button class="mt-2" @click="uploadFile()" style="background-color: skyblue; border: none;">Add</b-button>
+          <b-button class="mt-2" @click="uploadFile()" style="font-size: 8px; background-color: skyblue; border: none;">Add</b-button>
         </p>
-        <p class="mb-1"><strong>과제 제출 리스트</strong></p>
+        <h5><strong>과제 제출 리스트</strong></h5>
+        <p><font-awesome-icon icon="fa-solid fa-clock" class="fa-xl"/> 제출 기한 : {{assignment.homework.endDate.split(" ")[0]}}</p>
         <div v-for="userHomework in userHomeworkList" :key="userHomework.id">
-          <p class="p d-flex justify-content-between">
-            {{userHomework.nickname}} - <a :href="userHomework.userHomewrok.filepath" download>{{ userHomework.userHomewrok.ogfilename }}</a> 
-            <a v-if="userHomework.userHomewrok.filepath && userHomework.userHomewrok.userno==userno" @click="deleteFile(userHomework.userHomewrok.userhomeworkno)" style="color:red;">X</a>
-          </p>
-          
+          <div v-if="userHomework.userHomewrok.filepath">
+            <a style="width: 100%; white-space: normal" type="button" @click="downloadFile(userHomework.userHomewrok)">
+              <p>{{ userHomework.nickname }} - {{ userHomework.userHomewrok.ogfilename }}</p>
+            </a>  <!--수정-->
+            <a type="button" v-if="userHomework.userHomewrok.filepath && userHomework.userHomewrok.userno==userno" @click="deleteFile(userHomework.userHomewrok.userhomeworkno)" style="color:red;">X</a>
+          </div>
         </div>
       </div>
       <div class="mt-2 mb-3">
@@ -34,42 +29,47 @@
         title="Update Homework"   
         hide-footer 
       >
-        <b-form-group
-          label="Title"
-          label-for="title"
-        >
-          <b-form-input 
-            id="title" 
-            type="text"
-            v-model="homework.title"
+        <form>
+          <b-form-group
+            label="Title"
+            label-for="title"
           >
-          </b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Content"
-          label-for="content"
-        >
-          <b-form-textarea 
-            id="content" 
-            type="text"
-            v-model="homework.content"
-            rows="6"
-            max-rows="6"
+            <input 
+              id="title" 
+              type="text"
+              v-model="homework.title"
+              required
+              class="form-control"
+            >
+          </b-form-group>
+          <b-form-group
+            label="Content"
+            label-for="content"
           >
-          </b-form-textarea>
-        </b-form-group>
-        <b-form-group
-          label="Date"
-          label-for="content"
-        >
-          <b-form-input 
-            id="content" 
-            type="date"
-            v-model="homework.endDate"
+            <b-form-textarea 
+              id="content" 
+              type="text"
+              v-model="homework.content"
+              maxlength=100
+              rows="6"
+              max-rows="6"
+              required
+            >
+            </b-form-textarea>
+          </b-form-group>
+          <b-form-group
+            label="Date"
+            label-for="content"
           >
-          </b-form-input>
-        </b-form-group>
-        <b-button style="float-right; font-size: 15px; height: 40px;" @click="updateHomework()">확인</b-button>
+            <b-form-input 
+              id="content" 
+              type="date"
+              v-model="homework.endDate"
+            >
+            </b-form-input>
+          </b-form-group>
+          <b-button type="submit" style="float-right; font-size: 15px; height: 40px;" @click="updateHomework()">확인</b-button>
+        </form>
       </b-modal>
     </div>
   </div>
@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')              // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -125,7 +125,7 @@ export default {
         method: 'post',
         url: `http://localhost:8080/api/v1/homework/upload`,
         headers: this.setToken(),
-        data: formData
+        data: formData,
       })
         .then(res => {
           console.log(res)
@@ -135,8 +135,29 @@ export default {
           console.log(err)
         })
     },
+    downloadFile: function (file) {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/homework/download/${file.userhomeworkno}`,
+        headers: this.setToken(),
+        responseType: "blob",
+      })
+        .then(res => {
+          console.log(res.data)
+          const url = window.URL
+          .createObjectURL(new Blob([res.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `${file.ogfilename}`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     deleteFile: function(fileno){
-      console.log(fileno)
       axios({
         method: 'get',
         url: `http://localhost:8080/api/v1/homework/filedelete/${fileno}`,
@@ -144,7 +165,7 @@ export default {
       })
       .then(res => {
         console.log(res.data)
-        alert("과제 삭제 완료")
+        alert("해당 과제를 삭제하였습니다.")
         window.location.reload()
       })
       .catch(err => {
@@ -162,19 +183,36 @@ export default {
           console.log(res.data)
           alert("게시글이 삭제되었습니다.")
           window.location.reload()
-          this.$emit('getHomeworkList')
         })
         .catch(err => {
           console.log(err)
         })
     },
     updateHomework: function () {
-      axios({
-        method: 'put',
-        url: `http://localhost:8080/api/v1/homework/modify`,
-        data: this.homework,
-        headers: this.setToken(),
-      })
+      var flagTitle=false
+      var flagContent=false
+      for(var i = 0; i<this.homework.title.length;i++){
+        if(this.homework.title[i]!=' '){
+          flagTitle=true
+          break
+        }
+      }
+      for(var i = 0; i<this.homework.content.length;i++){
+        if(this.homework.content[i]!=' '){
+          flagContent=true
+          break
+        }
+      }
+      console.log(flagTitle, flagContent)
+      if (this.homework.title == null || this.homework.content == null || this.homework.title=='' || this.homework.content==''|| this.homework.endDate==null || !flagTitle ||!flagContent) {
+        alert("모든 입력 칸을 입력해주세요.")
+      }else{
+        axios({
+          method: 'put',
+          url: `http://localhost:8080/api/v1/homework/modify`,
+          data: this.homework,
+          headers: this.setToken(),
+        })
         .then(res => {
           console.log(res.data)
           window.location.reload()
@@ -182,6 +220,7 @@ export default {
         .catch(err => {
           console.log(err)
         })
+      }
     },
     getUserHomeworkList: function () {
       axios({
@@ -200,7 +239,7 @@ export default {
     },
   },
     created() {
-    const token = localStorage.getItem('jwt')
+    const token = sessionStorage.getItem('jwt')            // 수정
     const decoded = jwt_decode(token)
     const userno = decoded.userno
     this.userno = userno
@@ -220,11 +259,13 @@ export default {
     position: relative;
     background-color: white;
     box-shadow: 5px 5px 5px 0px gray;
-    word-break: break-all;
+    /* word-break: break-all; */
     white-space:pre;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    word-break: keep-all; 
+    word-wrap: break-word;
   }
   .content:before {
     content: '';
@@ -239,9 +280,14 @@ export default {
     float: right;
     margin-right: 2px;
     font-size: 11px; 
-    height: 30px; 
+    height: 34px; 
     background-color: rgb(130, 163, 209); 
   } 
+  .overflow {
+    font-size: 15px;
+    white-space: pre;
+    white-space: normal
+  }
   button:hover { 
     background-color: rgb(79, 138, 216); 
   }
@@ -250,5 +296,12 @@ export default {
   }
   p{
     font-size:15px;
+  }
+  h5 {
+    font-size: 16px;
+  }
+  a {
+    color: black;
+    font-size: 15px;
   }
 </style>

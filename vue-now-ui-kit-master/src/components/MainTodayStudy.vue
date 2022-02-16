@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>오늘 진행되는 스터디</h4>
+    <br>
     <div v-for="study in getStudyList" :key="study.id" >
       <p>{{study.studyname}}</p>
     </div>

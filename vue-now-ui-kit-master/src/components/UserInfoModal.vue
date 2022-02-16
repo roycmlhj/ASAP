@@ -1,10 +1,3 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.01.30
-    마지막 업데이트 : 2022.02.05
-    
-    회원 상세 정보 모달
- */
 <template>
   <div class="container">
     <p v-if="member.image">
@@ -13,7 +6,7 @@
     <p v-else>
       <img src="../views/accounts/assets/default.png">
     </p>
-    <p>{{ member.email }}</p>
+    <h5><strong>{{ member.email }}</strong></h5>
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -26,7 +19,7 @@
         </tr>
         <tr>
           <th>세부관심분야</th>
-          <td style="width: 70%;"><user-interests :interestList="getInterests(member)"></user-interests></td>
+          <td><user-interests :interestList="getInterests(member)"></user-interests></td>
         </tr>
         <tr>
           <th>Level</th>
@@ -50,10 +43,10 @@
         </tr>
         <tr>
           <th :rowspan="studylist.length + 1">스터디</th>
-          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(studylist[0].studyno, member.userno)">퇴출</a></td>
+          <td v-if="studylist.length >= 1">{{ studylist[0].studyname }}<a v-if="isAdmin == 1" type="button" @click="userKick(studylist[0].studyno, member.userno)">퇴출</a></td>    <!--수정-->
         </tr>
         <tr v-for="(study, index) in studylist" :key="index.id">
-          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" href="#" @click="userKick(study.studyno, member.userno)">퇴출</a></td>
+          <td v-if="index != 0 && studylist.length >= 1">{{ study.studyname }}<a v-if="isAdmin == 1" type="button" @click="userKick(study.studyno, member.userno)">퇴출</a></td>      <!--수정-->
         </tr>
       </tbody>
     </table>
@@ -93,7 +86,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                 // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -123,8 +116,8 @@ export default {
     },
   },
   created: function () {
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                        // 수정
+      const token = sessionStorage.getItem('jwt')                    // 수정
       const decoded = jwt_decode(token)
       this.isAdmin = decoded.isAdmin
       this.userNumber = decoded.userno
@@ -146,5 +139,8 @@ export default {
     color: red;
     margin-left: 1rem;
     font-size: 13px;
+  }
+  h5 {
+    font-size: 17px;
   }
 </style>

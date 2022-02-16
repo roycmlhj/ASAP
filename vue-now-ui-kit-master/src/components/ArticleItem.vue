@@ -1,23 +1,15 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.04
-    
-    스터디 방 > 게시글 수정, 삭제, 상세 정보
- */
 <template>
 <div id="container">
-  <div class="content" :style="{ height: post.studyBoard.content.length + 150 + 'px'}">
-    <p><strong>작성자 : {{ post.nickname }}</strong></p>
-    <p>{{ post.studyBoard.content }}</p>
-  </div>
-  
-  <div class="mt-2" v-for="file in post.studyBoard.fileList" :key="file.id">
-    <p class="p d-flex justify-content-between">
-      <a :href="file.filepath" download>{{ file.ogfilename }}</a> 
-      
-    </p> 
-    
+  <div class="content" :style="{ height: post.studyBoard.content.length + 300 + 'px'}">
+    <h5><strong>작성자 : {{ post.nickname }}</strong></h5>
+    <div class="overflow" style="width: 100%; white-space: pre-line;">{{ post.studyBoard.content }}</div>
+    <hr>
+    <h5 class="mb-1"><strong><font-awesome-icon icon="fa-solid fa-download" class="fa-xl" /> 첨부파일</strong></h5>
+    <div v-for="file in post.studyBoard.fileList" :key="file.id">
+      <div class="overflow" style="width: 100%; white-space: normal">
+        <a type="button" @click="downloadFile(file)"><p class="mb-0">{{ file.ogfilename }}</p></a>  <!--수정-->
+      </div>
+    </div>
   </div>
   <div class="mt-2 mb-3">
     <b-button v-if="userno===articleuserno" @click="deleteArticle(post.studyBoard.boardno)">삭제</b-button>
@@ -47,6 +39,7 @@
           id="content" 
           type="text"
           v-model="article.content"
+          maxlength=100
           rows="6"
           max-rows="6"
         >
@@ -86,7 +79,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')  // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -106,7 +99,28 @@ export default {
         .then(res => {
           console.log(res.data)
           alert("게시글이 삭제되었습니다.")
-          this.$emit('getArticleList')
+          window.location.reload()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    downloadFile: function (file) {
+      axios({
+        method: 'get',
+        url: `http://localhost:8080/api/v1/study_board/download/${file.fileno}`,
+        headers: this.setToken(),
+        responseType: "blob",
+      })
+        .then(res => {
+          const url = window.URL
+          .createObjectURL(new Blob([res.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `${file.ogfilename}`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         })
         .catch(err => {
           console.log(err)
@@ -121,12 +135,30 @@ export default {
       formData.append('title', this.article.title)
       formData.append('content', this.article.content)
       formData.append('boardno', this.article.boardno)
-      axios({
-        method: 'put',
-        url: `http://localhost:8080/api/v1/study_board/modify`,
-        headers: this.setToken(),
-        data: formData,
-      })
+      var flagTitle=false
+      var flagContent=false
+      for(var i = 0; i<this.article.title.length;i++){
+        if(this.article.title[i]!=' '){
+          flagTitle=true
+          break
+        }
+      }
+      for(var i = 0; i<this.article.content.length;i++){
+        if(this.article.content[i]!=' '){
+          flagContent=true
+          break
+        }
+      }
+      console.log(flagTitle, flagContent)
+      if (this.article.title == null || this.article.content == null || this.article.title=='' || this.article.content==''|| this.article.endDate==null || !flagTitle ||!flagContent) {
+        alert("모든 입력 칸을 입력해주세요.")
+      }else{
+        axios({
+          method: 'put',
+          url: `http://localhost:8080/api/v1/study_board/modify`,
+          headers: this.setToken(),
+          data: formData,
+        })
         .then(res => {
           console.log(res.data)
           window.location.reload()
@@ -134,10 +166,11 @@ export default {
         .catch(err => {
           console.log(err)
         })
+      }
     }
   },
   created() {
-    const token = localStorage.getItem('jwt')
+    const token = sessionStorage.getItem('jwt')  // 수정
     const decoded = jwt_decode(token)
     const userno = decoded.userno
     this.userno = userno
@@ -148,21 +181,24 @@ export default {
 </script>
 
 <style scoped>
-
   #container {
     display: flex;
     flex-direction: column;
+  }
+  h5 {
+    font-size: 16px;
   }
   p{
     font-size:15px;
   }
   .content {
+    width: 250px;
     border: 1px solid #0000004d;
     position: relative;
     background-color: white;
     box-shadow: 5px 5px 5px 0px gray;
     word-break: break-all;
-    white-space:pre;
+    white-space: pre;
     padding: 10px;
   }
   .content:before {
@@ -170,18 +206,28 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    border-top: 15px solid palevioletred;
+    border-top: 15px solid rgb(216, 116, 112);
     border-left: 15px solid rgba(0, 0, 0, 0);
     width: 0;
+  }
+  .overflow {
+    font-size: 15px;
   }
   button { 
     float: right;
     margin-right: 2px;
     font-size: 11px; 
-    height: 30px; 
+    height: 34px; 
     background-color: rgb(130, 163, 209); 
   } 
   button:hover { 
     background-color: rgb(79, 138, 216); 
+  }
+  a {
+    color: black;
+    font-size: 15px;
+  }
+  .p {
+    margin-bottom: 4rem;
   }
 </style>

@@ -1,13 +1,8 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.07
-    마지막 업데이트 : 2022.02.07
-    
-    마이페이지 > 과제 목록 테이블
- */
 <template>
-  <div>
-    <h5 class="float-left"><strong>과제 목록</strong></h5><br>
+  <div class="homeworkList">
+    <h5 class="d-flex justify-content-start mb-1"><strong>과제 목록</strong></h5>
+    <p class="d-flex justify-content-start mb-0">미완료 과제 : {{ ingHomework }}개</p>
+    <p class="d-flex justify-content-start mb-0">완료한 과제 : {{ endHomework }}개</p>
     <b-table
       id="my-table"
       :items="items"
@@ -37,6 +32,8 @@ export default {
       perPage: 5,
       currentPage: 1,
       items : [],
+      endHomework : 0,
+      ingHomework : 0,
     }
   },
   props: {
@@ -65,6 +62,7 @@ export default {
         제출기한: this.dateTime(this.homeworkList[i].homework.endDate),
         진행상태: '진행',
       })
+      this.ingHomework += 1
     }
     for(var j = 0; j < this.endHomeworkList.length; j++){
       this.items.push({
@@ -73,13 +71,21 @@ export default {
         제출기한: this.dateTime(this.endHomeworkList[j].homework.endDate),
         진행상태: '완료',
       })
+      this.endHomework += 1
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
   #th {
     background-color: #e2e0e6;
+  }
+  h5 {
+    margin: 0px;
+  }
+  .homeworkList {
+    display: flex;
+    flex-direction: column;
   }
 </style>

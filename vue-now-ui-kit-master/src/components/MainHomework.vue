@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>이번 주 과제 목록</h4>
+    <br>
     <div v-for="homework in getHomeworkList" :key="homework.id" >
       <p>{{homework.homework.title}}</p>
       </div>

@@ -1,73 +1,110 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.03
-    마지막 업데이트 : 2022.02.03
-    
-    메인페이지 > 스터디 리스트
- */
 <template>
-<div class="container">
-  <div class="container d-flex flex-wrap">
-    <div class="col-3 mb-5" v-for="study in studies" :key="study.id">
-      <div class="studyRoom">
-        <h5><strong>{{ study.studyName }}</strong></h5>
-        <div class="d-flex justify-content-center">
-          <p class="category" :style="{ width: study.category.length + 60 + '%'}">{{ study.category }}</p>
-        </div>
-        <div class="d-flex flex-wrap justify-content-center">
-          <div v-for="(image, index) in study.memberImage" :key="index.id">
-            <p v-if="image"><img :src="image" alt=""></p>
-            <p v-else><img src="../views/accounts/assets/default.png"></p>
+  <div style="width: 1050px; display: inline-block" class="mt-4 mb-4">
+    <swiper ref="swiper" :options="swiperOption">
+      <swiper-slide v-for="study in studies" :key="study.id"
+        ><div class="studyRoom">
+          <h4 class="d-flex justify-content-center">
+            <strong>{{ study.studyName }}</strong>
+          </h4>
+          <div class="d-flex justify-content-center">
+            <p
+              class="category d-flex justify-content-center"
+              :style="{ width: study.category.length + 60 + '%' }"
+            >
+              {{ study.category }}
+            </p>
           </div>
-        </div>
-        <p><router-link :to="{ name: 'StudyRoom', params: { study_no : study.studyno }}"><b-button>입장하기</b-button></router-link></p>
-      </div>  
-    </div>
+          <div class="d-flex flex-wrap justify-content-center">
+            <div v-for="(image, index) in study.memberImage" :key="index.id">
+              <p v-if="image"><img :src="image" alt="" /></p>
+              <p v-else><img src="../views/accounts/assets/default.png" /></p>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <router-link
+              :to="{ name: 'StudyRoom', params: { study_no: study.studyno } }"
+              ><b-button>입장하기</b-button></router-link
+            >
+          </div>
+        </div></swiper-slide
+      >
+      <div class="swiper-pagination" slot="pagination"></div>
+    </swiper>
   </div>
-</div>
 </template>
 
 <script>
+import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
+import "swiper/css/swiper.css";
+
 export default {
-  name: 'StudyRoomList',
+  name: "StudyRoomList",
   props: {
     studies: {
-      type: Array
-    }
+      type: Array,
+    },
   },
-}
+  components: { Swiper, SwiperSlide },
+  directives: {
+    swiper: directive,
+  },
+  data() {
+    return {
+      swiperOption: {
+        slidesPerView: 4,
+        // spaceBetween: 10,
+        loop: false,
+        pagination: { el: ".swiper-pagination", clickable: true },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        autoplay: { delay: 2000 },
+
+        // slidesPerView: "1",
+        // spaceBetween: 1, // swiper-slide 사이의 간격 지정
+        // slidesOffsetBefore: 0, // slidesOffsetBefore는 첫번째 슬라이드의 시작점에 대한 변경할 때 사용
+        // slidesOffsetAfter: 0, // slidesOffsetAfter는 마지막 슬라이드 시작점 + 마지막 슬라이드 너비에 해당하는 위치의 변경이 필요할 때 사용
+        // freeMode: true, // freeMode를 사용시 스크롤하는 느낌으로 구현 가능
+        // centerInsufficientSlides: true, // 컨텐츠의 수량에 따라 중앙정렬 여부를 결정함
+        // loop: false,
+        // pagination: { el: ".swiper-pagination", clickable: true },
+        // navigation: {
+        //   nextEl: ".swiper-button-next",
+        //   prevEl: ".swiper-button-prev",
+        // },
+      },
+    };
+  },
+};
 </script>
 
 <style scoped>
-  .studyRoom {
-    width: 230px;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    border: 1px solid;
-    margin-right: 1rem;
-    border-radius: 2%;
-    box-shadow: 5px 5px 5px 0px gray;
-  }
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 70%;
-  }
-  button {
-    font-size: 13px;
-    height: 38px;
-    background-color: rgb(130, 163, 209);
-  }
-  button:hover {
-    background-color: rgb(79, 138, 216);
-  }
-  h5 {
-    color: rgb(130, 163, 209);
-  }
-  .category {
-    background-color: rgb(245, 240, 235);
-    box-shadow: 5px 0px 5px 0px gray;
-  }
+.studyRoom {
+  width: 250px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border: 1px solid;
+  border-radius: 2%;
+  box-shadow: 5px 5px 5px 0px gray;
+}
+img {
+  width: 40px;
+  height: 40px;
+  border-radius: 70%;
+}
+button {
+  font-size: 13px;
+  height: 38px;
+  background-color: rgb(130, 163, 209);
+}
+button:hover {
+  background-color: rgb(79, 138, 216);
+}
+.category {
+  background-color: rgb(245, 240, 235);
+  box-shadow: 5px 0px 5px 0px gray;
+}
 </style>

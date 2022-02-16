@@ -18,7 +18,7 @@ export default {
     }
   },
   created() {
-    const token = localStorage.getItem('jwt')
+    const token = sessionStorage.getItem('jwt')                  // 수정
     const decoded =jwt_decode(token)
     const userno = decoded.userno
     

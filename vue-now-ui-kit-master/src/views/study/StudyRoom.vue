@@ -1,17 +1,10 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.06
-    
-    스터디 방
- */
 <template>
+<section>
   <div class="container d-flex justify-content-space-between" id="screen">
-    <div class="d-flex align-items-stretch justify-content-between col-1">
+    <div class="d-flex align-items-stretch justify-content-between col-2">
       <div class="icon">
-        
-        <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-right icon="edit"/>
-          <b-sidebar id="sidebar-right" title="스터디 게시판" right shadow>
+        <font-awesome-icon type="button" class="fa-2x my-2 ml-2" @click="sidebarArticleOn" icon="edit"/>    <!--수정-->
+          <b-sidebar id="sidebar-right" v-model="sidebarArticle" title="스터디 게시판" right shadow>     <!--수정-->
             <div class="px-3 py-2">
               <p class="article">
                 <article-modal></article-modal>
@@ -19,39 +12,39 @@
               </p>
             </div>
           </b-sidebar>
-        <font-awesome-icon type="button" class="clipboard fa-2x my-2" v-b-toggle.sidebar-right-homework icon="clipboard"/>
-        <b-sidebar id="sidebar-right-homework" title="과제 게시판" right shadow>
+        <font-awesome-icon type="button" class="clipboard fa-2x my-2" @click="sidebarHomeworkOn" icon="clipboard"/>    <!--수정-->
+        <b-sidebar id="sidebar-right-homework" v-model="sidebarHomework" title="과제 게시판" right shadow>  <!--수정-->
           <div class="px-3 py-2">
             <p class="homework">
-              <homework-modal></homework-modal>
+              <homework-modal :user="leader"></homework-modal>
               <homework-list :homeworkList="homeworkList" @getHomeworkList="getHomeworkList()"></homework-list>
             </p>
           </div>
         </b-sidebar>
-        <font-awesome-icon class="fa-2x my-2" v-b-modal.modal-xl type="button" id="show-btn" @click="calendarShowModal" icon="calendar-week"/>
+        <font-awesome-icon class="fa-2x my-2" v-b-modal.modal-xl type="button" id="show-btn" @click="calendarShowModal" icon="calendar-week"/> 
           <b-modal ref="calendar-modal" id="modal-xl" size="xl" hide-header hide-footer>
             <calendar :studyLeaderno="leader" :studyno="this.$route.params.study_no" :demoEvents="demoEvents"></calendar>
           </b-modal>
-        <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-left-study icon="info-circle"/>
-        <b-sidebar id="sidebar-left-study" title="스터디 상세 정보" right shadow>
-          <div class="d-flex justify-content-center">
-            <div class="mt-3" id="information" v-for="study in studyInformation" :key="study.id">
-              <!-- <p class="studyInfo"><font-awesome-icon class="fa-1x" icon="cir"cle-notch"/>스터디 이름</p> -->
-              <h3 style="font-family: 'Nanum Pen Script', cursive;">{{ study.studyname }}</h3>
-              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 장 </p>
-              <p><badge type="warning">  {{ study.maker }}</badge></p>
-              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 메인 카테고리</p>
-              <p><badge type="success" class="mx-1">{{ study.category }}</badge></p>
-              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 관심분야</p>
+        <font-awesome-icon type="button" class="fa-2x my-2" @click="sidebarDetailOn" icon="info-circle"/>      <!--수정-->
+        <b-sidebar id="sidebar-left-study" v-model="sidebarDetail" title="스터디 상세 정보" right shadow>  <!--수정-->
+          <div>
+            <div id="information" v-for="study in studyInformation" :key="study.id">
+              <p class="studyInfo"><font-awesome-icon icon="fa-solid fa-tag" class="fa-1x" /> Name</p>
+              <p>{{ study.studyname }}</p>
+              <p class="studyInfo"><font-awesome-icon icon="fa-solid fa-user-tag" class="fa-1x" /> Creator</p>
+              <p>{{ study.maker }}</p>
+              <p class="studyInfo"><font-awesome-icon icon="fa-solid fa-palette" class="fa-1x" /> Category</p>
+              <p>{{ study.category }}</p>
+              <p class="studyInfo"><font-awesome-icon icon="fa-solid fa-list-ol" class="fa-1x"/> Interests</p>
               <p><badge type="info" class="mx-1" v-for="interest in interestList" :key="interest.id"> {{ interest }}</badge></p>
-              <p style="font-family: 'Nanum Pen Script', cursive; font-size:25px;" class="studyInfo">스터디 설명</p>
-              <p style="font-size:15px;">{{ study.description }}</p>
+              <p class="studyInfo"><font-awesome-icon icon="fa-solid fa-newspaper" class="fa-1x"/> Description</p>
+              <p>{{ study.description }}</p>
               <update-study-information :studyInformation="study" :interestList="interestList"></update-study-information>
             </div>
           </div>
-          </b-sidebar>
-        <font-awesome-icon type="button" class="fa-2x my-2" v-b-toggle.sidebar-left-member icon="user-friends"/>
-        <b-sidebar id="sidebar-left-member" title="스터디 회원 목록" right shadow>
+        </b-sidebar>
+        <font-awesome-icon type="button" class="fa-2x my-2" @click="sidebarMemberOn" icon="user-friends"/>      <!--수정-->
+        <b-sidebar id="sidebar-left-member" v-model="sidebarMember" title="스터디 회원 목록" right shadow>   <!--수정-->
           <div class="px-5 py-2 mt-3" v-for="members in studyMemberList" :key="members.id">
             <div class="d-flex justify-content-between" v-for="member in members" :key="member.id">
               <div class="d-flex">
@@ -61,12 +54,12 @@
                 <p v-else>
                   <img src="./../accounts/assets/default.png">
                 </p>
-                <a id="show-btn" href="#" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>
+                <a id="show-btn" type="button" class="mt-2 ml-3" @click="showModal(member.studyMember)">{{ member.nickname }}</a>    <!--수정-->
               </div>
-              <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 28px; background-color: #FF6464;" @click="userKick(member.studyMember.userno)">강퇴</b-button>
+              <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 32px; background-color: rgb(235, 124, 124);" @click="userKick(member.studyMember.userno)">강퇴</b-button>
             </div>
           </div>
-          <b-button class="kick" href="#" @click="userKick(userNumber)">회원탈퇴</b-button>
+          <a class="kick" type="button" @click="userKick(userNumber)">회원탈퇴</a>      <!--수정-->
         </b-sidebar>
         <b-modal ref="my-modal" :member="member" hide-header hide-footer>
           <div class="d-block text-center">
@@ -75,12 +68,13 @@
             </div>
           </div>
         </b-modal>
+        <router-link :to="{ name: 'Main'}">       <!--수정-->
+        <h4 class="exit" style="color: white;"><font-awesome-icon icon="fa-solid fa-door-closed" /> 나가기</h4></router-link><!--수정-->
       </div>
     </div>
-    <div class = "col-11" id="RTC area">
 
-    </div>
   </div>
+</section>
 </template>
 
 <script>
@@ -125,16 +119,44 @@ export default {
         studyno: this.$route.params.study_no
       },
       userNumber: null,
+      sidebarHomework: false,   // 수정
+      sidebarArticle: false,  // 수정
+      sidebarDetail: false, // 수정 
+      sidebarMember: false, // 수정
     }
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')           // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
       return config
     },
+    sidebarHomeworkOn() {       // 수정
+      this.sidebarArticle=false // 수정
+      this.sidebarDetail=false // 수정
+      this.sidebarMember=false // 수정
+      this.sidebarHomework=!this.sidebarHomework // 수정
+    }, // 수정
+    sidebarArticleOn() { // 수정
+      this.sidebarHomework=false // 수정
+      this.sidebarDetail=false // 수정
+      this.sidebarMember=false // 수정
+      this.sidebarArticle=!this.sidebarArticle // 수정
+    }, // 수정
+    sidebarDetailOn() { // 수정
+      this.sidebarHomework=false // 수정
+      this.sidebarArticle=false // 수정
+      this.sidebarMember=false // 수정
+      this.sidebarDetail=!this.sidebarDetail // 수정
+    }, // 수정
+    sidebarMemberOn() { // 수정
+      this.sidebarHomework=false // 수정
+      this.sidebarArticle=false // 수정
+      this.sidebarDetail=false // 수정
+      this.sidebarMember=!this.sidebarMember // 수정
+    },// 수정
     showModal: function (user) {
       this.$refs['my-modal'].show()
       this.getUserInformation(user)
@@ -149,14 +171,26 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          console.log(res.data)
+          console.log(res.data, 888)
           this.studyInformation = res.data
+          const memList= res.data.study.studyMemberList
+          var flag = false
+          for(var i = 0; i<memList.length;i++){
+            if(memList[i].userno==this.userNumber){
+              flag = true
+              break
+            }
+          }
+          if(!flag){
+            this.$router.push({name:'Main'})
+          }
           this.interestList = this.studyInformation.study.interests.split("#")
           this.interestList.shift(0)
           console.log(this.interestList)
         })
         .catch(err => {
           console.log(err)
+          this.$router.push({name:'Main'})
         })
     },
     getArticleList: function () {
@@ -166,7 +200,7 @@ export default {
         headers: this.setToken(),
       })
         .then(res => {
-          console.log(res.data)
+          console.log(res.data.studyBoardList, 456)
           this.studyBoardList = res.data.studyBoardList
         })
         .catch(err => {
@@ -280,32 +314,38 @@ export default {
     }
   },
   created: function () {
-    this.getStudyMemberList()
-    this.getArticleList()
-    this.getHomeworkList()
-    this.getStudyInformation()
-    this.getCalendar()
-    if (localStorage.getItem('jwt')) {
-      const token = localStorage.getItem('jwt')
+    if (sessionStorage.getItem('jwt')) {                  // 수정
+      const token = sessionStorage.getItem('jwt')                   // 수정
       const decoded = jwt_decode(token)
       this.userNumber = decoded.userno
     } else {
       this.$router.push({name: 'Login'})
     }
+    this.getStudyMemberList()
+    this.getArticleList()
+    this.getHomeworkList()
+    this.getStudyInformation()
+    this.getCalendar()
+    
   }
 }
 </script>
 
 <style scoped>
-  #screen{
-    height:800px;
+  section {
+    background-image: url("./assets/board.jpg");
+    background-size: contain;
+    height: 100vh;
+    background-repeat: repeat-x;
+    margin-top: 4rem;                 /* 수정 */
   }
   .icon {
     display: flex;
     flex-direction: column;
+    margin-top: 5rem;
+    color: white;
   }
   .icon2 {
-    
     align-items:flex-end
   }
   .kick {
@@ -341,14 +381,15 @@ export default {
     color: black;
   }
   #information {
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    width: 80%;
-    height: 500px;
-    border: 2px solid skyblue;
-    background-color: white;
   }
   .studyInfo {
     margin: 0;
+    font-size: 25px;
+  }
+  .exit {
+    margin-top: 15rem;
   }
 </style>

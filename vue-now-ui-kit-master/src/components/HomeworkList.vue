@@ -1,14 +1,9 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.02.04
-    마지막 업데이트 : 2022.02.07
-    
-    스터디 방 > 과제 리스트
- */
 <template>
   <div class="container">
     <div v-for="homework in homeworkList" :key="homework.id">
-      <a href="#" @click="getHomeworkInformation(homework.homework.homeworkno)"><strong> {{ homework.homework.title }}</strong></a>
+      <a type="button" @click="getHomeworkInformation(homework.homework.homeworkno)">
+        <font-awesome-icon icon="fa-solid fa-paperclip" />
+        <strong> {{ homework.homework.title }}</strong></a>  <!--수정-->
       <hr>
       <p v-if="assignment && assignment.homework.homeworkno == homework.homework.homeworkno">
         <homework-item :assignment="assignment"></homework-item>
@@ -38,7 +33,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')                  // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -55,6 +50,8 @@ export default {
         })
           .then(res => {
             this.assignment = res.data
+            this.assignment.homework.content.replace(/\n/g,"<br>")
+            console.log(this.assignment.homework.content, 789)
           })
           .catch(err => {
             console.log(err)

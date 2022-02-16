@@ -1,13 +1,7 @@
-/*
-    작성자 : 한슬기
-    생성일 : 2022.01.30
-    마지막 업데이트 : 2022.01.30
-    
-    관리자 페이지
- */
-<template>
+<template>   <!--전체적으로 수정-->
+<section>
   <div class="container">
-    <h3 class="float-left"><strong>회원리스트</strong></h3>
+    <h2 class="float-left" style="font-family: 'Black Han Sans', sans-serif;"><strong>회원 리스트</strong></h2>
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
@@ -28,7 +22,7 @@
           <td v-if="user.delFlag == 0">가입</td>
           <td v-else>탈퇴</td>
           <td v-if="user.delFlag == 0">
-            <b-button id="show-btn" size="sm" style="background-color: rgb(221, 182, 74);" @click="showModal(user)">Detail</b-button>
+            <b-button id="show-btn" class="mt-0" size="sm" style="background-color: rgb(221, 182, 74);" @click="showModal(user)">Detail</b-button>
           </td>
         </tr>
       </tbody>
@@ -46,10 +40,12 @@
     </div>
     </b-modal>
   </div>
+</section>
 </template>
 
 <script>
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import UserInfoModal from '@/components/UserInfoModal.vue'
 
 export default {
@@ -67,7 +63,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -128,8 +124,19 @@ export default {
     }
   },
   created: function () {
-    this.getUserList()
-  }
+    if (sessionStorage.getItem('jwt')) {
+      const token = sessionStorage.getItem('jwt')
+      const decoded = jwt_decode(token)
+      if (decoded.isAdmin == 1)
+        {
+          this.getUserList()
+        } else {
+          this.$router.push({name: 'Login'})
+        }
+    } else {
+      this.$router.push({name: 'Login'})
+    }
+  },
 }
 </script>
 
@@ -139,5 +146,12 @@ export default {
   }
   button {
     font-size: 11px;
+  }
+  td {
+    margin-top: 1rem;
+  }
+  section {
+    margin-top : 5rem;
+    margin-bottom: 10rem;
   }
 </style>

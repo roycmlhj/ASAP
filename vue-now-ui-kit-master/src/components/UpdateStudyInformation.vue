@@ -60,7 +60,7 @@
           >
           </study-member-count-bar>
         </b-form-group>
-        <b-button @click="updateStudyInformation" style="background-color: #A5A6F6; width: 100%">완료</b-button>
+        <b-button @click="updateStudyInformation" style="width: 100%">완료</b-button>
       </b-form>
     </b-modal>
   </div>
@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     setToken: function () {
-      const token = localStorage.getItem('jwt')
+      const token = sessionStorage.getItem('jwt')            // 수정
       const config = {
         Authorization: `JWT ${token}`
       }
@@ -133,6 +133,9 @@ export default {
           console.log(err)
         })
     },
+    created: function () {
+      console.log(this.studyInformation, 999)
+    }
   }
 }
 </script>
