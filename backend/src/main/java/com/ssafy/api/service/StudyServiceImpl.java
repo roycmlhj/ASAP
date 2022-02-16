@@ -269,5 +269,13 @@ public class StudyServiceImpl implements StudyService {
 		return time;
 	}
 
+	@Override
+	public boolean scheduleDuplicated(String nextDate) {
+		if(scheduleRepository.findByNextDate(nextDate).orElse(null) == null) {
+			return true;
+		}
+		return false;
+	}
+
 
 }

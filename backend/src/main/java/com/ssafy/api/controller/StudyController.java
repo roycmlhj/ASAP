@@ -211,11 +211,15 @@ public class StudyController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<? extends BaseResponseBody> scheduleCreate(
-			@RequestBody @ApiParam(value="생성 스케줄 정보", required = true) ScheduleCreatePostReq scheduleInfo){	
-		if(studyService.createSchedule(scheduleInfo))
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
+			@RequestBody @ApiParam(value="생성 스케줄 정보", required = true) ScheduleCreatePostReq scheduleInfo){
+		if(studyService.scheduleDuplicated(scheduleInfo.getNextDate())) {
+			if(studyService.createSchedule(scheduleInfo)) {
+				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));							
+			}
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));
+		}
 		else
-			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "시간 중복"));
 	}
 	
 	
@@ -228,10 +232,14 @@ public class StudyController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> changeSchedule(
 			@RequestBody @ApiParam(value="스케줄 pk, 변경 날짜", required = true) SchedulePutReq scheduleChangeInfo){
-		if(studyService.changeSchdule(scheduleChangeInfo))
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
+		if(studyService.scheduleDuplicated(scheduleChangeInfo.getNextDate())) {
+			if(studyService.changeSchdule(scheduleChangeInfo))
+				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
+			else
+				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));
+		}
 		else
-			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "시간 중복"));
 	}
 	
 	@DeleteMapping("/schedule/delete/{scheduleno}")
