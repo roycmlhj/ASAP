@@ -29,43 +29,47 @@
         title="Update Homework"   
         hide-footer 
       >
-        <b-form-group
-          label="Title"
-          label-for="title"
-        >
-          <b-form-input 
-            id="title" 
-            type="text"
-            v-model="homework.title"
+        <form>
+          <b-form-group
+            label="Title"
+            label-for="title"
           >
-          </b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Content"
-          label-for="content"
-        >
-          <b-form-textarea 
-            id="content" 
-            type="text"
-            v-model="homework.content"
-            maxlength=100
-            rows="6"
-            max-rows="6"
+            <input 
+              id="title" 
+              type="text"
+              v-model="homework.title"
+              required
+              class="form-control"
+            >
+          </b-form-group>
+          <b-form-group
+            label="Content"
+            label-for="content"
           >
-          </b-form-textarea>
-        </b-form-group>
-        <b-form-group
-          label="Date"
-          label-for="content"
-        >
-          <b-form-input 
-            id="content" 
-            type="date"
-            v-model="homework.endDate"
+            <b-form-textarea 
+              id="content" 
+              type="text"
+              v-model="homework.content"
+              maxlength=100
+              rows="6"
+              max-rows="6"
+              required
+            >
+            </b-form-textarea>
+          </b-form-group>
+          <b-form-group
+            label="Date"
+            label-for="content"
           >
-          </b-form-input>
-        </b-form-group>
-        <b-button style="float-right; font-size: 15px; height: 40px;" @click="updateHomework()">확인</b-button>
+            <b-form-input 
+              id="content" 
+              type="date"
+              v-model="homework.endDate"
+            >
+            </b-form-input>
+          </b-form-group>
+          <b-button type="submit" style="float-right; font-size: 15px; height: 40px;" @click="updateHomework()">확인</b-button>
+        </form>
       </b-modal>
     </div>
   </div>
@@ -119,7 +123,7 @@ export default {
       console.log(formData)
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/homework/upload`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/upload`,
         headers: this.setToken(),
         data: formData,
       })
@@ -134,7 +138,7 @@ export default {
     downloadFile: function (file) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/download/${file.userhomeworkno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/download/${file.userhomeworkno}`,
         headers: this.setToken(),
         responseType: "blob",
       })
@@ -156,7 +160,7 @@ export default {
     deleteFile: function(fileno){
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/filedelete/${fileno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/filedelete/${fileno}`,
        
       })
       .then(res => {
@@ -172,7 +176,7 @@ export default {
     deleteHomework: function (homeworkno) {
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/v1/homework/delete/${homeworkno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/delete/${homeworkno}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -185,12 +189,30 @@ export default {
         })
     },
     updateHomework: function () {
-      axios({
-        method: 'put',
-        url: `http://localhost:8080/api/v1/homework/modify`,
-        data: this.homework,
-        headers: this.setToken(),
-      })
+      var flagTitle=false
+      var flagContent=false
+      for(var i = 0; i<this.homework.title.length;i++){
+        if(this.homework.title[i]!=' '){
+          flagTitle=true
+          break
+        }
+      }
+      for(var i = 0; i<this.homework.content.length;i++){
+        if(this.homework.content[i]!=' '){
+          flagContent=true
+          break
+        }
+      }
+      console.log(flagTitle, flagContent)
+      if (this.homework.title == null || this.homework.content == null || this.homework.title=='' || this.homework.content==''|| this.homework.endDate==null || !flagTitle ||!flagContent) {
+        alert("모든 입력 칸을 입력해주세요.")
+      }else{
+        axios({
+          method: 'put',
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/modify`,
+          data: this.homework,
+          headers: this.setToken(),
+        })
         .then(res => {
           console.log(res.data)
           window.location.reload()
@@ -198,11 +220,12 @@ export default {
         .catch(err => {
           console.log(err)
         })
+      }
     },
     getUserHomeworkList: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/uploadList/${this.homework.homeworkno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/uploadList/${this.homework.homeworkno}`,
         headers: this.setToken(),
       })
         .then(res => {

@@ -1,5 +1,8 @@
 package com.ssafy.db.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,15 @@ public class StudyBoardRepositoryCustomImpl extends QuerydslRepositorySupport  i
 		jpaQueryFactory.delete(qStudyBoard)
 		.where(qStudyBoard.boardno.eq(boardno))
 		.execute();
+	}
+
+
+	@Override
+	public Optional<List<StudyBoard>> findStudyBoardByStudyno(int studyno) {
+		List<StudyBoard> list = jpaQueryFactory.select(qStudyBoard).from(qStudyBoard)
+				.where(qStudyBoard.studyno.eq(studyno))
+				.fetch();
+		return Optional.ofNullable(list);
 	}
 
 }

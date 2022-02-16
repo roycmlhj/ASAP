@@ -133,8 +133,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<Integer> getBoardnoByUserno(int userno) {
-		List<Integer> list = boardRepository.findBoardnoByUserno(userno);
-		return list;
+		List<Integer> list = boardRepository.findBoardnoByUserno(userno).orElse(null);
+		if(list != null) {
+			return list;			
+		}else {
+			return null;
+		}
 	}
 
 	@Override

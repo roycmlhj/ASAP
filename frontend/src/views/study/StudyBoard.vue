@@ -1,16 +1,15 @@
-<template>
+<template>   <!--수정-->
 <section>
   <div class="page-header2">
     <div class="d-flex justify-content-center">
       <font-awesome-icon icon="fa-solid fa-comments" class="icon fa-5x" style="color: rgb(231, 223, 223);" />
       <div>
-        <h5 id="massage">{{ nickname }}님 관심 분야의 스터디를 찾아보세요!</h5>
-        <h5>찾고 있는 스터디가 없다면 직접 모집해보세요.</h5>
+        <h2 id="massage">스터디 모집 게시판</h2>
       </div>
     </div>
   </div>
   <div class="container">
-    <h2>스터디 모집 및 찾기</h2>
+    <h2 style="color: #394E79;">스터디 모집 및 찾기</h2>
     <div class="d-flex justify-content-center mb-5">
       <b-form-select class="mt-3 col-2" v-model="selected" :options="options"></b-form-select>
       <input class="form-control col-5" style="height: 40px;" @keyup.enter="search" v-model="searchWord">
@@ -99,7 +98,7 @@ import {Badge} from '../../components'
         console.log(searchword)
         axios({
           method: 'get',
-          url: `http://localhost:8080/api/v1/board/list/search?keyword=${searchword}&type=${this.selected}`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list/search?keyword=${searchword}&type=${this.selected}`,
           
         })
         .then(res => {
@@ -125,7 +124,7 @@ import {Badge} from '../../components'
           console.log(searchword)
           axios({
             method: 'get',
-            url: `http://localhost:8080/api/v1/board/list/search?keyword=${searchword}&page=${pageNum}&type=${this.selected}`,
+            url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list/search?keyword=${searchword}&page=${pageNum}&type=${this.selected}`,
             
           })
           .then(res => {
@@ -142,7 +141,7 @@ import {Badge} from '../../components'
         else{
           axios({
             method: 'get',
-            url: `http://localhost:8080/api/v1/board/list?page=${pageNum}&size=8`,
+            url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list?page=${pageNum}&size=8`,
             headers: this.setToken()
           })
           .then(res => {
@@ -164,7 +163,7 @@ import {Badge} from '../../components'
     created(){
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/board/list?page=${1}&size=8`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/board/list?page=${1}&size=8`,
       })
       .then(res => {
         console.log(res.data.content)
@@ -206,13 +205,13 @@ import {Badge} from '../../components'
     flex-direction: column;
     text-align: start;
   }
-  h5 {
+  h2 {
     color: rgb(231, 223, 223);
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Black Han Sans', sans-serif;
     margin-bottom: 0px;
   }
   #massage{
-    margin-top: 3rem;
+    margin-top: 3.5rem;
   }
   .icon {
     margin-top: 2rem;

@@ -213,7 +213,7 @@ export default {
     getHomeworkList: function () {
       axios({
         method: "get",
-        url: `http://localhost:8080/api/v1/user/detail/${this.userno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/detail/${this.userno}`,
       })
         .then((res) => {
           this.onHomeworkList = res.data.onHomeworkList;
@@ -230,7 +230,7 @@ export default {
       } else {
         axios({
           method: "get",
-          url: `http://localhost:8080/api/v1/study/name_check/${this.title}`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/study/name_check/${this.title}`,
           data: this.title,
         })
           .then((res) => {
@@ -248,7 +248,7 @@ export default {
     getStudies: function () {
       axios({
         method: "get",
-        url: `http://localhost:8080/api/v1/study/${this.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study/${this.userno}/`,
         headers: this.setToken(),
       })
         .then((res) => {
@@ -272,21 +272,39 @@ export default {
         userno: decoded.userno,
         interests: this.interests,
       };
-      if (
-        !StudyRoomItem.studyname ||
-        !StudyRoomItem.description ||
-        !StudyRoomItem.category ||
-        !StudyRoomItem.memberno ||
-        !StudyRoomItem.interests
-      ) {
-        console.log("pass");
-        alert("모든 정보를 입력해주세요.");
-      } else {
-        axios({
-          method: "post",
-          url: `http://localhost:8080/api/v1/study/create`,
-          data: StudyRoomItem,
-        })
+      var flagTitle=false
+      var flagContent=false
+      for(var i = 0; i<StudyRoomItem.studyname.length;i++){
+        if(StudyRoomItem.studyname[i]!=' '){
+          flagTitle=true
+          break
+        }
+      }
+      for(var i = 0; i<StudyRoomItem.description.length;i++){
+        if(StudyRoomItem.description[i]!=' '){
+          flagContent=true
+          break
+        }
+      }
+      console.log(flagTitle, flagContent)
+      if (StudyRoomItem.studyname == null || StudyRoomItem.description == null || StudyRoomItem.studyname=='' || StudyRoomItem.description==''|| !flagTitle ||!flagContent) {
+        alert("모든 입력 칸을 입력해주세요.")
+      }else{
+        if (
+          !StudyRoomItem.studyname ||
+          !StudyRoomItem.description ||
+          !StudyRoomItem.category ||
+          !StudyRoomItem.memberno ||
+          !StudyRoomItem.interests
+        ) {
+          console.log("pass");
+          alert("모든 정보를 입력해주세요.");
+        } else {
+          axios({
+            method: "post",
+            url: `https://i6a107.p.ssafy.io:8443/api/v1/study/create`,
+            data: StudyRoomItem,
+          })
           .then((res) => {
             console.log(res);
             this.modalShow = false;
@@ -295,6 +313,7 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+        }
       }
     },
   },

@@ -109,7 +109,7 @@ export default {
         
         axios({
           method:'delete',
-          url:`http://localhost:8080/api/v1/homework/delete/${this.selectedEvent}`
+          url:`https://i6a107.p.ssafy.io:8443/api/v1/homework/delete/${this.selectedEvent}`
         }).then(res=>{
           console.log(res)
           window.location.reload()
@@ -119,7 +119,7 @@ export default {
       }else{
         axios({
           method:'delete',
-          url: `http://localhost:8080/api/v1/study/schedule/delete/${this.selectedEvent}`
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/study/schedule/delete/${this.selectedEvent}`
         }).then(res=>{
           console.log(res)
           window.location.reload()
@@ -158,7 +158,7 @@ createSchedule(){
   console.log(data.nextDate,11111)
   axios({
     method: 'post',
-    url: `http://localhost:8080/api/v1/study/schedule/create`,
+    url: `https://i6a107.p.ssafy.io:8443/api/v1/study/schedule/create`,
     data: data,
   })
   .then(res => {

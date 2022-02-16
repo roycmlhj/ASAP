@@ -121,7 +121,7 @@ export default {
     updateStudyInformation: function () {
       axios({
         method: 'put',
-        url: `http://localhost:8080/api/v1/study/modify`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study/modify`,
         data: this.information,
         headers: this.setToken(),
       })

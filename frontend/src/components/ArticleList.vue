@@ -46,7 +46,7 @@ export default {
       } else {
         axios({
           method: 'get',
-          url: `http://localhost:8080/api/v1/study_board/boardlist/detail/${boardno}`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/study_board/boardlist/detail/${boardno}`,
           headers: this.setToken(),
         })
           .then(res => {

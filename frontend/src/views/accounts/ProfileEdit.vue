@@ -23,10 +23,11 @@
           id="password"
           type="password" 
           v-model="user.password" 
+          :state="passwordState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다."
         ></b-form-input>
-        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">   // 수정
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">
           비밀번호는 문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.
         </b-form-invalid-feedback> -->
       </b-form-group>
@@ -39,10 +40,11 @@
           id="passwordcheck" 
           type="password"
           v-model="passwordcheck"
+          :state="passwordcheckState"
           aria-describedby="input-live-help input-live-feedback" 
           placeholder="비밀번호를 한번 더 입력해주세요."
         ></b-form-input>
-        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">     // 수정
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;"> 
           비밀번호가 일치하지 않습니다.
         </b-form-invalid-feedback> -->
       </b-form-group>
@@ -54,13 +56,15 @@
         <b-form-input 
           id="nickname" 
           v-model="user.nickname" 
+          :state="nameState"
           aria-describedby="input-live-help input-live-feedback"
           placeholder="닉네임은 2자 이상이어야 합니다."
         ></b-form-input>
-        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;">    // 수정
+        <!-- <b-form-invalid-feedback id="input-live-feedback" style="text-align: left;"> 
           닉네임은 두 글자 이상이어야 합니다.
         </b-form-invalid-feedback> -->
       </b-form-group>
+      <b-button id="btn" type="button" class="btn float-right" @click="nicnameCheck">중복체크</b-button>
     </b-card>
     <div class="d-flex mr-3">
       <b-card class="col-6" bg-variant="light">
@@ -152,6 +156,9 @@ export default {
       interestTmp: [],
       passwordcheck: '',
       img: null,
+      nicFlag: 2,
+      originalNickname: null,
+      checkedFlag: false,
     }
   },
   methods: {
@@ -169,7 +176,7 @@ export default {
       formData.append('image', image)
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/user/upload/${this.userno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/upload/${this.userno}`,
         headers: this.setToken(),
         data: formData
       })
@@ -186,34 +193,79 @@ export default {
       console.log(this.$refs['image'])
       this.$refs['image'].reset()
     },
-    userEdit: function() {
-      console.log(this.user)
-      axios({
-        method: 'post',
-        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
-        headers: this.setToken(),
-        data: this.user
+    nicnameCheck: function () {
+      if (this.user.nickname.length < 3) {
+        alert("닉네임은 두글자 이상이어야 합니다.")
+      } else {
+        axios({
+        method: 'get',
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/nickname/${this.user.nickname}/`,
       })
         .then(res => {
+          this.nicFlag = 1
+          this.checkedFlag = true
           console.log(res)
-          if (this.admin == 0) {
-            sessionStorage.setItem('jwt', res.data.accessToken)               // 수정
-            alert("회원 정보 수정이 완료되었습니다.")
-            window.location.reload(this.$route.params.user_no)
-          }
-          else {
-            alert("회원 정보 수정이 완료되었습니다.")
-            window.location.reload(this.$route.params.user_no)
-          }
+          alert("사용할 수 있는 닉네임입니다.")
         })
         .catch(err => {
-          console.log(err)
+          this.nicFlag = 2
+          this.checkedFlag = false
+          console.log(err, this.user.email)
+          alert("사용중인 닉네임입니다.")
         })
+      }
+    },
+    userEdit: function() {
+      var pattern1 = /[0-9]/;
+      var pattern2 = /[a-zA-Z]/;
+      var pattern3 = /[~!@#$%<>^&*]/;
+      var checkFlag = true
+      if (this.user.nickname == this.originalNickname) {
+        this.nicFlag = 1 
+        this.checkedFlag = true
+      }
+      if (this.nicFlag == 2 || this.checkedFlag == false) {
+        alert("닉네임을 확인해주세요.")
+        checkFlag = false
+      }
+      else if (this.user.password != null && this.user.password != "") {
+          if (this.user.password != this.passwordcheck) {
+            alert("비밀번호가 일치하지 않습니다.") 
+            checkFlag = false
+        } 
+          else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
+            alert("비밀번호는 8글자 이상, 문자와 숫자, 특수문자를 포함해야 합니다.")
+            checkFlag = false
+          }
+      }
+      if (checkFlag) {
+        axios({
+          method: 'post',
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/user/${this.userno}/`,
+          headers: this.setToken(),
+          data: this.user
+        })
+          .then(res => {
+            console.log(res)
+            if (this.admin == 0) {
+              sessionStorage.setItem('jwt', res.data.accessToken)               // 수정
+              alert("회원 정보 수정이 완료되었습니다.")
+              window.location.reload(this.$route.params.user_no)
+            }
+            else {
+              alert("회원 정보 수정이 완료되었습니다.")
+              window.location.reload(this.$route.params.user_no)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
     },
     userDelete: function () {
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/v1/user/${this.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/user/${this.userno}/`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -229,6 +281,8 @@ export default {
       const token = sessionStorage.getItem('jwt')              // 수정
       const decoded = jwt_decode(token)
       this.user.nickname = decoded.nickname
+      this.originalNickname = decoded.nickname
+      console.log(this.originalNickname)
       this.user.mainCategory = decoded.mainCategory
       this.userno = decoded.userno
       this.user.email = decoded.email
@@ -241,12 +295,13 @@ export default {
     getUserInformationByAdmin: function (user_no) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/admin/${user_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/${user_no}`,
       })
         .then(res => {
           console.log(res)
           this.user.nickname = res.data.user.nickname
           this.user.mainCategory = res.data.user.mainCategory
+          this.originalNickname = decoded.nickname
           this.userno = res.data.user.userno
           this.user.email = res.data.user.email
           this.mainCategory = res.data.user.mainCategory
@@ -259,41 +314,42 @@ export default {
     },
   },
   computed: {
-    // nameState() {                                // 수정
-    //   if (this.user.nickname.length == 0) {
-    //     return null
-    //   } else {
-    //     return this.user.nickname.length > 1 ? true : false    
-    //   }
-    // },
-    // passwordState() {
-    //   var pattern1 = /[0-9]/;
-    //   var pattern2 = /[a-zA-Z]/;
-    //   var pattern3 = /[~!@#$%<>^&*]/;
-    //   if (this.user.password == 0) {
-    //     return null
-    //   }
-    //   else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
-    //     return false
-    //   } else {
-    //     return true
-    //   }
-    // },
-    // passwordcheckState() {
-    //   if (this.passwordcheck.length == 0) {
-    //     return null
-    //   }
-    //   else if (this.passwordcheck == this.user.password) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // }
+    nameState() {                                // 수정
+      if (this.user.nickname.length == 0) {
+        return null
+      } else {
+        return this.user.nickname.length > 1 ? true : false    
+      }
+    },
+    passwordState() {
+      var pattern1 = /[0-9]/;
+      var pattern2 = /[a-zA-Z]/;
+      var pattern3 = /[~!@#$%<>^&*]/;
+      if (this.user.password == 0) {
+        return null
+      }
+      else if (!pattern1.test(this.user.password)||!pattern2.test(this.user.password)||!pattern3.test(this.user.password)||this.user.password.length<8||this.user.password.length>50) {
+        return false
+      } else {
+        return true
+      }
+    },
+    passwordcheckState() {
+      if (this.passwordcheck.length == 0) {
+        return null
+      }
+      else if (this.passwordcheck == this.user.password) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   created: function () {
     if (sessionStorage.getItem('jwt')) {                       // 수정
       const token = sessionStorage.getItem('jwt')                      // 수정
       const decoded = jwt_decode(token)
+      this.img = decoded.image   // 수정
       if (decoded.isAdmin == 1) {
         this.admin = 1
         this.getUserInformationByAdmin(this.$route.params.user_no)

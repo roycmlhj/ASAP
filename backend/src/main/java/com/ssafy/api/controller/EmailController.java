@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +43,7 @@ public class EmailController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
-	@GetMapping("email-confirm/{email}")
+	@GetMapping("/email-confirm/{email}")
 	@ApiOperation(value = "전송된 이메일 인증번호 인증", notes = "기존사용하고 있는 이메일을 통해 인증")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -53,6 +54,7 @@ public class EmailController {
 	public ResponseEntity<? extends BaseResponseBody> emailConfirm(
 			@RequestParam @ApiParam(value="인증번호", required = true) String code,
 			@PathVariable("email") @ApiParam(value="이메일 정보", required = true) String email) throws Exception{
+		System.out.println(code);
 		EmailConfirm ec = emailService.getByEmail(email);
 		if(ec == null) {
 			return ResponseEntity.status(404).body(BaseResponseBody.of(404, "사용자 없음"));

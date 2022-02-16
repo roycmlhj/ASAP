@@ -1,6 +1,7 @@
 package com.ssafy.db.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -20,10 +21,10 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 	}
 	
 	@Override
-	public List<Integer> findBoardnoByUserno(int userno) {
+	public Optional<List<Integer>> findBoardnoByUserno(int userno) {
 		List<Integer> list = jpaQueryFactory.select(qBoard.boardno).from(qBoard)
 				.where(qBoard.userno.eq(userno))
 				.fetch();
-		return list;
+		return Optional.ofNullable(list);
 	}
 }

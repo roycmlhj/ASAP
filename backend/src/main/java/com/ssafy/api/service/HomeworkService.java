@@ -17,5 +17,4 @@ public interface HomeworkService {
 	List<HomeworkNStudy> getUserHomeworkList(int userno, int flag);
 	Homework getSHomeworkDetail(int homeworkno);
 	List<UserHomework> getUploadHomework(int homeworkno);
-	int getDoHomeworkCnt(int userno);
 }

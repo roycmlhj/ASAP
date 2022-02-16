@@ -45,7 +45,7 @@ export default {
       } else {
         axios({
           method: 'get',
-          url: `http://localhost:8080/api/v1/homework/homework/detail/${homeworkno}`,
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/homework/detail/${homeworkno}`,
           headers: this.setToken(),
         })
           .then(res => {

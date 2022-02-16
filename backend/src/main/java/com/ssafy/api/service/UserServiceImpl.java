@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.BoardMember;
+import com.ssafy.db.entity.FileData;
 import com.ssafy.db.entity.Homework;
+import com.ssafy.db.entity.StudyBoard;
 import com.ssafy.db.entity.StudyMember;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.BoardRepository;
@@ -18,6 +20,7 @@ import com.ssafy.db.repository.HomeworkRepository;
 import com.ssafy.db.repository.ScheduleRepository;
 import com.ssafy.db.repository.StudyBoardRepository;
 import com.ssafy.db.repository.StudyMemberRepository;
+import com.ssafy.db.repository.StudyRepository;
 import com.ssafy.db.repository.UserHomeworkRepository;
 import com.ssafy.db.repository.UserRepository;
 
@@ -41,6 +44,12 @@ public class UserServiceImpl implements UserService {
 	ScheduleRepository scheduleRepository;
 	@Autowired
 	StudyBoardRepository studyBoardRepository;
+	@Autowired
+	StudyRepository studyRepository;
+	@Autowired
+	FileService fileService;
+	@Autowired
+	AwsS3Service awsS3Service;
 	
 	@Override
 	public User signUp(UserRegisterPostReq registerInfo) {
@@ -94,21 +103,13 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userno).get();
 		user.setDelFlag(1);
 		userRepository.save(user);
-		//board테이블 삭제
-		List<Integer> boardlist = boardService.getBoardnoByUserno(userno);
-		for (Integer boardno : boardlist) {
-			boardService.deleteBoard(boardno);
+		List<Integer> studylist = studyMemberRepository.findStudynobyuserno(userno);
+		for (Integer i : studylist) {
+			kickUser(userno, i);			
 		}
-		
-		List<StudyMember> studyMemberList = studyMemberRepository.findByUserno(userno);
-		for(int i = 0; i < studyMemberList.size(); i++) {
-			kickUser(userno, studyMemberList.get(i).getStudyno());
-		}
-		//push테이블 삭제
 		return true;
 	}
 	
-	//추가
 	@Override
 	public List<BoardMember> getBoardMember(int studyno) {
 		List<BoardMember> list = userRepository.findBoardMemberByStudyno(studyno).get();
@@ -132,8 +133,8 @@ public class UserServiceImpl implements UserService {
 		StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(userno, studyno);
 		
 		if(studyMember.getPosition() == 0) {
-			StudyMember studyMemberMandate = studyMemberRepository.findByStudynoMandate(studyno);
-			if(studyMemberMandate == null) {
+			StudyMember studyMemberMandate = studyMemberRepository.findByStudynoMandate(studyno).orElse(null);
+			if(studyMemberMandate == null) { // 위임할 사람이 없다면 스터디 삭제
 				//스터디 신청 인원 studymember에서 삭제
 				List<StudyMember> studyMemberList = studyMemberRepository.findByStudyno(studyno);
 				for(int i = 0; i < studyMemberList.size(); i++)
@@ -141,24 +142,28 @@ public class UserServiceImpl implements UserService {
 				
 				//board 삭제
 				boardRepository.deleteByStudyno(studyno);
-				
-				//나중에 해줘야하나...? conference 삭제
-				
 				//schedule 삭제
 				scheduleRepository.deleteByStudyno(studyno);
-				
 				//user_homework 삭제
 				List<Homework> homeworkList = homeworkRepository.findByStudyno(studyno).get();
 				for(int i = 0; i < homeworkList.size(); i++)
 					userHomeworkRepository.deleteByHomeworkno(homeworkList.get(i).getHomeworkno());
-				
 				//homework 삭제
 				homeworkRepository.deleteByStudyno(studyno);
 				
-				//file 삭제
-				
+				List<StudyBoard> studyboardList = studyBoardRepository.findStudyBoardByStudyno(studyno).get();
+				for (StudyBoard studyBoard : studyboardList) {					
+					//file 삭제
+					FileData file = fileService.getFilebyBoardno(studyBoard.getBoardno());
+					if(file != null) {
+						awsS3Service.deleteFile(file.getFilepath());
+						fileService.deleteFileByBoardno(studyBoard.getBoardno());
+					}
+				}
 				//study_board 삭제
 				studyBoardRepository.deleteByStudyno(studyno);
+				//conference 삭제
+				
 			}
 			else {
 				//System.out.println("스터디장 위임 시키자");
@@ -173,6 +178,11 @@ public class UserServiceImpl implements UserService {
 		}
 
 		studyMemberRepository.kickStudyMember(userno, studyno);
+		
+		if(studyMember.getPosition() == 0) {
+			//study 삭제
+			studyRepository.deleteById(studyno);
+		}
 		return true;
 	}
 

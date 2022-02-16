@@ -97,7 +97,7 @@ export default {
       this.userInfo.userno = userno
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/admin/kick`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/kick`,
         data: this.userInfo
       })
         .then(res => {

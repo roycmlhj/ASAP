@@ -93,7 +93,7 @@ export default {
     deleteArticle: function (boardno) {
       axios({
         method: 'delete',
-        url: `http://localhost:8080/api/v1/study_board/delete/${boardno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study_board/delete/${boardno}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -108,7 +108,7 @@ export default {
     downloadFile: function (file) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/study_board/download/${file.fileno}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study_board/download/${file.fileno}`,
         headers: this.setToken(),
         responseType: "blob",
       })
@@ -135,12 +135,30 @@ export default {
       formData.append('title', this.article.title)
       formData.append('content', this.article.content)
       formData.append('boardno', this.article.boardno)
-      axios({
-        method: 'put',
-        url: `http://localhost:8080/api/v1/study_board/modify`,
-        headers: this.setToken(),
-        data: formData,
-      })
+      var flagTitle=false
+      var flagContent=false
+      for(var i = 0; i<this.article.title.length;i++){
+        if(this.article.title[i]!=' '){
+          flagTitle=true
+          break
+        }
+      }
+      for(var i = 0; i<this.article.content.length;i++){
+        if(this.article.content[i]!=' '){
+          flagContent=true
+          break
+        }
+      }
+      console.log(flagTitle, flagContent)
+      if (this.article.title == null || this.article.content == null || this.article.title=='' || this.article.content=='' || !flagTitle || !flagContent) {
+        alert("모든 입력 칸을 입력해주세요.")
+      }else{
+        axios({
+          method: 'put',
+          url: `https://i6a107.p.ssafy.io:8443/api/v1/study_board/modify`,
+          headers: this.setToken(),
+          data: formData,
+        })
         .then(res => {
           console.log(res.data)
           window.location.reload()
@@ -148,6 +166,7 @@ export default {
         .catch(err => {
           console.log(err)
         })
+      }
     }
   },
   created() {

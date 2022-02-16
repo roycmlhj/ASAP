@@ -1,9 +1,10 @@
 package com.ssafy.db.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 public interface BoardRepositoryCustom {
-	List<Integer> findBoardnoByUserno(int userno);
+	Optional<List<Integer>> findBoardnoByUserno(int userno);
 }

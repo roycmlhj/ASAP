@@ -140,7 +140,7 @@ export default {
       this.studyno=studyinfo.studyno
       axios({
         method:'get',
-        url:`http://localhost:8080/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
+        url:`https://i6a107.p.ssafy.io:8443/api/v1/study/list/simple-detail/${studyinfo.studyno}`,
         data:this.study
       }).then(res=> {
         console.log(res)
@@ -162,17 +162,36 @@ export default {
         userno:this.userno,
       }
       console.log(StudyRoomItem)
-      axios({
-        method:'post',
-        url:`http://localhost:8080/api/v1/board/create/`,
-        data: StudyRoomItem,
-      }).then(res => {
-        console.log(res)
-        this.$router.push({name:'StudyBoard'})
-      }).catch(err=> {
-        console.log(err,1)
-        alert(err)
-      })
+      var flagTitle=false
+      var flagContent=false
+      for(var i = 0; i<StudyRoomItem.boardname.length;i++){
+        if(StudyRoomItem.boardname[i]!=' '){
+          flagTitle=true
+          break
+        }
+      }
+      for(var i = 0; i<StudyRoomItem.boarddescription.length;i++){
+        if(StudyRoomItem.boarddescription[i]!=' '){
+          flagContent=true
+          break
+        }
+      }
+      console.log(flagTitle, flagContent)
+      if (StudyRoomItem.boardname == null || StudyRoomItem.boarddescription == null || StudyRoomItem.boardname=='' || StudyRoomItem.boarddescription==''|| !flagTitle ||!flagContent) {
+        alert("모든 입력 칸을 입력해주세요.")
+      }else{
+        axios({
+          method:'post',
+          url:`https://i6a107.p.ssafy.io:8443/api/v1/board/create/`,
+          data: StudyRoomItem,
+        }).then(res => {
+          console.log(res)
+          this.$router.push({name:'StudyBoard'})
+        }).catch(err=> {
+          console.log(err,1)
+          alert(err)
+        })
+      }
     },
     created: function () {
       if (sessionStorage.getItem('jwt')) {                    // 수정

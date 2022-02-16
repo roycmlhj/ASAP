@@ -21,18 +21,20 @@ export default {
     const token = sessionStorage.getItem('jwt')                  // 수정
     const decoded =jwt_decode(token)
     const userno = decoded.userno
+    const email = decoded.email
     
     axios({
       method:'get',
-      url:`http://localhost:8080/api/v1/study/list/${userno}/`,
+      url:`https://i6a107.p.ssafy.io:8443/api/v1/study/list/${userno}/`,
       
     }).then(res=> {
       console.log(res)
       this.studies = res.data.studyList
       
        for (var i = 0; i<this.studies.length;i++) {
-         this.options.push({value:this.studies[i],text:this.studies[i].studyname})
-
+         if (this.studies[i].maker == email) {
+          this.options.push({value:this.studies[i],text:this.studies[i].studyname})
+         }
        }
       
       

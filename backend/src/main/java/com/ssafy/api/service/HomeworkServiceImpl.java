@@ -129,8 +129,4 @@ public class HomeworkServiceImpl implements HomeworkService {
 		return userHomeworkList;
 	}
 
-	@Override
-	public int getDoHomeworkCnt(int userno) {
-		return userHomeworkRepository.DoHomeworkCnt(userno);
-	}
 }

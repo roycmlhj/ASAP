@@ -59,7 +59,7 @@
               <b-button class="mt-1" v-if="userNumber == getLeader() && member.studyMember.userno != getLeader()" style="font-size: 10px; height: 32px; background-color: rgb(235, 124, 124);" @click="userKick(member.studyMember.userno)">강퇴</b-button>
             </div>
           </div>
-          <a class="kick" type="button" @click="userKick(userNumber)">회원탈퇴</a>      <!--수정-->
+          <a class="kick" type="button" @click="userKick(userNumber)">스터디 탈퇴</a>      <!--수정-->
         </b-sidebar>
         <b-modal ref="my-modal" :member="member" hide-header hide-footer>
           <div class="d-block text-center">
@@ -167,7 +167,7 @@ export default {
     getStudyInformation: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/study/detail/${this.$route.params.study_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study/detail/${this.$route.params.study_no}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -184,7 +184,7 @@ export default {
     getArticleList: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/study_board/boardlist/${this.$route.params.study_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study_board/boardlist/${this.$route.params.study_no}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -198,7 +198,7 @@ export default {
     getHomeworkList: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/homework/homeworklist/${this.$route.params.study_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/homework/homeworklist/${this.$route.params.study_no}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -212,7 +212,7 @@ export default {
     getStudyMemberList: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/study/memberList/${this.$route.params.study_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study/memberList/${this.$route.params.study_no}`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -226,7 +226,7 @@ export default {
     getUserInformation: function (user) {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/admin/${user.userno}/`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/${user.userno}/`,
         headers: this.setToken(),
       })
         .then(res => {
@@ -241,7 +241,7 @@ export default {
      getCalendar: function () {
       axios({
         method: 'get',
-        url: `http://localhost:8080/api/v1/study/calendar/${this.$route.params.study_no}`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/study/calendar/${this.$route.params.study_no}`,
       })
       .then(res => {
         const homeworkList = res.data.homeworkList
@@ -274,7 +274,7 @@ export default {
       this.userInfo.userno = userno
       axios({
         method: 'post',
-        url: `http://localhost:8080/api/v1/admin/kick`,
+        url: `https://i6a107.p.ssafy.io:8443/api/v1/admin/kick`,
         data: this.userInfo
       })
         .then(res => {
