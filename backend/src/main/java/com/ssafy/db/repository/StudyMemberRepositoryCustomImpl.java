@@ -1,8 +1,5 @@
 package com.ssafy.db.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +59,12 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 
 	//나중에는 스터디 참여도가 높은 사람한테 위임될수 있게 바꾸자
 	@Override
-	public Optional<StudyMember> findByStudynoMandate(int studyno) {
+	public StudyMember findByStudynoMandate(int studyno) {
 		StudyMember studyMember = jpaQueryFactory.selectFrom(qStudyMember)
 				.where(qStudyMember.studyno.eq(studyno)
 						.and(qStudyMember.position.eq(1)))
 				.fetchFirst();
-		return Optional.ofNullable(studyMember);
+		return studyMember;
 	}
 
 	@Override
@@ -85,13 +82,5 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 		.set(qStudyMember.studyTime, time)
 		.where(qStudyMember.studyno.eq(studyno).and(qStudyMember.userno.eq(userno)))
 		.execute();
-	}
-
-	@Override
-	public List<Integer> findStudynobyuserno(int userno) {
-		List<Integer> list = jpaQueryFactory.select(qStudyMember.studyno).from(qStudyMember)
-				.where(qStudyMember.userno.eq(userno))
-				.fetch();
-		return list;
 	}
 }

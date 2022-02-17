@@ -1,7 +1,6 @@
 package com.ssafy.db.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -15,5 +14,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Sc
 	List<Schedule> findByStudyno(int studyno);
 	@Transactional
 	void deleteByStudyno(int studyno);
-	Optional<Schedule> findByNextDate(String nextDate);
 }

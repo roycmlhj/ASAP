@@ -33,5 +33,4 @@ public interface StudyService {
 	boolean addTime(AddTimeReq addTimeInfo);
 	int getStudyTime(int userno, int studyno);
 	Study getStudyByStudyno(int studyno);
-	boolean scheduleDuplicated(String nextDate);
 }

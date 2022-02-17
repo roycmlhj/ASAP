@@ -87,9 +87,7 @@ public class StudyServiceImpl implements StudyService {
 		List<StudyMember> members = studyMemberRepository.findByStudyno(studyno);
 		List<String> memberImage = new ArrayList<String>();
 		for(int i = 0; i < members.size(); i++) {
-			if(members.get(i).getPosition() < 2) {
-				memberImage.add(userRepository.findById(members.get(i).getUserno()).get().getImage());
-			}			
+			memberImage.add(userRepository.findById(members.get(i).getUserno()).get().getImage());
 		}
 		
 		StudyInfo studyInfo = new StudyInfo();
@@ -267,14 +265,6 @@ public class StudyServiceImpl implements StudyService {
 		time += ":";
 		time += Integer.toString(sec);
 		return time;
-	}
-
-	@Override
-	public boolean scheduleDuplicated(String nextDate) {
-		if(scheduleRepository.findByNextDate(nextDate).orElse(null) == null) {
-			return true;
-		}
-		return false;
 	}
 
 

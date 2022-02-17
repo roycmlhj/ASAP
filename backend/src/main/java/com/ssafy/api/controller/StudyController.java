@@ -129,7 +129,7 @@ public class StudyController {
 	};
 	
 	@GetMapping("/detail/{studyno}")
-	@ApiOperation(value = "스터디 정보", notes = "스터디번호에 따른 스터디 정보를 반환해 준다.")
+	@ApiOperation(value = "스터디 간략 정보", notes = "스터디번호에 따른 간략 정보를 반환해 준다.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "성공"),
 		@ApiResponse(code = 401, message = "실패"),
@@ -211,15 +211,11 @@ public class StudyController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<? extends BaseResponseBody> scheduleCreate(
-			@RequestBody @ApiParam(value="생성 스케줄 정보", required = true) ScheduleCreatePostReq scheduleInfo){
-		if(studyService.scheduleDuplicated(scheduleInfo.getNextDate())) {
-			if(studyService.createSchedule(scheduleInfo)) {
-				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));							
-			}
-			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));
-		}
+			@RequestBody @ApiParam(value="생성 스케줄 정보", required = true) ScheduleCreatePostReq scheduleInfo){	
+		if(studyService.createSchedule(scheduleInfo))
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
 		else
-			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "시간 중복"));
+			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
 	}
 	
 	
@@ -232,14 +228,10 @@ public class StudyController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> changeSchedule(
 			@RequestBody @ApiParam(value="스케줄 pk, 변경 날짜", required = true) SchedulePutReq scheduleChangeInfo){
-		if(studyService.scheduleDuplicated(scheduleChangeInfo.getNextDate())) {
-			if(studyService.changeSchdule(scheduleChangeInfo))
-				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
-			else
-				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "실패"));
-		}
+		if(studyService.changeSchdule(scheduleChangeInfo))
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "성공"));
 		else
-			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "시간 중복"));
+			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "실패"));
 	}
 	
 	@DeleteMapping("/schedule/delete/{scheduleno}")
