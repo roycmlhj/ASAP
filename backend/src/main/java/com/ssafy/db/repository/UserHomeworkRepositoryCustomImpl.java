@@ -45,5 +45,17 @@ public class UserHomeworkRepositoryCustomImpl extends QuerydslRepositorySupport 
 		.where(qUserHomework.homeworkno.eq(homeworkno).and(qUserHomework.userno.eq(userno)))
 		.execute();
 	}
+	
+	@Override
+	public int DoHomeworkCnt(int userno) {		
+		List<UserHomework> userHomeworkList = jpaQueryFactory.select(qUserHomework).from(qUserHomework)
+		.where(qUserHomework.userno.eq(userno).and(qUserHomework.isDone.eq(1)))
+		.fetch();
+
+		if(!Optional.ofNullable(userHomeworkList).isPresent())
+			return 0;
+		
+		return userHomeworkList.size();
+	}
 
 }

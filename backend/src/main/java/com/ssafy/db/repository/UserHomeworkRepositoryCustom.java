@@ -10,4 +10,5 @@ public interface UserHomeworkRepositoryCustom {
 	void deleteUserHomework(int homeworkno);
 	Optional<List<UserHomework>> findUserHomeworkByuserno(int userno);
 	void deleteByIdNUserno(Integer homeworkno, int userno);
+	int DoHomeworkCnt(int userno);
 }

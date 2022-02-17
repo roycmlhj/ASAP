@@ -128,5 +128,9 @@ public class HomeworkServiceImpl implements HomeworkService {
 		List<UserHomework> userHomeworkList = userHomeworkRepository.findByHomeworkno(homeworkno).get();
 		return userHomeworkList;
 	}
-
+	
+	@Override
+	public int getDoHomeworkCnt(int userno) {
+		return userHomeworkRepository.DoHomeworkCnt(userno);
+	}
 }

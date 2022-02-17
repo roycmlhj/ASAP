@@ -185,6 +185,11 @@ public class UserController {
 			studyAnalyze.addStudyTime(studyTimeAdd);
 		}
 		studyAnalyze.setTotal_time(total_time);
+		int homeworkCnt = homeworkService.getDoHomeworkCnt(userno);
+		
+		int total_Exp = ((total_time / 60) + homeworkCnt) * 5;
+		user.setLevel(total_Exp / 100 + 1);
+		user.setExp(total_Exp % 100);
 
 		return ResponseEntity.status(200).body(UserDetailInfoRes.of(user, studyList, onHomeworkList, doneHomeworkList, studyAnalyze));
 	}
