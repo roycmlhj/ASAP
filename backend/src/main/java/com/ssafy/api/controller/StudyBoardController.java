@@ -152,18 +152,17 @@ public class StudyBoardController {
 		studyBoardPutInfo.setTitle(title);
 		studyBoardPutInfo.setContent(content);
 		
-		FileData boardfile = fileService.getFilebyBoardno(boardno);
-		if(boardfile != null) { // 게시판에 파일이 있으면 기존파일 삭제
-			String filename = boardfile.getFilepath();
-			fileService.deleteFileByBoardno(boardno);
-			try {
-				awsS3Service.deleteFile(filename);
-			}catch (Exception e) {
-				System.out.println("delete file error"+e.getMessage());
-			}
-		}
-		
 		if(!ObjectUtils.isEmpty(files)) { // 파일이 입력되었을 때
+			FileData boardfile = fileService.getFilebyBoardno(boardno);
+			if(boardfile != null) { // 게시판에 파일이 있으면 기존파일 삭제
+				String filename = boardfile.getFilepath();
+				fileService.deleteFileByBoardno(boardno);
+				try {
+					awsS3Service.deleteFile(filename);
+				}catch (Exception e) {
+					System.out.println("delete file error"+e.getMessage());
+				}
+			}
 			try {
 				String ogname = files.getOriginalFilename();
 				String extention = FilenameUtils.getExtension(ogname);
