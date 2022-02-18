@@ -56,6 +56,7 @@
             v-model="description"
             type = "text"
             required
+            style="white-space: pre;"
             rows="12"
           >{{description}}
           </b-form-textarea>

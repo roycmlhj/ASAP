@@ -8,7 +8,8 @@
     <b-row class="landing_page">
       <div class="landing_content col-12">
         <div class="col-6 images">
-          <img src="./assets/studyRoom.png" />
+          <!--<img src="./assets/StudyRoomBegin.PNG" />-->
+          <img src="./assets/studyroombegin.png" />
         </div>
         <div class="col-6 ments">
           <div class="div">
@@ -69,7 +70,7 @@
         </div>
         <div class="col-6 images">
           <div>
-            <img src="./assets/main그림3.jpg" />
+            <img src="./assets/mainbegin.png" />
           </div>
         </div>
       </div>
@@ -78,7 +79,7 @@
     <b-row class="landing_page">
       <div class="landing_content col-12">
         <div class="col-6 images">
-          <img src="./assets/studyboard1.png" />
+          <img src="./assets/studyboardbegin.png" />
         </div>
         <div class="col-6 ments">
           <div class="div">

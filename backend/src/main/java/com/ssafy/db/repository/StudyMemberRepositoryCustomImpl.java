@@ -12,6 +12,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.api.request.StudyAcceptPutReq;
 import com.ssafy.db.entity.QStudyMember;
 import com.ssafy.db.entity.StudyMember;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport implements StudyMemberRepositoryCustom {
 
@@ -22,6 +24,8 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 	public StudyMemberRepositoryCustomImpl() {
 		super(StudyMember.class);
 	}
+ 
+ private static final Logger log = LoggerFactory.getLogger(StudyMemberRepositoryCustomImpl.class);
 
 	@Override
 	@Transactional
@@ -53,6 +57,7 @@ public class StudyMemberRepositoryCustomImpl extends QuerydslRepositorySupport i
 	
 	@Override
 	public StudyMember findByUsernoNStudyNo(int userno, int studyno) {
+    log.info("check3 studyno : {}" + studyno);
 		StudyMember studyMember = jpaQueryFactory.select(qStudyMember).from(qStudyMember)
 				.where(qStudyMember.userno.eq(userno).
 						and(qStudyMember.studyno.eq(studyno)))

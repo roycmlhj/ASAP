@@ -2,7 +2,7 @@
   <div id="container">
     <h5 class="d-flex justify-content-start"><strong>스터디 분석</strong></h5>
     <p>
-      {{ userName }}님의 한달 스터디 시간은 {{ parseInt(totalTime) }}시간입니다.
+      {{ userName }}님의 한달 스터디 시간은 {{ parseInt(totalTime) }}분입니다.
     </p>
     <!--수정-->
     <pie-chart :chart-data="datacollection" style="width: 350px"></pie-chart>

@@ -152,7 +152,6 @@ public class StudyBoardController {
 		studyBoardPutInfo.setTitle(title);
 		studyBoardPutInfo.setContent(content);
 		
-		
 		if(!ObjectUtils.isEmpty(files)) { // 파일이 입력되었을 때
 			FileData boardfile = fileService.getFilebyBoardno(boardno);
 			if(boardfile != null) { // 게시판에 파일이 있으면 기존파일 삭제

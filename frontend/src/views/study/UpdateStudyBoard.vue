@@ -47,6 +47,7 @@
             type = "text"
             required
             rows="12"
+            style="white-space: pre;"
           >{{description}}
           </b-form-textarea>
         </b-form-group>

@@ -40,7 +40,7 @@
         <div class="d-flex col-12 content" name="detail-body">
           <div class="col-8 justify-content-start" name="study data">
             <div name="description" class="description">
-              <p align="left">
+              <p align="left" style="white-space: pre;">
                 {{ description }}
               </p>
             </div>

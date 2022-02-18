@@ -24,6 +24,9 @@ import com.ssafy.db.repository.StudyRepository;
 import com.ssafy.db.repository.UserHomeworkRepository;
 import com.ssafy.db.repository.UserRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service("userService")
 public class UserServiceImpl implements UserService {
 	@Autowired
@@ -51,6 +54,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	AwsS3Service awsS3Service;
 	
+private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
 	@Override
 	public User signUp(UserRegisterPostReq registerInfo) {
 		User user = new User();
@@ -105,6 +110,7 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		List<Integer> studylist = studyMemberRepository.findStudynobyuserno(userno);
 		for (Integer i : studylist) {
+  log.info("check1 studyno : {}" , i);
 			kickUser(userno, i);			
 		}
 		return true;
@@ -130,6 +136,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean kickUser(int userno, int studyno) {
+    log.info("check2 studyno : {}" + studyno);
 		StudyMember studyMember = studyMemberRepository.findByUsernoNStudyNo(userno, studyno);
 		
 		if(studyMember.getPosition() == 0) {

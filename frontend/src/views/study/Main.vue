@@ -120,6 +120,7 @@
             type="text"
             rows="6"
             max-rows="6"
+            style="white-space: pre;"
             required
           ></b-form-textarea>
         </b-form-group>
