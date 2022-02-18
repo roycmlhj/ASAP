@@ -1,3 +1,46 @@
+## 프로그램 버전
+gradle
+```
+------------------------------------------------------------
+Gradle 7.3
+------------------------------------------------------------
+
+Kotlin:       1.5.31
+Groovy:       3.0.9
+Ant:          Apache Ant(TM) version 1.10.11 compiled on July 10 2021
+JVM:          1.8.0_312 (Private Build 25.312-b07)
+OS:           Linux 5.4.0-1018-aws amd64
+
+```
+
+java
+```
+openjdk version "1.8.0_312"
+OpenJDK Runtime Environment (build 1.8.0_312-8u312-b07-0ubuntu1~20.04-b07)
+OpenJDK 64-Bit Server VM (build 25.312-b07, mixed mode)
+```
+
+mysql
+```
+mysql  Ver 8.0.28-0ubuntu0.20.04.3 for Linux on x86_64 ((Ubuntu))
+```
+
+node.js
+```
+v10.19.0
+```
+
+nginx
+```
+1.18.0
+```
+
+openssl
+```
+1.1.1f
+```
+
+
 ## inbound 포트
 
 webRTC와 연결할 포트를 열어줍니다
@@ -9,6 +52,8 @@ sudo iptables -I INPUT 1 -p udp --dport 49152:65535 -j ACCEPT
 ```
 
 ## 프로그램 실행
+
+[docker를 사용하여 kms 이미지를 받아옵니다.](https://gh402.tistory.com/44)
 
 깃에서 파일을 클론합니다.
 ```
@@ -116,5 +161,5 @@ server {
 
 ```
 
-위와 같이 수정하여주세요
+위와 같이 추가하여주세요
 i6a107.p.ssafy.io에 접속시 ASAP를 이용하실 수 있습니다.
